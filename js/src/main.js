@@ -12,7 +12,8 @@ import { blockConditions, latinSquareIndex, buildTrialListTier2,
          CONDITION_INSTRUCTIONS, CONDITION_DIALOGUE } from "./tier2.js";
 import { CastleState } from "./castle.js";
 import { TripletPlugin, ScreenPlugin } from "./plugins.js";
-import { AudioTripletPlugin, armPriming } from "./audio.js";
+import { AudioTripletPlugin, armPriming, stimulusAudioActive } from "./audio.js";
+import { initSfx, playSfx } from "./sfx.js";
 import { CutscenePlugin, resolvePanels, probeImages } from "./cutscene.js";
 import { PlaygroundPlugin } from "./playground.js";
 import { buildPayload, makeResponse, downloadPayload, postPayload } from "./save.js";
@@ -115,6 +116,15 @@ const jget = async (url) => {
                             rooms, perRoom);
   }
   const feedbackRng = stream(pid, "feedback");
+
+  // The game's own sound effects, named in the manifest. Gated on stimulus
+  // playback so a chime can never land over a Tier 2 clip.
+  initSfx({
+    assetRoot: cfg.asset_root,
+    sounds: cfg.Gamify ? (manifest.sounds ?? {}) : {},
+    muted: cfg.Gamify_Mute_SFX,
+    isStimulusActive: stimulusAudioActive,
+  });
 
   if (TIER2) {
     // Warm the cache for exactly the clips this session uses, so the first
@@ -365,6 +375,10 @@ const jget = async (url) => {
         type: ScreenPlugin,
         html: () => {
           const got = castle.completeRoom(thisRoom).map(sticker);
+          // Room finished, then the stickers land. Two sounds because they
+          // are two events, and the desktop plays both.
+          playSfx("level_up");
+          setTimeout(() => playSfx("sticker"), 450);
           return `<img class="pip" src="${mascot}" alt="">` +
                  `<p class="speech">${line("level_complete", "Room finished!")}</p>` +
                  `<p class="awarded">${got.map(stickerHtml).join(" ")}</p>` +
@@ -408,8 +422,13 @@ const jget = async (url) => {
     pushCutscene("close", "Next");
     timeline.push({
       type: ScreenPlugin,
-      html: `<img class="pip big-pip" src="${mascot}" alt="">` +
-            `<p class="speech">${line("finish", "All done! Thank you for playing.")}</p>`,
+      // A function so the chime fires when the screen is reached, not when
+      // the timeline is assembled -- these are built before the session runs.
+      html: () => {
+        playSfx("finish");
+        return `<img class="pip big-pip" src="${mascot}" alt="">` +
+               `<p class="speech">${line("finish", "All done! Thank you for playing.")}</p>`;
+      },
       button: "Finished!",
     });
   }

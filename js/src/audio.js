@@ -28,6 +28,7 @@
  */
 
 import { SELECT_COLOUR, afterResponseText } from "./plugins.js";
+import { playSfx } from "./sfx.js";
 
 // Defaults match the desktop build. Exposed as plugin parameters (and as
 // ?lead= / ?gap=) because pacing is a real design knob -- the clips run 1-2s
@@ -41,6 +42,16 @@ const SILENCE =
   "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
 
 let primed = false;
+
+// Elements currently mounted by a stimulus trial. sfx.js consults this so a
+// reward chime can never land over a Tier 2 clip -- the A and AV conditions
+// measure an auditory judgment, and a sound played across one contaminates it.
+let livePlayers = [];
+
+/** True while any stimulus clip is sounding. */
+export function stimulusAudioActive() {
+  return livePlayers.some((p) => p && !p.paused && !p.ended);
+}
 
 /**
  * Unlock audio for the session, from inside a user gesture. Call it once and
@@ -158,6 +169,9 @@ export class AudioTripletPlugin {
       a.preload = "auto";
       return a;
     });
+    // Published for the SFX gate; replaced per trial, and emptied when the
+    // trial ends so a finished screen never reads as "stimulus playing".
+    livePlayers = players;
 
     const stopAll = () => {
       for (const p of players) { p.pause(); try { p.currentTime = 0; } catch { /* not seekable yet */ } }
@@ -202,6 +216,10 @@ export class AudioTripletPlugin {
       // Silence the stimulus BEFORE any feedback, so the two never overlap.
       this.jsPsych.pluginAPI.clearAllTimeouts();
       stopAll();
+      // The clips are stopped, so the SFX gate must stop reporting them as
+      // live -- otherwise the select chime is swallowed on every audio trial.
+      livePlayers = [];
+      playSfx("select");
 
       const card = display.querySelector(`.audio-card[data-i="${i}"]`);
       card.style.outline = `4px solid ${SELECT_COLOUR}`;

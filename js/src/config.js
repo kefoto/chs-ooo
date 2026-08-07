@@ -35,6 +35,11 @@ export const CONFIG = {
   Gamify: true,
   Gamify_Mascot: "neutral",
   Gamify_Reduced_Motion: false,
+  // Silences the game's own sound effects. Reduced-motion mode implies it
+  // unless the session says otherwise -- the same precedence GameLayer
+  // applies on the desktop. Stimulus audio is never affected: a Tier 2 trial
+  // without its clips is not the task.
+  Gamify_Mute_SFX: false,
 
   // Where the finished session goes. Download is offered by default; set
   // upload_url to also POST the same JSON to a collection endpoint.
@@ -118,5 +123,10 @@ export function applyUrlOverrides(cfg, search = window.location.search) {
   if (q.get("upload")) cfg.upload_url = q.get("upload");
   if (q.get("plain") === "1") cfg.Gamify = false;
   if (q.get("calm") === "1") cfg.Gamify_Reduced_Motion = true;
+  if (q.get("quiet") === "1") cfg.Gamify_Mute_SFX = true;
+
+  // Reduced stimulation implies quiet, unless this session asked for sound
+  // explicitly. Mirrors GameLayer.__init__.
+  if (cfg.Gamify_Reduced_Motion && !q.has("quiet")) cfg.Gamify_Mute_SFX = true;
   return cfg;
 }

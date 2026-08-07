@@ -315,6 +315,7 @@ buttons work.
 | Tier 2 V / A / AV task | yes | yes |
 | Tier 2 Latin-square block order | md5(pid) | mulberry32 — **different order per id** |
 | Stimulus audio | QMediaPlayer | `<audio>`, plus autoplay unlock + blocked-trial flag |
+| Game sound effects | QSoundEffect | `<audio>` via `src/sfx.js`, gated on stimulus playback |
 | REDCap upload | yes | `upload=URL` POST instead |
 | Cutscene cross-fade | yes | plain screens |
 | Sticker silhouettes | alpha-mask shapes | CSS grayscale |

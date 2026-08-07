@@ -18,6 +18,7 @@ import { buildPayload, makeResponse } from "../src/save.js";
 import { sessionPlan, ageBin, FIXED_TRIALS_PER_SESSION } from "../src/session.js";
 import { CONFIG, applyUrlOverrides } from "../src/config.js";
 import { setupNeeded } from "../src/setup.js";
+import { initSfx, playSfx } from "../src/sfx.js";
 
 let pass = 0;
 const test = (name, fn) => {
@@ -456,6 +457,71 @@ test("a self-description cannot outlive the option that invited it", () => {
   assert.equal(pd.race, "White");
   assert.equal(pd.race_self_describe, "",
     "a description was saved against a category that did not ask for one");
+});
+
+test("the game's sound effects are wired to the manifest", () => {
+  // The browser build never read manifest.sounds, so every session ran silent
+  // apart from Tier 2 stimulus audio. These are the five clips the desktop
+  // build has always played.
+  const played = [];
+  class FakeAudio {
+    constructor(src) { this.src = src; this.volume = 1; this.paused = true; }
+    play() { played.push(this.src); this.paused = false; return { catch() {} }; }
+    pause() { this.paused = true; }
+  }
+  globalThis.Audio = FakeAudio;
+
+  const sounds = { select: "sounds/select.wav", level_up: "sounds/level_up.wav",
+                   sticker: "sounds/sticker.wav", nudge: "sounds/nudge.wav",
+                   finish: "sounds/finish.wav" };
+  initSfx({ assetRoot: "../assets/game", sounds, muted: false });
+
+  playSfx("select");
+  assert.deepEqual(played, ["../assets/game/sounds/select.wav"]);
+  playSfx("finish");
+  assert.equal(played.length, 2);
+  // An unknown key is silent rather than an exception mid-session.
+  playSfx("no_such_sound");
+  assert.equal(played.length, 2);
+});
+
+test("a game sound never plays over a Tier 2 stimulus clip", () => {
+  // The A and AV conditions measure an auditory judgment. A reward chime
+  // landing across a stimulus contaminates it, so the gate is in playSfx
+  // rather than left to each caller to remember.
+  const played = [];
+  class FakeAudio {
+    constructor(src) { this.src = src; }
+    play() { played.push(this.src); return { catch() {} }; }
+  }
+  globalThis.Audio = FakeAudio;
+
+  let stimulusPlaying = true;
+  initSfx({ assetRoot: "a", sounds: { select: "s.wav" }, muted: false,
+            isStimulusActive: () => stimulusPlaying });
+
+  playSfx("select");
+  assert.equal(played.length, 0, "a chime played over a stimulus clip");
+  stimulusPlaying = false;
+  playSfx("select");
+  assert.equal(played.length, 1, "the chime never played once the clip ended");
+});
+
+test("quiet mode silences the game, and reduced motion implies it", () => {
+  const played = [];
+  globalThis.Audio = class { constructor(s) { this.src = s; }
+                             play() { played.push(this.src); return { catch() {} }; } };
+
+  initSfx({ assetRoot: "a", sounds: { select: "s.wav" }, muted: true });
+  playSfx("select");
+  assert.equal(played.length, 0, "quiet mode still made a sound");
+
+  // ?calm=1 implies quiet; an explicit ?quiet=0 overrides that.
+  assert.equal(applyUrlOverrides({ ...CONFIG }, "?calm=1").Gamify_Mute_SFX, true);
+  assert.equal(applyUrlOverrides({ ...CONFIG }, "?quiet=1").Gamify_Mute_SFX, true);
+  assert.equal(applyUrlOverrides({ ...CONFIG }, "?calm=1&quiet=0").Gamify_Mute_SFX,
+               false, "an explicit quiet=0 should survive reduced motion");
+  assert.equal(applyUrlOverrides({ ...CONFIG }, "").Gamify_Mute_SFX, false);
 });
 
 test("a partial session is flagged, not silently pooled", () => {

@@ -12,6 +12,8 @@
  *   every embedding built from the data afterwards.
  */
 
+import { playSfx } from "./sfx.js";
+
 // Exported so the audio conditions highlight identically. One definition, so
 // "never green, never red" cannot drift apart between the V and A/AV screens.
 export const SELECT_COLOUR = "#7C9CD6";   // deliberately not green, and not red
@@ -93,6 +95,9 @@ export class TripletPlugin {
       if (answered) return;
       answered = true;
       const rt = performance.now() - t0;
+      // Acknowledges the tap, not the answer: it is the same sound whichever
+      // card was picked, so it cannot teach a similarity structure.
+      playSfx("select");
 
       const btn = display.querySelector(`.stimulus[data-i="${i}"]`);
       btn.style.outline = `4px solid ${SELECT_COLOUR}`;
