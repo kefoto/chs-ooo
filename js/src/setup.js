@@ -21,8 +21,11 @@ import { sessionPlan, DURATIONS } from "./session.js";
 
 const GENDER = ["", "Female", "Male", "Non-binary", "Prefer not to say"];
 const HANDEDNESS = ["", "Right", "Left", "Ambidextrous"];
+// Ethnicity is the Hispanic/Latino item and nothing else; race is the separate
+// list below. Kept in the same order as field_mappings['ethnicity'] in
+// experiments/setup_experiment.py, where the position IS the REDCap code.
 const ETHNICITY = ["", "Hispanic or Latino", "Not Hispanic or Latino",
-                   "Prefer not to say"];
+                   "Prefer not to answer"];
 // Race, asked separately from ethnicity above -- they are two questions, and
 // one is not a finer grain of the other. OMB/US Census categories. Kept in the
 // same order as field_mappings['race'] in experiments/setup_experiment.py,
