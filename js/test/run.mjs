@@ -416,6 +416,48 @@ test("the saved schema is the one the Python analysis reads", () => {
   assert.equal(p.participant_data.completion_status, 1);
 });
 
+test("demographics reach the payload under the names Python writes", () => {
+  // Both builds feed the same analysis, so a browser session missing a field
+  // the desktop writes -- or spelling it differently -- silently produces a
+  // column that is empty for half the sample.
+  const cfg = {
+    participant_id: "P1", Tier: 1, "Num Blocks": 2, "Num Trials": 4,
+    Age: "6", Gender: "Female", Handedness: "Right",
+    Ethnicity: "Not Hispanic or Latino",
+    Race: "Two or more races", Race_Self_Describe: "",
+    First_Language: "English", Other_Languages: "Spanish, Cantonese",
+  };
+  const pd = buildPayload({ config: cfg, responses: [], castle: null,
+    startTime: "2026-01-01 00:00:00", completed: true }).participant_data;
+
+  assert.equal(pd.race, "Two or more races");
+  assert.equal(pd.first_language, "English");
+  assert.equal(pd.other_languages, "Spanish, Cantonese");
+  // Kept, and kept distinct: race is not a finer grain of ethnicity.
+  assert.equal(pd.ethnicity, "Not Hispanic or Latino");
+  // Every demographic key the desktop build writes must exist here too.
+  for (const k of ["age", "gender", "handedness", "ethnicity", "race",
+                   "race_self_describe", "first_language", "other_languages",
+                   "experiment_site", "setting", "vr_exposure",
+                   "screen_time"]) {
+    assert.ok(k in pd, `participant_data is missing ${k}`);
+  }
+});
+
+test("a self-description cannot outlive the option that invited it", () => {
+  // The box is cleared when the category changes, but a stale value arriving
+  // from a config or a restored form must not be saved against a category
+  // that contradicts it.
+  const pd = buildPayload({
+    config: { participant_id: "P1", Tier: 1, "Num Blocks": 1, "Num Trials": 1,
+              Race: "White", Race_Self_Describe: "" },
+    responses: [], castle: null,
+    startTime: "2026-01-01 00:00:00", completed: true }).participant_data;
+  assert.equal(pd.race, "White");
+  assert.equal(pd.race_self_describe, "",
+    "a description was saved against a category that did not ask for one");
+});
+
 test("a partial session is flagged, not silently pooled", () => {
   const p = buildPayload({ config: { participant_id: "P1", Tier: 1,
     "Num Blocks": 5, "Num Trials": 4 }, responses: [], castle: null,

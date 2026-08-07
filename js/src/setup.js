@@ -23,6 +23,16 @@ const GENDER = ["", "Female", "Male", "Non-binary", "Prefer not to say"];
 const HANDEDNESS = ["", "Right", "Left", "Ambidextrous"];
 const ETHNICITY = ["", "Hispanic or Latino", "Not Hispanic or Latino",
                    "Prefer not to say"];
+// Race, asked separately from ethnicity above -- they are two questions, and
+// one is not a finer grain of the other. OMB/US Census categories. Kept in the
+// same order as field_mappings['race'] in experiments/setup_experiment.py,
+// where the position IS the REDCap code.
+const RACE = ["", "American Indian or Alaska Native", "Asian",
+              "Black or African American",
+              "Native Hawaiian or Other Pacific Islander", "White",
+              "Two or more races", "Prefer to self-describe",
+              "Prefer not to answer"];
+const RACE_SELF_DESCRIBE = "Prefer to self-describe";
 const SETTING = ["lab", "home", "school", "clinic"];
 const EXPOSURE = ["", "None", "Occasional", "Frequent"];
 const SCREEN_TIME = ["", "<1 hour", "1-2 hours", "2-4 hours", "4+ hours"];
@@ -86,6 +96,22 @@ export function showSetup(cfg, root, search = window.location.search) {
 
           <label>Ethnicity
             <select id="s-eth">${options(ETHNICITY, cfg.Ethnicity)}</select></label>
+          <label>Race
+            <select id="s-race">${options(RACE, cfg.Race)}</select></label>
+
+          <label class="setup-wide">Self-describe
+            <input id="s-race-self" type="text" value="${cfg.Race_Self_Describe ?? ""}"
+                   placeholder="Only if &quot;Prefer to self-describe&quot; is selected"
+                   autocomplete="off" disabled></label>
+
+          <label>First language
+            <input id="s-lang1" type="text" value="${cfg.First_Language ?? ""}"
+                   placeholder="e.g. English" autocomplete="off"></label>
+          <label>Other languages
+            <input id="s-lang2" type="text" value="${cfg.Other_Languages ?? ""}"
+                   placeholder="Comma-separated, blank if none"
+                   autocomplete="off"></label>
+
           <label>Site
             <input id="s-site" type="text" value="${cfg["Experiment Site"] ?? ""}"
                    autocomplete="off"></label>
@@ -134,6 +160,18 @@ export function showSetup(cfg, root, search = window.location.search) {
           : `<span>Every room is visual</span>`);
     }
 
+    // The free-text box is live only while it has something to describe.
+    // Clearing it on the way out matters: a description typed against
+    // "Prefer to self-describe" and then left behind when the category changed
+    // would be saved alongside a category that contradicts it.
+    function syncRaceSelfDescribe() {
+      const wanted = el("#s-race").value === RACE_SELF_DESCRIBE;
+      el("#s-race-self").disabled = !wanted;
+      if (!wanted) el("#s-race-self").value = "";
+    }
+    el("#s-race").addEventListener("change", syncRaceSelfDescribe);
+    syncRaceSelfDescribe();
+
     ["#s-age", "#s-duration", "#s-tier"].forEach((id) => {
       el(id).addEventListener("input", refresh);
       el(id).addEventListener("change", refresh);
@@ -162,6 +200,13 @@ export function showSetup(cfg, root, search = window.location.search) {
         Gender: el("#s-gender").value,
         Handedness: el("#s-hand").value,
         Ethnicity: el("#s-eth").value,
+        Race: el("#s-race").value,
+        // Read through the category rather than straight off the box, so a
+        // description can never outlive the option that invited it.
+        Race_Self_Describe: el("#s-race").value === RACE_SELF_DESCRIBE
+          ? el("#s-race-self").value.trim() : "",
+        First_Language: el("#s-lang1").value.trim(),
+        Other_Languages: el("#s-lang2").value.trim(),
         "Experiment Site": el("#s-site").value.trim(),
         Setting: el("#s-setting").value,
         VR_Exposure: el("#s-vr").value,

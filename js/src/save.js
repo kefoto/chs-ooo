@@ -56,6 +56,13 @@ export function buildPayload({ config, responses, castle, startTime, completed }
     gender: config.Gender ?? "",
     handedness: config.Handedness ?? "",
     ethnicity: config.Ethnicity ?? "",
+    // Race is a separate question from ethnicity, not a finer grain of it.
+    // race_self_describe is only ever non-empty when race is
+    // "Prefer to self-describe".
+    race: config.Race ?? "",
+    race_self_describe: config.Race_Self_Describe ?? "",
+    first_language: config.First_Language ?? "",
+    other_languages: config.Other_Languages ?? "",
     experiment_site: config["Experiment Site"] ?? "",
     setting: config.Setting ?? "",
     vr_exposure: config.VR_Exposure ?? "",

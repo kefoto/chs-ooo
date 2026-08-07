@@ -263,6 +263,9 @@ button.quiet { background: transparent; color: var(--select); border: 3px solid 
 /* Checkboxes sit in a grid cell of their own, so they need to align to the
    inputs beside them rather than to the label text above them. */
 .setup-checks { justify-content: flex-end; gap: 8px; }
+/* A field whose answer is free text and can run long -- the race
+   self-description -- gets the full row rather than half of one. */
+.setup-wide { grid-column: 1 / -1; }
 .setup-check {
   display: flex; align-items: center; gap: 8px;
   font-size: 15px; color: var(--text);

@@ -19,6 +19,14 @@ export const CONFIG = {
   Gender: "",
   Handedness: "",
   Ethnicity: "",
+  // Race is a separate question from ethnicity, not a finer grain of it.
+  // Race_Self_Describe is only ever non-empty when Race is
+  // "Prefer to self-describe". Languages are free text: a fixed list would be
+  // wrong for a multi-site study.
+  Race: "",
+  Race_Self_Describe: "",
+  First_Language: "",
+  Other_Languages: "",
   "Experiment Site": "",
   Setting: "lab",
   VR_Exposure: "",
