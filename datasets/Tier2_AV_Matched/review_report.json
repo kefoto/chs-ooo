@@ -1,0 +1,2302 @@
+[
+  {
+    "concept_id": "road_traffic",
+    "sound_label": "road traffic",
+    "category": "vehicle",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 35.3,
+    "scores": {
+      "clap_audio_text": 0.12108509242534637,
+      "clip_image_text": 0.23022904992103577,
+      "cross_modal_coherence": 0.17565706372261047
+    }
+  },
+  {
+    "concept_id": "printing",
+    "sound_label": "printing",
+    "category": "human",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 62.6,
+    "scores": {
+      "clap_audio_text": 0.20862872898578644,
+      "clip_image_text": 0.22496789693832397,
+      "cross_modal_coherence": 0.2167983055114746
+    }
+  },
+  {
+    "concept_id": "motorcycle_reving",
+    "sound_label": "motorcycle reving",
+    "category": "vehicle",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 8.1,
+    "scores": {
+      "clap_audio_text": 0.1980891078710556,
+      "clip_image_text": 0.24070371687412262,
+      "cross_modal_coherence": 0.2193964123725891
+    }
+  },
+  {
+    "concept_id": "wind",
+    "sound_label": "wind",
+    "category": "nature",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 61.3,
+    "scores": {
+      "clap_audio_text": 0.1799830198287964,
+      "clip_image_text": 0.26793429255485535,
+      "cross_modal_coherence": 0.22395865619182587
+    }
+  },
+  {
+    "concept_id": "applause",
+    "sound_label": "applause",
+    "category": "human",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 18.3,
+    "scores": {
+      "clap_audio_text": 0.3133867681026459,
+      "clip_image_text": 0.1484384387731552,
+      "cross_modal_coherence": 0.23091259598731995
+    }
+  },
+  {
+    "concept_id": "hammering",
+    "sound_label": "hammering",
+    "category": "human",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 221.4,
+    "scores": {
+      "clap_audio_text": 0.2172968089580536,
+      "clip_image_text": 0.25199079513549805,
+      "cross_modal_coherence": 0.23464380204677582
+    }
+  },
+  {
+    "concept_id": "drum_roll",
+    "sound_label": "drum roll",
+    "category": "instrument",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 136.8,
+    "scores": {
+      "clap_audio_text": 0.2058531641960144,
+      "clip_image_text": 0.26572930812835693,
+      "cross_modal_coherence": 0.23579123616218567
+    }
+  },
+  {
+    "concept_id": "piano",
+    "sound_label": "piano",
+    "category": "instrument",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 140.4,
+    "scores": {
+      "clap_audio_text": 0.20678012073040009,
+      "clip_image_text": 0.3064192533493042,
+      "cross_modal_coherence": 0.25659969449043274
+    }
+  },
+  {
+    "concept_id": "breathing",
+    "sound_label": "breathing",
+    "category": "body",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 59.4,
+    "scores": {
+      "clap_audio_text": 0.37648892402648926,
+      "clip_image_text": 0.15370747447013855,
+      "cross_modal_coherence": 0.2650982141494751
+    }
+  },
+  {
+    "concept_id": "car_accelerating",
+    "sound_label": "car accelerating",
+    "category": "vehicle",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 44.1,
+    "scores": {
+      "clap_audio_text": 0.3435196280479431,
+      "clip_image_text": 0.19075548648834229,
+      "cross_modal_coherence": 0.2671375572681427
+    }
+  },
+  {
+    "concept_id": "cello",
+    "sound_label": "cello",
+    "category": "instrument",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 422.7,
+    "scores": {
+      "clap_audio_text": 0.2290695607662201,
+      "clip_image_text": 0.30865317583084106,
+      "cross_modal_coherence": 0.2688613533973694
+    }
+  },
+  {
+    "concept_id": "vacuum",
+    "sound_label": "vacuum",
+    "category": "appliance",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 398.4,
+    "scores": {
+      "clap_audio_text": 0.2662196755409241,
+      "clip_image_text": 0.27639079093933105,
+      "cross_modal_coherence": 0.27130523324012756
+    }
+  },
+  {
+    "concept_id": "school_bell",
+    "sound_label": "school bell",
+    "category": "other",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 108.8,
+    "scores": {
+      "clap_audio_text": 0.28785672783851624,
+      "clip_image_text": 0.26333892345428467,
+      "cross_modal_coherence": 0.27559781074523926
+    }
+  },
+  {
+    "concept_id": "airplane_taking_off",
+    "sound_label": "airplane taking off",
+    "category": "vehicle",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 129.6,
+    "scores": {
+      "clap_audio_text": 0.30943557620048523,
+      "clip_image_text": 0.24758735299110413,
+      "cross_modal_coherence": 0.2785114645957947
+    }
+  },
+  {
+    "concept_id": "coin_dropping",
+    "sound_label": "coin dropping",
+    "category": "household",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 221.6,
+    "scores": {
+      "clap_audio_text": 0.301021933555603,
+      "clip_image_text": 0.2637207806110382,
+      "cross_modal_coherence": 0.2823713421821594
+    }
+  },
+  {
+    "concept_id": "finger_tapping",
+    "sound_label": "finger tapping",
+    "category": "action",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 62.0,
+    "scores": {
+      "clap_audio_text": 0.2688218951225281,
+      "clip_image_text": 0.299879789352417,
+      "cross_modal_coherence": 0.28435084223747253
+    }
+  },
+  {
+    "concept_id": "car_horn",
+    "sound_label": "car horn",
+    "category": "vehicle",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 122.7,
+    "scores": {
+      "clap_audio_text": 0.33934977650642395,
+      "clip_image_text": 0.2313767969608307,
+      "cross_modal_coherence": 0.2853632867336273
+    }
+  },
+  {
+    "concept_id": "flushing",
+    "sound_label": "flushing",
+    "category": "household",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 142.6,
+    "scores": {
+      "clap_audio_text": 0.3441074788570404,
+      "clip_image_text": 0.22796379029750824,
+      "cross_modal_coherence": 0.2860356271266937
+    }
+  },
+  {
+    "concept_id": "helicopter",
+    "sound_label": "helicopter",
+    "category": "vehicle",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 108.2,
+    "scores": {
+      "clap_audio_text": 0.27922266721725464,
+      "clip_image_text": 0.29619792103767395,
+      "cross_modal_coherence": 0.2877103090286255
+    }
+  },
+  {
+    "concept_id": "rubbing_hands",
+    "sound_label": "rubbing hands",
+    "category": "action",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 20.4,
+    "scores": {
+      "clap_audio_text": 0.37792709469795227,
+      "clip_image_text": 0.20186865329742432,
+      "cross_modal_coherence": 0.2898978590965271
+    }
+  },
+  {
+    "concept_id": "water_dripping",
+    "sound_label": "water dripping",
+    "category": "nature",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 256.3,
+    "scores": {
+      "clap_audio_text": 0.41741734743118286,
+      "clip_image_text": 0.16379977762699127,
+      "cross_modal_coherence": 0.29060855507850647
+    }
+  },
+  {
+    "concept_id": "cymbal_crash",
+    "sound_label": "cymbal crash",
+    "category": "instrument",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 80.1,
+    "scores": {
+      "clap_audio_text": 0.2643474340438843,
+      "clip_image_text": 0.32123392820358276,
+      "cross_modal_coherence": 0.2927906811237335
+    }
+  },
+  {
+    "concept_id": "biting_and_chewing",
+    "sound_label": "biting and chewing",
+    "category": "human",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 18.6,
+    "scores": {
+      "clap_audio_text": 0.3962624669075012,
+      "clip_image_text": 0.19101829826831818,
+      "cross_modal_coherence": 0.2936403751373291
+    }
+  },
+  {
+    "concept_id": "water_splashing",
+    "sound_label": "water splashing",
+    "category": "nature",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 124.0,
+    "scores": {
+      "clap_audio_text": 0.3423371911048889,
+      "clip_image_text": 0.25406721234321594,
+      "cross_modal_coherence": 0.2982022166252136
+    }
+  },
+  {
+    "concept_id": "walking_with_heels",
+    "sound_label": "walking with heels",
+    "category": "action",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 13.8,
+    "scores": {
+      "clap_audio_text": 0.29775866866111755,
+      "clip_image_text": 0.2987372577190399,
+      "cross_modal_coherence": 0.29824796319007874
+    }
+  },
+  {
+    "concept_id": "cat_meowing",
+    "sound_label": "cat meowing",
+    "category": "animal",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 7.1,
+    "scores": {
+      "clap_audio_text": 0.4109894633293152,
+      "clip_image_text": 0.19149348139762878,
+      "cross_modal_coherence": 0.3012414574623108
+    }
+  },
+  {
+    "concept_id": "walking_on_hard_surface",
+    "sound_label": "walking on hard surface",
+    "category": "action",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 12.8,
+    "scores": {
+      "clap_audio_text": 0.3402029573917389,
+      "clip_image_text": 0.2666783332824707,
+      "cross_modal_coherence": 0.3034406304359436
+    }
+  },
+  {
+    "concept_id": "baby_crying",
+    "sound_label": "baby crying",
+    "category": "human",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 120.1,
+    "scores": {
+      "clap_audio_text": 0.4258057773113251,
+      "clip_image_text": 0.19596447050571442,
+      "cross_modal_coherence": 0.31088513135910034
+    }
+  },
+  {
+    "concept_id": "shuffling_cards",
+    "sound_label": "shuffling cards",
+    "category": "action",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 279.7,
+    "scores": {
+      "clap_audio_text": 0.3872067928314209,
+      "clip_image_text": 0.24444325268268585,
+      "cross_modal_coherence": 0.3158250153064728
+    }
+  },
+  {
+    "concept_id": "spraying",
+    "sound_label": "spraying",
+    "category": "other",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 256.3,
+    "scores": {
+      "clap_audio_text": 0.3423595726490021,
+      "clip_image_text": 0.29536816477775574,
+      "cross_modal_coherence": 0.3188638687133789
+    }
+  },
+  {
+    "concept_id": "wings_flapping",
+    "sound_label": "wings flapping",
+    "category": "animal",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 108.5,
+    "scores": {
+      "clap_audio_text": 0.39598822593688965,
+      "clip_image_text": 0.24189117550849915,
+      "cross_modal_coherence": 0.3189396858215332
+    }
+  },
+  {
+    "concept_id": "camera_snapping_photos",
+    "sound_label": "camera snapping photos",
+    "category": "human",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 55.5,
+    "scores": {
+      "clap_audio_text": 0.4198235273361206,
+      "clip_image_text": 0.22229118645191193,
+      "cross_modal_coherence": 0.32105734944343567
+    }
+  },
+  {
+    "concept_id": "dog_barking",
+    "sound_label": "dog barking",
+    "category": "animal",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 249.8,
+    "scores": {
+      "clap_audio_text": 0.5299965143203735,
+      "clip_image_text": 0.11897208541631699,
+      "cross_modal_coherence": 0.32448428869247437
+    }
+  },
+  {
+    "concept_id": "basketball_dribbling",
+    "sound_label": "basketball dribbling",
+    "category": "human",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 191.8,
+    "scores": {
+      "clap_audio_text": 0.4055246114730835,
+      "clip_image_text": 0.24589943885803223,
+      "cross_modal_coherence": 0.32571202516555786
+    }
+  },
+  {
+    "concept_id": "dishes_clanking",
+    "sound_label": "dishes clanking",
+    "category": "household",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 130.0,
+    "scores": {
+      "clap_audio_text": 0.44078147411346436,
+      "clip_image_text": 0.2125781625509262,
+      "cross_modal_coherence": 0.3266798257827759
+    }
+  },
+  {
+    "concept_id": "chopping_food",
+    "sound_label": "chopping food",
+    "category": "cooking",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 115.8,
+    "scores": {
+      "clap_audio_text": 0.3957045078277588,
+      "clip_image_text": 0.2593016028404236,
+      "cross_modal_coherence": 0.3275030553340912
+    }
+  },
+  {
+    "concept_id": "bike_bell",
+    "sound_label": "bike bell",
+    "category": "household",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 119.7,
+    "scores": {
+      "clap_audio_text": 0.43445682525634766,
+      "clip_image_text": 0.2231099158525467,
+      "cross_modal_coherence": 0.3287833631038666
+    }
+  },
+  {
+    "concept_id": "clock_ticking",
+    "sound_label": "clock ticking",
+    "category": "household",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 62.8,
+    "scores": {
+      "clap_audio_text": 0.3813759684562683,
+      "clip_image_text": 0.27832451462745667,
+      "cross_modal_coherence": 0.3298502564430237
+    }
+  },
+  {
+    "concept_id": "puppy_whining",
+    "sound_label": "puppy whining",
+    "category": "animal",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 133.9,
+    "scores": {
+      "clap_audio_text": 0.3875834047794342,
+      "clip_image_text": 0.27647197246551514,
+      "cross_modal_coherence": 0.3320276737213135
+    }
+  },
+  {
+    "concept_id": "bees_buzzing",
+    "sound_label": "bees buzzing",
+    "category": "animal",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 6.1,
+    "scores": {
+      "clap_audio_text": 0.37113630771636963,
+      "clip_image_text": 0.2933102250099182,
+      "cross_modal_coherence": 0.3322232663631439
+    }
+  },
+  {
+    "concept_id": "guitar",
+    "sound_label": "guitar",
+    "category": "instrument",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 86.1,
+    "scores": {
+      "clap_audio_text": 0.3441305458545685,
+      "clip_image_text": 0.332205206155777,
+      "cross_modal_coherence": 0.33816787600517273
+    }
+  },
+  {
+    "concept_id": "thunder",
+    "sound_label": "thunder",
+    "category": "nature",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 50.6,
+    "scores": {
+      "clap_audio_text": 0.45860424637794495,
+      "clip_image_text": 0.2177879810333252,
+      "cross_modal_coherence": 0.3381960988044739
+    }
+  },
+  {
+    "concept_id": "crowd_cheering",
+    "sound_label": "crowd cheering",
+    "category": "human",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 20.3,
+    "scores": {
+      "clap_audio_text": 0.4487108588218689,
+      "clip_image_text": 0.22953669726848602,
+      "cross_modal_coherence": 0.33912378549575806
+    }
+  },
+  {
+    "concept_id": "scratching",
+    "sound_label": "scratching",
+    "category": "action",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 19.8,
+    "scores": {
+      "clap_audio_text": 0.4662390351295471,
+      "clip_image_text": 0.21533532440662384,
+      "cross_modal_coherence": 0.3407871723175049
+    }
+  },
+  {
+    "concept_id": "gargling",
+    "sound_label": "gargling",
+    "category": "human",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 20.6,
+    "scores": {
+      "clap_audio_text": 0.528833270072937,
+      "clip_image_text": 0.15710291266441345,
+      "cross_modal_coherence": 0.3429681062698364
+    }
+  },
+  {
+    "concept_id": "cutting_with_scissors",
+    "sound_label": "cutting with scissors",
+    "category": "human",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 790.7,
+    "scores": {
+      "clap_audio_text": 0.35040104389190674,
+      "clip_image_text": 0.34174254536628723,
+      "cross_modal_coherence": 0.3460717797279358
+    }
+  },
+  {
+    "concept_id": "stream",
+    "sound_label": "stream",
+    "category": "nature",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 23.4,
+    "scores": {
+      "clap_audio_text": 0.43695539236068726,
+      "clip_image_text": 0.25540676712989807,
+      "cross_modal_coherence": 0.34618109464645386
+    }
+  },
+  {
+    "concept_id": "pouring_water_out_of_bottle",
+    "sound_label": "pouring water out of bottle",
+    "category": "nature",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 119.8,
+    "scores": {
+      "clap_audio_text": 0.47428184747695923,
+      "clip_image_text": 0.21811099350452423,
+      "cross_modal_coherence": 0.34619641304016113
+    }
+  },
+  {
+    "concept_id": "car_alarm",
+    "sound_label": "car alarm",
+    "category": "vehicle",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 69.3,
+    "scores": {
+      "clap_audio_text": 0.4822993278503418,
+      "clip_image_text": 0.2144489288330078,
+      "cross_modal_coherence": 0.3483741283416748
+    }
+  },
+  {
+    "concept_id": "velcro",
+    "sound_label": "velcro",
+    "category": "other",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 177.1,
+    "scores": {
+      "clap_audio_text": 0.44258996844291687,
+      "clip_image_text": 0.260356068611145,
+      "cross_modal_coherence": 0.35147303342819214
+    }
+  },
+  {
+    "concept_id": "walking_on_gravel",
+    "sound_label": "walking on gravel",
+    "category": "nature",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 171.5,
+    "scores": {
+      "clap_audio_text": 0.41705095767974854,
+      "clip_image_text": 0.2869046926498413,
+      "cross_modal_coherence": 0.3519778251647949
+    }
+  },
+  {
+    "concept_id": "train_warning_bell",
+    "sound_label": "train warning bell",
+    "category": "vehicle",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 144.0,
+    "scores": {
+      "clap_audio_text": 0.5069674253463745,
+      "clip_image_text": 0.19781450927257538,
+      "cross_modal_coherence": 0.35239097476005554
+    }
+  },
+  {
+    "concept_id": "songbird",
+    "sound_label": "songbird",
+    "category": "animal",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 247.2,
+    "scores": {
+      "clap_audio_text": 0.5278570652008057,
+      "clip_image_text": 0.1801922619342804,
+      "cross_modal_coherence": 0.35402464866638184
+    }
+  },
+  {
+    "concept_id": "dog_drinking",
+    "sound_label": "dog drinking",
+    "category": "animal",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 110.1,
+    "scores": {
+      "clap_audio_text": 0.5644437074661255,
+      "clip_image_text": 0.14572690427303314,
+      "cross_modal_coherence": 0.3550853133201599
+    }
+  },
+  {
+    "concept_id": "swimming",
+    "sound_label": "swimming",
+    "category": "human",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 282.7,
+    "scores": {
+      "clap_audio_text": 0.48933491110801697,
+      "clip_image_text": 0.2247626930475235,
+      "cross_modal_coherence": 0.35704880952835083
+    }
+  },
+  {
+    "concept_id": "running_up_stairs",
+    "sound_label": "running up stairs",
+    "category": "action",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 12.9,
+    "scores": {
+      "clap_audio_text": 0.43930941820144653,
+      "clip_image_text": 0.2750302255153656,
+      "cross_modal_coherence": 0.3571698069572449
+    }
+  },
+  {
+    "concept_id": "pouring_liquid",
+    "sound_label": "pouring liquid",
+    "category": "action",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 87.7,
+    "scores": {
+      "clap_audio_text": 0.478047639131546,
+      "clip_image_text": 0.2367067039012909,
+      "cross_modal_coherence": 0.35737717151641846
+    }
+  },
+  {
+    "concept_id": "telephone_dialing",
+    "sound_label": "telephone dialing",
+    "category": "household",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 131.0,
+    "scores": {
+      "clap_audio_text": 0.49272242188453674,
+      "clip_image_text": 0.22372783720493317,
+      "cross_modal_coherence": 0.35822513699531555
+    }
+  },
+  {
+    "concept_id": "typing",
+    "sound_label": "typing",
+    "category": "action",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 138.0,
+    "scores": {
+      "clap_audio_text": 0.44644248485565186,
+      "clip_image_text": 0.2736210823059082,
+      "cross_modal_coherence": 0.36003178358078003
+    }
+  },
+  {
+    "concept_id": "tearing",
+    "sound_label": "tearing",
+    "category": "action",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 10.8,
+    "scores": {
+      "clap_audio_text": 0.4841524064540863,
+      "clip_image_text": 0.24266473948955536,
+      "cross_modal_coherence": 0.36340856552124023
+    }
+  },
+  {
+    "concept_id": "frog_croaking",
+    "sound_label": "frog croaking",
+    "category": "animal",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 187.1,
+    "scores": {
+      "clap_audio_text": 0.4203917384147644,
+      "clip_image_text": 0.31873998045921326,
+      "cross_modal_coherence": 0.36956584453582764
+    }
+  },
+  {
+    "concept_id": "hair_dryer",
+    "sound_label": "hair dryer",
+    "category": "appliance",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 78.4,
+    "scores": {
+      "clap_audio_text": 0.41214632987976074,
+      "clip_image_text": 0.3319054841995239,
+      "cross_modal_coherence": 0.37202590703964233
+    }
+  },
+  {
+    "concept_id": "crow",
+    "sound_label": "crow",
+    "category": "animal",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 116.3,
+    "scores": {
+      "clap_audio_text": 0.4212952256202698,
+      "clip_image_text": 0.33076921105384827,
+      "cross_modal_coherence": 0.3760322332382202
+    }
+  },
+  {
+    "concept_id": "squeaky_toy",
+    "sound_label": "squeaky toy",
+    "category": "household",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 168.4,
+    "scores": {
+      "clap_audio_text": 0.5935654044151306,
+      "clip_image_text": 0.15945009887218475,
+      "cross_modal_coherence": 0.3765077590942383
+    }
+  },
+  {
+    "concept_id": "church_bells",
+    "sound_label": "church bells",
+    "category": "household",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 117.7,
+    "scores": {
+      "clap_audio_text": 0.39117681980133057,
+      "clip_image_text": 0.3622587323188782,
+      "cross_modal_coherence": 0.37671777606010437
+    }
+  },
+  {
+    "concept_id": "car_power_windows",
+    "sound_label": "car power windows",
+    "category": "vehicle",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 18.2,
+    "scores": {
+      "clap_audio_text": 0.5922630429267883,
+      "clip_image_text": 0.16498221457004547,
+      "cross_modal_coherence": 0.3786226212978363
+    }
+  },
+  {
+    "concept_id": "heart_beat",
+    "sound_label": "heart beat",
+    "category": "body",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 59.4,
+    "scores": {
+      "clap_audio_text": 0.5594109892845154,
+      "clip_image_text": 0.20145969092845917,
+      "cross_modal_coherence": 0.38043534755706787
+    }
+  },
+  {
+    "concept_id": "flag_flapping",
+    "sound_label": "flag flapping",
+    "category": "household",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 627.8,
+    "scores": {
+      "clap_audio_text": 0.49552541971206665,
+      "clip_image_text": 0.27018338441848755,
+      "cross_modal_coherence": 0.3828544020652771
+    }
+  },
+  {
+    "concept_id": "crumpling_paper",
+    "sound_label": "crumpling paper",
+    "category": "action",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 195.1,
+    "scores": {
+      "clap_audio_text": 0.5603231191635132,
+      "clip_image_text": 0.20795375108718872,
+      "cross_modal_coherence": 0.38413843512535095
+    }
+  },
+  {
+    "concept_id": "kettle_whistling",
+    "sound_label": "kettle whistling",
+    "category": "appliance",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 87.8,
+    "scores": {
+      "clap_audio_text": 0.44625067710876465,
+      "clip_image_text": 0.32210493087768555,
+      "cross_modal_coherence": 0.3841778039932251
+    }
+  },
+  {
+    "concept_id": "boiling_water",
+    "sound_label": "boiling water",
+    "category": "cooking",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 128.7,
+    "scores": {
+      "clap_audio_text": 0.5564505457878113,
+      "clip_image_text": 0.2138768881559372,
+      "cross_modal_coherence": 0.38516372442245483
+    }
+  },
+  {
+    "concept_id": "train_whistle",
+    "sound_label": "train whistle",
+    "category": "vehicle",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 147.1,
+    "scores": {
+      "clap_audio_text": 0.47875288128852844,
+      "clip_image_text": 0.29527270793914795,
+      "cross_modal_coherence": 0.387012779712677
+    }
+  },
+  {
+    "concept_id": "walking_on_leaves",
+    "sound_label": "walking on leaves",
+    "category": "nature",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 132.6,
+    "scores": {
+      "clap_audio_text": 0.5259426832199097,
+      "clip_image_text": 0.249331533908844,
+      "cross_modal_coherence": 0.38763710856437683
+    }
+  },
+  {
+    "concept_id": "violin",
+    "sound_label": "violin",
+    "category": "instrument",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 63.8,
+    "scores": {
+      "clap_audio_text": 0.44764024019241333,
+      "clip_image_text": 0.33157622814178467,
+      "cross_modal_coherence": 0.389608234167099
+    }
+  },
+  {
+    "concept_id": "duck_quack",
+    "sound_label": "duck quack",
+    "category": "animal",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 250.0,
+    "scores": {
+      "clap_audio_text": 0.5227659344673157,
+      "clip_image_text": 0.26109302043914795,
+      "cross_modal_coherence": 0.3919294774532318
+    }
+  },
+  {
+    "concept_id": "chimes_in_the_wind",
+    "sound_label": "chimes in the wind",
+    "category": "nature",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 52.6,
+    "scores": {
+      "clap_audio_text": 0.4728454351425171,
+      "clip_image_text": 0.31111177802085876,
+      "cross_modal_coherence": 0.3919786214828491
+    }
+  },
+  {
+    "concept_id": "whistle",
+    "sound_label": "whistle",
+    "category": "other",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 147.1,
+    "scores": {
+      "clap_audio_text": 0.4376249611377716,
+      "clip_image_text": 0.34764131903648376,
+      "cross_modal_coherence": 0.3926331400871277
+    }
+  },
+  {
+    "concept_id": "telephone_ringing",
+    "sound_label": "telephone ringing",
+    "category": "household",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 42.7,
+    "scores": {
+      "clap_audio_text": 0.5134919285774231,
+      "clip_image_text": 0.27915892004966736,
+      "cross_modal_coherence": 0.39632540941238403
+    }
+  },
+  {
+    "concept_id": "doorbell",
+    "sound_label": "doorbell",
+    "category": "household",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 108.8,
+    "scores": {
+      "clap_audio_text": 0.4476955533027649,
+      "clip_image_text": 0.350028395652771,
+      "cross_modal_coherence": 0.39886197447776794
+    }
+  },
+  {
+    "concept_id": "geese",
+    "sound_label": "geese",
+    "category": "animal",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 240.4,
+    "scores": {
+      "clap_audio_text": 0.5086539387702942,
+      "clip_image_text": 0.3052901327610016,
+      "cross_modal_coherence": 0.4069720506668091
+    }
+  },
+  {
+    "concept_id": "keys_jingling",
+    "sound_label": "keys jingling",
+    "category": "household",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 113.4,
+    "scores": {
+      "clap_audio_text": 0.5251559615135193,
+      "clip_image_text": 0.29494649171829224,
+      "cross_modal_coherence": 0.41005122661590576
+    }
+  },
+  {
+    "concept_id": "crickets",
+    "sound_label": "crickets",
+    "category": "animal",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 135.2,
+    "scores": {
+      "clap_audio_text": 0.5374523401260376,
+      "clip_image_text": 0.28313344717025757,
+      "cross_modal_coherence": 0.4102928936481476
+    }
+  },
+  {
+    "concept_id": "electric_hand_drill",
+    "sound_label": "electric hand drill",
+    "category": "tool",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 93.0,
+    "scores": {
+      "clap_audio_text": 0.5400618314743042,
+      "clip_image_text": 0.29162418842315674,
+      "cross_modal_coherence": 0.41584300994873047
+    }
+  },
+  {
+    "concept_id": "running_water",
+    "sound_label": "running water",
+    "category": "nature",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 124.0,
+    "scores": {
+      "clap_audio_text": 0.5277401208877563,
+      "clip_image_text": 0.305669903755188,
+      "cross_modal_coherence": 0.41670501232147217
+    }
+  },
+  {
+    "concept_id": "siren",
+    "sound_label": "siren",
+    "category": "other",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 46.3,
+    "scores": {
+      "clap_audio_text": 0.5997159481048584,
+      "clip_image_text": 0.23466472327709198,
+      "cross_modal_coherence": 0.4171903431415558
+    }
+  },
+  {
+    "concept_id": "car_skidding",
+    "sound_label": "car skidding",
+    "category": "vehicle",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 41.4,
+    "scores": {
+      "clap_audio_text": 0.5617550611495972,
+      "clip_image_text": 0.2749633193016052,
+      "cross_modal_coherence": 0.4183591902256012
+    }
+  },
+  {
+    "concept_id": "microwave_running",
+    "sound_label": "microwave running",
+    "category": "animal",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 155.1,
+    "scores": {
+      "clap_audio_text": 0.5053331255912781,
+      "clip_image_text": 0.3417382836341858,
+      "cross_modal_coherence": 0.42353570461273193
+    }
+  },
+  {
+    "concept_id": "toothbrushing",
+    "sound_label": "toothbrushing",
+    "category": "appliance",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 279.1,
+    "scores": {
+      "clap_audio_text": 0.5388312339782715,
+      "clip_image_text": 0.31471917033195496,
+      "cross_modal_coherence": 0.4267752170562744
+    }
+  },
+  {
+    "concept_id": "cicadas",
+    "sound_label": "cicadas",
+    "category": "animal",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 102.4,
+    "scores": {
+      "clap_audio_text": 0.6020856499671936,
+      "clip_image_text": 0.25206825137138367,
+      "cross_modal_coherence": 0.42707693576812744
+    }
+  },
+  {
+    "concept_id": "cash_register",
+    "sound_label": "cash register",
+    "category": "household",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 116.8,
+    "scores": {
+      "clap_audio_text": 0.5364923477172852,
+      "clip_image_text": 0.32925087213516235,
+      "cross_modal_coherence": 0.43287160992622375
+    }
+  },
+  {
+    "concept_id": "newspaper_rustling",
+    "sound_label": "newspaper rustling",
+    "category": "action",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 28.2,
+    "scores": {
+      "clap_audio_text": 0.5563695430755615,
+      "clip_image_text": 0.3192831575870514,
+      "cross_modal_coherence": 0.43782633543014526
+    }
+  },
+  {
+    "concept_id": "sports_arena_buzzer",
+    "sound_label": "sports arena buzzer",
+    "category": "human",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 24.5,
+    "scores": {
+      "clap_audio_text": 0.6187711954116821,
+      "clip_image_text": 0.25955820083618164,
+      "cross_modal_coherence": 0.4391646981239319
+    }
+  },
+  {
+    "concept_id": "blender",
+    "sound_label": "blender",
+    "category": "appliance",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 86.5,
+    "scores": {
+      "clap_audio_text": 0.5678287744522095,
+      "clip_image_text": 0.3191913962364197,
+      "cross_modal_coherence": 0.4435100853443146
+    }
+  },
+  {
+    "concept_id": "door_knocking",
+    "sound_label": "door knocking",
+    "category": "household",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 159.8,
+    "scores": {
+      "clap_audio_text": 0.6736310720443726,
+      "clip_image_text": 0.21710267663002014,
+      "cross_modal_coherence": 0.44536685943603516
+    }
+  },
+  {
+    "concept_id": "electric_shaver",
+    "sound_label": "electric shaver",
+    "category": "appliance",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 96.7,
+    "scores": {
+      "clap_audio_text": 0.6215336918830872,
+      "clip_image_text": 0.2777279019355774,
+      "cross_modal_coherence": 0.4496307969093323
+    }
+  },
+  {
+    "concept_id": "alarm_clock",
+    "sound_label": "alarm clock",
+    "category": "household",
+    "quality": "fair",
+    "source": "AV_McDermott",
+    "image_source": "EcoSet",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 27.9,
+    "scores": {
+      "clap_audio_text": 0.6033908128738403,
+      "clip_image_text": 0.30686384439468384,
+      "cross_modal_coherence": 0.4551273286342621
+    }
+  },
+  {
+    "concept_id": "cellphone_vibrating",
+    "sound_label": "cellphone vibrating",
+    "category": "household",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 185.0,
+    "scores": {
+      "clap_audio_text": 0.6378619074821472,
+      "clip_image_text": 0.2802108824253082,
+      "cross_modal_coherence": 0.4590364098548889
+    }
+  },
+  {
+    "concept_id": "zipper",
+    "sound_label": "zipper",
+    "category": "household",
+    "quality": "excellent",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 175.7,
+    "scores": {
+      "clap_audio_text": 0.6294997930526733,
+      "clip_image_text": 0.2933225929737091,
+      "cross_modal_coherence": 0.46141117811203003
+    }
+  },
+  {
+    "concept_id": "frying",
+    "sound_label": "frying",
+    "category": "cooking",
+    "quality": "fair_supplemental",
+    "source": "McDermott_supplemental",
+    "image_source": "Pexels",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 12.5,
+    "scores": {
+      "clap_audio_text": 0.6145676374435425,
+      "clip_image_text": 0.31342414021492004,
+      "cross_modal_coherence": 0.46399587392807007
+    }
+  },
+  {
+    "concept_id": "coin_in_vending_machine",
+    "sound_label": "coin in vending machine",
+    "category": "household",
+    "quality": "good",
+    "source": "AV_McDermott",
+    "image_source": "THINGS",
+    "audio_info": {
+      "exists": true,
+      "size_kb": 172.3,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_s": 2.0,
+      "bit_depth": 16
+    },
+    "image_exists": true,
+    "image_size_kb": 206.7,
+    "scores": {
+      "clap_audio_text": 0.6691755056381226,
+      "clip_image_text": 0.30481404066085815,
+      "cross_modal_coherence": 0.48699477314949036
+    }
+  }
+]

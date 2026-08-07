@@ -1,0 +1,158 @@
+{
+  "_doc": [
+    "Dialogue bank for the game layer. Every line here is spoken/shown by the",
+    "mascot. HARD RULE: no line in a LINTED key (see _EVALUATIVE_TOKENS and",
+    "_LINTED_KEYS in experiments/game_layer.py) may imply the child's choice was",
+    "right, wrong, good, clever, or expected. The odd-one-out task has no",
+    "correct answer on regular trials, praising a choice teaches a similarity",
+    "structure and corrupts the measurement the embedding is built from.",
+    "",
+    "Safe: acknowledges the ACT of choosing ('you picked one!').",
+    "Unsafe: evaluates the CONTENT of the choice ('good one!', 'nice match!').",
+    "",
+    "`after_response` lines are drawn uniformly at random and are interchangeable",
+    "by construction, so no child can learn a contingency between what they",
+    "picked and what the mascot said.",
+    "",
+    "The narrative keys (cutscene_*, room_intro_*) are linted too. They are read",
+    "aloud AFTER the child has been making choices, so 'every room is just right',",
+    "the phrasing in the original structure document, would land as a verdict",
+    "on those choices even though it is describing the castle."
+  ],
+
+  "mascot_name": "Pip",
+
+  "cutscene_open": [
+    "Pip's castle is almost built, but the rooms are still empty.",
+    "Oh, hello! I'm Pip, and this is my castle.",
+    "I'm still working out what goes where. Will you help me sort things, room by room?"
+  ],
+
+  "cutscene_close": [
+    "Look at that, every single room has something in it now.",
+    "Thank you for showing me how you would sort things."
+  ],
+
+  "welcome": [
+    "Let's start with the first room!",
+    "Here we go, room number one."
+  ],
+
+  "instructions_tier1": [
+    "In each room I'll show you three pictures.",
+    "Tap the one that is the most different from the other two.",
+    "There's no right answer, I just want to know what YOU think!"
+  ],
+
+  "instructions_tier2": [
+    "Some rooms have pictures to SEE, some have sounds to HEAR.",
+    "Tap the one that is the most different from the other two.",
+    "There's no right answer, I just want to know what YOU think!"
+  ],
+
+  "room_intro_visual": [
+    "Here's the collection room. Let's see what's in it!",
+    "This is the collection room, have a look around."
+  ],
+
+  "room_intro_audio": [
+    "Here's the echo room. This room is for listening!",
+    "This is the echo room, close your eyes if it helps."
+  ],
+
+  "room_intro_av": [
+    "Here's the theatre room. You'll see AND hear things in here!",
+    "This is the theatre room, pictures and sounds together."
+  ],
+
+  "_trial_prompt_doc": [
+    "One prompt per condition. Shown via stable_line(), so a child sees the same",
+    "wording on every trial of a room, rotating it reads as the instruction",
+    "having changed. `trial_prompt` is the fallback for any unmapped condition."
+  ],
+
+  "trial_prompt": [
+    "Which one is the most different from the other two?",
+    "Tap the one that doesn't belong with the other two.",
+    "Which one is the odd one out?"
+  ],
+
+  "trial_prompt_visual": [
+    "Which one is the most different from the other two?",
+    "Tap the one that doesn't belong with the other two.",
+    "Which one is the odd one out?"
+  ],
+
+  "trial_prompt_audio": [
+    "Listen close, which sound doesn't belong?",
+    "Which sound is the most different from the other two?"
+  ],
+
+  "trial_prompt_av": [
+    "Look and listen, which one doesn't belong?",
+    "Which one is the most different from the other two?"
+  ],
+
+  "after_response": [
+    "Okay!",
+    "Got it!",
+    "Thanks for picking!",
+    "Ooh, interesting!",
+    "Mmhmm!",
+    "I see!",
+    "Alright!",
+    "Noted!"
+  ],
+
+  "_level_complete_doc": [
+    "Must not name a NUMBER of stickers: a room awards 2-4 and the count is",
+    "drawn per room before the session starts, so any fixed wording would be",
+    "wrong most of the time. Keep it count-agnostic."
+  ],
+
+  "level_complete": [
+    "That's a whole room done! Here's what you found.",
+    "Room finished! These are for your book.",
+    "That's the end of that room. Sticker time."
+  ],
+
+  "playground_prompt": [
+    "Put them anywhere you like!",
+    "Where should these go? You choose!"
+  ],
+
+  "break_prompt": [
+    "Want to keep going, or take a rest?",
+    "Ready for the next room? Or we can pause."
+  ],
+
+  "resting": [
+    "No problem, take as long as you like. I'll wait!",
+    "Let's rest. Tap when you're ready to play again."
+  ],
+
+  "paused": [
+    "We're paused. Nothing's lost, tap when you want to carry on.",
+    "Taking a break! Your stickers are safe."
+  ],
+
+  "nudge": [
+    "Take your time, pick whichever one you want.",
+    "No rush! Any one you like."
+  ],
+
+  "finish": [
+    "All done! Thank you so much for playing with me.",
+    "That's the end! Thank you for sticking with it."
+  ],
+
+  "_unsafe_examples_do_not_use": [
+    "Good job!",
+    "Nice match!",
+    "That's right!",
+    "Clever pick!",
+    "Hmm, are you sure?",
+    "Most kids pick that one too!",
+    "Every room is just right!"
+  ]
+}

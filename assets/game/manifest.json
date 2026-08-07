@@ -1,0 +1,782 @@
+{
+  "version": 1,
+  "description": "Asset manifest for the kid-facing game layer. Resolved by experiments/game_layer.py. Paths are relative to assets/game/.",
+  "mascot_variants": {
+    "_doc": "Pip is a rounded fox-raccoon hybrid -- deliberately not a real species, so children do not import real-animal associations into the similarity judgment. There is exactly ONE variant, by design; see _single_variant_doc.",
+    "_single_variant_doc": "The gendered boy/girl variants were REMOVED. Selecting the mascot from the participant's gender put a systematically different image on screen for every trial, which is a presentation confound with any across-gender comparison -- and one that would have forced every downstream analysis to stratify by variant forever. One character for everyone removes it at the source. The structure appears here so a future variant (a translation, a high-contrast set) can be added without a schema change; participant_data.mascot_variant is still recorded so a session can always be audited.",
+    "_default": "neutral",
+    "neutral": {
+      "name": "Pip",
+      "idle": "mascot/neutral/mascot_idle.png",
+      "happy": "mascot/neutral/mascot_happy.png",
+      "think": "mascot/neutral/mascot_think.png",
+      "wave": "mascot/neutral/mascot_wave.png"
+    }
+  },
+  "rooms": {
+    "_doc": "Room framing per stimulus condition. One room = one block = one break point. Names are deliberately ABSTRACT (place words, not category words): a room called 'the toy room' over a triplet containing toys would hint at the grouping we are trying to measure. Keyed by the condition code used in experiments/two_tier_experiment.py.",
+    "_backdrop_doc": "Backdrops advance ONE PER ROOM, not per condition: c1 is a bare shell and each step is a little more furnished, so the castle visibly fills up as the session goes on. Rooms beyond the sequence re-use the later, fullest ones.",
+    "V": {
+      "name": "the collection room",
+      "prompt_key": "trial_prompt_visual",
+      "intro_key": "room_intro_visual",
+      "backdrop": "room/collection/c1.png"
+    },
+    "A": {
+      "name": "the echo room",
+      "prompt_key": "trial_prompt_audio",
+      "intro_key": "room_intro_audio",
+      "backdrop": "room/echo/echo.jpg"
+    },
+    "AV": {
+      "name": "the theatre room",
+      "prompt_key": "trial_prompt_av",
+      "intro_key": "room_intro_av",
+      "backdrop": "room/theatre/theatre.jpg"
+    },
+    "_progression_doc": "progression[i] is the backdrop for room i (0-based). Once it runs out, a room draws at random from progression[repeat_from-1:] -- the fullest rooms, so a long session never appears to go backwards. The draw uses a stream seeded from the participant id, never the trial rng, and the chosen file is recorded per room in game_state so a session can be reconstructed.",
+    "_shared_doc": "All three conditions currently share this progression. Echo and theatre keep their own single-image entries below for when their art exists; set `progression` inside a condition to override.",
+    "progression": [
+      "room/collection/c1.png",
+      "room/collection/c2.png",
+      "room/collection/c3.png",
+      "room/collection/c4.png",
+      "room/collection/c5.png",
+      "room/collection/c6.png",
+      "room/collection/c7.png",
+      "room/collection/c8.jpg",
+      "room/collection/c9.jpg",
+      "room/collection/c10.png",
+      "room/collection/c11.png"
+    ],
+    "repeat_from": 7
+  },
+  "sounds": {
+    "select": "sounds/select.wav",
+    "level_up": "sounds/level_up.wav",
+    "sticker": "sounds/sticker.wav",
+    "nudge": "sounds/nudge.wav",
+    "finish": "sounds/finish.wav"
+  },
+  "dialogue": {
+    "en": "dialogue/dialogue_en.json"
+  },
+  "theme": {
+    "_palette_doc": "Pip's palette: muted-but-warm soft teal / sandy yellow / dusty rose. Inviting without the high-saturation overstimulation of a typical children's game. These three are the CHARACTER and SCENERY colours; see the selection note below for why they do not extend to the highlight.",
+    "palette_teal": "#6E9E9A",
+    "palette_sand": "#D9BE86",
+    "palette_rose": "#C99A96",
+    "background": "#FAF6EF",
+    "panel": "#FFFFFF",
+    "text": "#33302B",
+    "text_muted": "#7A7268",
+    "_selection_color_doc": "Deliberately NOT green and NOT red -- those read as correct/incorrect to a child and would imply the free choice was graded. Note this is why the highlight stays blue rather than adopting the palette above: soft teal reads as greenish and dusty rose as reddish, so neither is safe for the one element that marks the child's own choice.",
+    "selection": "#7C9CD6",
+    "selection_fill": "rgba(124,156,214,0.18)",
+    "_progress_fill_doc": "Sandy yellow, not the previous green. A progress bar is not response feedback, but a green fill that advances after each choice is an avoidable success cue.",
+    "progress_fill": "#D9BE86",
+    "progress_track": "#EDE5D8",
+    "_font_doc": "Bundled UI font. Rodin Bokutoh is the rounded/soft cut, which suits a children's game better than the straight-sided NewRodin; both are listed so either can be selected by changing `family`. Set `family` to null or remove the block to fall back to the system font. NOTE for maintainers: these files are loaded by READING THE BYTES, because QFontDatabase.addApplicationFont(path) returns -1 for them on macOS even though the files are valid OpenType. See _load_fonts in experiments/game_layer.py.",
+    "font": {
+      "files": [],
+      "family": null,
+      "_note": "licensed font not redistributed; see js/css/game.css"
+    },
+    "font_scale": 1.35,
+    "min_touch_px": 96,
+    "corner_radius_px": 18
+  },
+  "accessibility": {
+    "_doc": "Defaults for reduced-stimulation mode (config key: Gamify_Reduced_Motion). Applied when working with children who are sensitive to movement/sound, including autistic participants.",
+    "reduced_motion": {
+      "disable_bob": true,
+      "disable_fade": false,
+      "max_animation_ms": 200
+    },
+    "quiet": {
+      "mute_all_sfx": true
+    }
+  },
+  "cutscene": {
+    "_doc": "Story panels shown at the start and end of a session. Each panel pairs a wide image with one dialogue line, drawn in a box along the bottom; panels cross-fade. Missing images degrade to the text-only cutscene, so the session still runs while art is being made.",
+    "_composition_doc": "Panels must keep their bottom ~20% visually calm -- the dialogue box covers it. See docs/ASSET_BRIEF.md §4.",
+    "fade_ms": 450,
+    "dialogue_box_rel_height": 0.18,
+    "_panels_doc": "1 = Pip waves, castle behind him. 2 = cutaway castle, every room empty, Pip looking up at them. 3 = the same castle decorated, Pip looking at it. Panel 2 carries two lines because the premise and the invitation are separate beats; the image holds while the text changes.",
+    "open": [
+      {
+        "image": "cutscene/1.png",
+        "line": 0
+      },
+      {
+        "image": "cutscene/2.png",
+        "line": 1
+      },
+      {
+        "image": "cutscene/2.png",
+        "line": 2
+      }
+    ],
+    "close": [
+      {
+        "image": "cutscene/3.png",
+        "line": 0
+      },
+      {
+        "image": "cutscene/3.png",
+        "line": 1
+      }
+    ]
+  },
+  "cursors": {
+    "_doc": "Optional custom cursor art for the playground. Omit a key and Qt's open-hand / closed-hand cursors are used, which already read as \"you can pick this up\" and \"you are holding it\" on every platform. A named-but-missing file falls back the same way rather than leaving a blank cursor with nothing to aim.",
+    "_hotspot_doc": "hotspot is [x, y] in pixels within the SCALED image (size_px), i.e. the exact point that counts as the pointer tip. Per-kind overrides: point_hotspot / drag_hotspot.",
+    "size_px": 48,
+    "hotspot": [
+      8,
+      4
+    ]
+  },
+  "castle": {
+    "_doc": "Playground placement (Stage 9). Stickers go ANYWHERE the child puts them -- there are no slots and no snapping, and overlapping is allowed. Deciding where is the only real autonomy the game layer offers, and a snap target quietly makes that decision instead of the child.",
+    "_coords_doc": "Positions are recorded RELATIVE to the room canvas (0..1) in game_state.castle.placements, so a castle laid out on one screen renders identically on another and survives a window resize. Drops are clamped to keep the sticker fully on screen and clear of the pending-sticker tray; see EDGE_MARGIN_REL in experiments/playground.py."
+  },
+  "stickers": {
+    "_doc": "2-4 stickers are awarded per completed ROOM. The count for every room is drawn ONCE at session start, before the first response exists -- see experiments/castle_state.py. Purely cosmetic and never contingent on WHAT was picked, only on finishing the room.",
+    "_codepoint_doc": "Every sticker MUST be an astral emoji (U+1F300 and above). Emoji in the BMP symbol blocks (⭐ U+2B50, ⛵ U+26F5, ☀ U+2600, ☁ U+2601) also have a monochrome TEXT glyph, and Qt reaches a system symbol font before the colour emoji font, so they render as thin line art next to full-colour stickers. Appending U+FE0F does NOT fix it -- ☀️ and ☁️ carried the variation selector and still came out monochrome, because Qt font matching on macOS ignores it. Astral codepoints have no monochrome glyph to fall back to, which is why the rule is about the codepoint and not the variation selector. tests/test_game_layer.py::test_stickers_render_in_colour_not_line_art enforces it.",
+    "_art_doc": "Deliberately generic castle-decoration subjects, NOT objects from the stimulus set. Sticker art that matched a room's stimulus category would turn the reward into a hint about the grouping the trial is measuring. This is the open question flagged in docs/GAMIFICATION_ROADMAP.md §7, resolved here in favour of decoration.",
+    "pool": [
+      {
+        "id": "star",
+        "label": "Star",
+        "emoji": "🌟",
+        "image": "emoji/star.png"
+      },
+      {
+        "id": "rocket",
+        "label": "Rocket",
+        "emoji": "🚀",
+        "image": "emoji/rocket.png"
+      },
+      {
+        "id": "rainbow",
+        "label": "Rainbow",
+        "emoji": "🌈",
+        "image": "emoji/rainbow.png"
+      },
+      {
+        "id": "cake",
+        "label": "Cake",
+        "emoji": "🎂",
+        "image": "emoji/cake.png"
+      },
+      {
+        "id": "turtle",
+        "label": "Turtle",
+        "emoji": "🐢",
+        "image": "emoji/turtle.png"
+      },
+      {
+        "id": "balloon",
+        "label": "Balloon",
+        "emoji": "🎈",
+        "image": "emoji/balloon.png"
+      },
+      {
+        "id": "moon",
+        "label": "Moon",
+        "emoji": "🌙",
+        "image": "emoji/moon.png"
+      },
+      {
+        "id": "sun",
+        "label": "Sun",
+        "emoji": "🌞",
+        "image": "emoji/sun.png"
+      },
+      {
+        "id": "leaf",
+        "label": "Leaf",
+        "emoji": "🍃",
+        "image": "emoji/leaf.png"
+      },
+      {
+        "id": "shell",
+        "label": "Shell",
+        "emoji": "🐚",
+        "image": "emoji/shell.png"
+      },
+      {
+        "id": "crown",
+        "label": "Crown",
+        "emoji": "👑",
+        "image": "emoji/crown.png"
+      },
+      {
+        "id": "kite",
+        "label": "Kite",
+        "emoji": "🪁",
+        "image": "emoji/kite.png"
+      },
+      {
+        "id": "boat",
+        "label": "Boat",
+        "emoji": "🛶",
+        "image": "emoji/boat.png"
+      },
+      {
+        "id": "gem",
+        "label": "Gem",
+        "emoji": "💎",
+        "image": "emoji/gem.png"
+      },
+      {
+        "id": "fish",
+        "label": "Fish",
+        "emoji": "🐟",
+        "image": "emoji/fish.png"
+      },
+      {
+        "id": "tree",
+        "label": "Tree",
+        "emoji": "🌳",
+        "image": "emoji/tree.png"
+      },
+      {
+        "id": "mushroom",
+        "label": "Mushroom",
+        "emoji": "🍄",
+        "image": "emoji/mushroom.png"
+      },
+      {
+        "id": "shooting_star",
+        "label": "Shooting star",
+        "emoji": "🌠",
+        "image": "emoji/shooting_star.png"
+      },
+      {
+        "id": "planet",
+        "label": "Planet",
+        "emoji": "🪐",
+        "image": "emoji/planet.png"
+      },
+      {
+        "id": "crescent_left",
+        "label": "Crescent",
+        "emoji": "🌛",
+        "image": "emoji/crescent_left.png"
+      },
+      {
+        "id": "crescent_right",
+        "label": "Crescent",
+        "emoji": "🌜",
+        "image": "emoji/crescent_right.png"
+      },
+      {
+        "id": "full_moon_face",
+        "label": "Moon face",
+        "emoji": "🌝",
+        "image": "emoji/full_moon_face.png"
+      },
+      {
+        "id": "sparkle_swirl",
+        "label": "Swirl",
+        "emoji": "💫",
+        "image": "emoji/sparkle_swirl.png"
+      },
+      {
+        "id": "wave",
+        "label": "Wave",
+        "emoji": "🌊",
+        "image": "emoji/wave.png"
+      },
+      {
+        "id": "bright",
+        "label": "Bright",
+        "emoji": "🔆",
+        "image": "emoji/bright.png"
+      },
+      {
+        "id": "music_note",
+        "label": "Music note",
+        "emoji": "🎵",
+        "image": "emoji/music_note.png"
+      },
+      {
+        "id": "party",
+        "label": "Party",
+        "emoji": "🎉",
+        "image": "emoji/party.png"
+      },
+      {
+        "id": "confetti",
+        "label": "Confetti",
+        "emoji": "🎊",
+        "image": "emoji/confetti.png"
+      },
+      {
+        "id": "ribbon",
+        "label": "Ribbon",
+        "emoji": "🎀",
+        "image": "emoji/ribbon.png"
+      },
+      {
+        "id": "firework",
+        "label": "Firework",
+        "emoji": "🎆",
+        "image": "emoji/firework.png"
+      },
+      {
+        "id": "bubble_a",
+        "label": "Bubble",
+        "emoji": "🫧",
+        "image": "emoji/bubble_a.png"
+      },
+      {
+        "id": "spiral",
+        "label": "Spiral",
+        "emoji": "🌀",
+        "image": "emoji/spiral.png"
+      },
+      {
+        "id": "cyclone_x",
+        "label": "Comet",
+        "emoji": "🌌",
+        "image": "emoji/cyclone_x.png"
+      },
+      {
+        "id": "orb",
+        "label": "Crystal orb",
+        "emoji": "🔮",
+        "image": "emoji/orb.png"
+      },
+      {
+        "id": "wand",
+        "label": "Wand",
+        "emoji": "🪄",
+        "image": "emoji/wand.png"
+      },
+      {
+        "id": "mirrorball",
+        "label": "Mirror ball",
+        "emoji": "🪩",
+        "image": "emoji/mirrorball.png"
+      },
+      {
+        "id": "amulet",
+        "label": "Amulet",
+        "emoji": "🧿",
+        "image": "emoji/amulet.png"
+      },
+      {
+        "id": "trident",
+        "label": "Trident",
+        "emoji": "🔱",
+        "image": "emoji/trident.png"
+      },
+      {
+        "id": "badge",
+        "label": "Badge",
+        "emoji": "🔰",
+        "image": "emoji/badge.png"
+      },
+      {
+        "id": "rosette",
+        "label": "Rosette",
+        "emoji": "💮",
+        "image": "emoji/rosette.png"
+      },
+      {
+        "id": "boom",
+        "label": "Boom",
+        "emoji": "💥",
+        "image": "emoji/boom.png"
+      },
+      {
+        "id": "droplet",
+        "label": "Droplet",
+        "emoji": "💧",
+        "image": "emoji/droplet.png"
+      },
+      {
+        "id": "dash",
+        "label": "Dash",
+        "emoji": "💨",
+        "image": "emoji/dash.png"
+      },
+      {
+        "id": "dizzy_deco",
+        "label": "Dizzy",
+        "emoji": "🌬",
+        "image": "emoji/dizzy_deco.png"
+      },
+      {
+        "id": "unicorn",
+        "label": "Unicorn",
+        "emoji": "🦄",
+        "image": "emoji/unicorn.png"
+      },
+      {
+        "id": "dragon",
+        "label": "Dragon",
+        "emoji": "🐉",
+        "image": "emoji/dragon.png"
+      },
+      {
+        "id": "ghost",
+        "label": "Ghost",
+        "emoji": "👻",
+        "image": "emoji/ghost.png"
+      },
+      {
+        "id": "alien",
+        "label": "Alien",
+        "emoji": "👾",
+        "image": "emoji/alien.png"
+      },
+      {
+        "id": "robot",
+        "label": "Robot",
+        "emoji": "🤖",
+        "image": "emoji/robot.png"
+      },
+      {
+        "id": "ufo",
+        "label": "Flying Saucer",
+        "emoji": "🛸",
+        "image": "emoji/ufo.png"
+      },
+      {
+        "id": "trex",
+        "label": "T-Rex",
+        "emoji": "🦖",
+        "image": "emoji/trex.png"
+      },
+      {
+        "id": "sauropod",
+        "label": "Long-Neck",
+        "emoji": "🦕",
+        "image": "emoji/sauropod.png"
+      },
+      {
+        "id": "dolphin",
+        "label": "Dolphin",
+        "emoji": "🐬",
+        "image": "emoji/dolphin.png"
+      },
+      {
+        "id": "whale",
+        "label": "Whale",
+        "emoji": "🐳",
+        "image": "emoji/whale.png"
+      },
+      {
+        "id": "shark",
+        "label": "Shark",
+        "emoji": "🦈",
+        "image": "emoji/shark.png"
+      },
+      {
+        "id": "crab",
+        "label": "Crab",
+        "emoji": "🦀",
+        "image": "emoji/crab.png"
+      },
+      {
+        "id": "coral",
+        "label": "Coral",
+        "emoji": "🪸",
+        "image": "emoji/coral.png"
+      },
+      {
+        "id": "seal",
+        "label": "Seal",
+        "emoji": "🦭",
+        "image": "emoji/seal.png"
+      },
+      {
+        "id": "blowfish",
+        "label": "Blowfish",
+        "emoji": "🐡",
+        "image": "emoji/blowfish.png"
+      },
+      {
+        "id": "squid",
+        "label": "Squid",
+        "emoji": "🦑",
+        "image": "emoji/squid.png"
+      },
+      {
+        "id": "lion",
+        "label": "Lion",
+        "emoji": "🦁",
+        "image": "emoji/lion.png"
+      },
+      {
+        "id": "panda",
+        "label": "Panda",
+        "emoji": "🐼",
+        "image": "emoji/panda.png"
+      },
+      {
+        "id": "koala",
+        "label": "Koala",
+        "emoji": "🐨",
+        "image": "emoji/koala.png"
+      },
+      {
+        "id": "hedgehog",
+        "label": "Hedgehog",
+        "emoji": "🦔",
+        "image": "emoji/hedgehog.png"
+      },
+      {
+        "id": "sloth",
+        "label": "Sloth",
+        "emoji": "🦥",
+        "image": "emoji/sloth.png"
+      },
+      {
+        "id": "flamingo",
+        "label": "Flamingo",
+        "emoji": "🦩",
+        "image": "emoji/flamingo.png"
+      },
+      {
+        "id": "giraffe",
+        "label": "Giraffe",
+        "emoji": "🦒",
+        "image": "emoji/giraffe.png"
+      },
+      {
+        "id": "elephant",
+        "label": "Elephant",
+        "emoji": "🐘",
+        "image": "emoji/elephant.png"
+      },
+      {
+        "id": "zebra",
+        "label": "Zebra",
+        "emoji": "🦓",
+        "image": "emoji/zebra.png"
+      },
+      {
+        "id": "penguin",
+        "label": "Penguin",
+        "emoji": "🐧",
+        "image": "emoji/penguin.png"
+      },
+      {
+        "id": "otter",
+        "label": "Otter",
+        "emoji": "🦦",
+        "image": "emoji/otter.png"
+      },
+      {
+        "id": "butterfly",
+        "label": "Butterfly",
+        "emoji": "🦋",
+        "image": "emoji/butterfly.png"
+      },
+      {
+        "id": "ladybug",
+        "label": "Ladybug",
+        "emoji": "🐞",
+        "image": "emoji/ladybug.png"
+      },
+      {
+        "id": "snail",
+        "label": "Snail",
+        "emoji": "🐌",
+        "image": "emoji/snail.png"
+      },
+      {
+        "id": "donut",
+        "label": "Donut",
+        "emoji": "🍩",
+        "image": "emoji/donut.png"
+      },
+      {
+        "id": "lollipop",
+        "label": "Lollipop",
+        "emoji": "🍭",
+        "image": "emoji/lollipop.png"
+      },
+      {
+        "id": "cupcake",
+        "label": "Cupcake",
+        "emoji": "🧁",
+        "image": "emoji/cupcake.png"
+      },
+      {
+        "id": "strawberry",
+        "label": "Strawberry",
+        "emoji": "🍓",
+        "image": "emoji/strawberry.png"
+      },
+      {
+        "id": "watermelon",
+        "label": "Watermelon",
+        "emoji": "🍉",
+        "image": "emoji/watermelon.png"
+      },
+      {
+        "id": "cherries",
+        "label": "Cherries",
+        "emoji": "🍒",
+        "image": "emoji/cherries.png"
+      },
+      {
+        "id": "grapes",
+        "label": "Grapes",
+        "emoji": "🍇",
+        "image": "emoji/grapes.png"
+      },
+      {
+        "id": "popcorn",
+        "label": "Popcorn",
+        "emoji": "🍿",
+        "image": "emoji/popcorn.png"
+      },
+      {
+        "id": "cactus",
+        "label": "Cactus",
+        "emoji": "🌵",
+        "image": "emoji/cactus.png"
+      },
+      {
+        "id": "clover",
+        "label": "Four-Leaf Clover",
+        "emoji": "🍀",
+        "image": "emoji/clover.png"
+      },
+      {
+        "id": "sunflower",
+        "label": "Sunflower",
+        "emoji": "🌻",
+        "image": "emoji/sunflower.png"
+      },
+      {
+        "id": "candy",
+        "label": "Candy",
+        "emoji": "🍬",
+        "image": "emoji/candy.png"
+      },
+      {
+        "id": "pineapple",
+        "label": "Pineapple",
+        "emoji": "🍍",
+        "image": "emoji/pineapple.png"
+      },
+      {
+        "id": "fire",
+        "label": "Flame",
+        "emoji": "🔥",
+        "image": "emoji/fire.png"
+      },
+      {
+        "id": "volcano",
+        "label": "Volcano",
+        "emoji": "🌋",
+        "image": "emoji/volcano.png"
+      },
+      {
+        "id": "island",
+        "label": "Island",
+        "emoji": "🏝️",
+        "image": "emoji/island.png"
+      },
+      {
+        "id": "tornado",
+        "label": "Tornado",
+        "emoji": "🌪️",
+        "image": "emoji/tornado.png"
+      },
+      {
+        "id": "tulip",
+        "label": "Tulip",
+        "emoji": "🌷",
+        "image": "emoji/tulip.png"
+      },
+      {
+        "id": "carousel",
+        "label": "Carousel",
+        "emoji": "🎠",
+        "image": "emoji/carousel.png"
+      },
+      {
+        "id": "ferris",
+        "label": "Ferris Wheel",
+        "emoji": "🎡",
+        "image": "emoji/ferris.png"
+      },
+      {
+        "id": "bigtop",
+        "label": "Circus Tent",
+        "emoji": "🎪",
+        "image": "emoji/bigtop.png"
+      },
+      {
+        "id": "pinata",
+        "label": "Pinata",
+        "emoji": "🪅",
+        "image": "emoji/pinata.png"
+      },
+      {
+        "id": "teddy",
+        "label": "Teddy Bear",
+        "emoji": "🧸",
+        "image": "emoji/teddy.png"
+      },
+      {
+        "id": "nesting",
+        "label": "Nesting Dolls",
+        "emoji": "🪆",
+        "image": "emoji/nesting.png"
+      },
+      {
+        "id": "palette",
+        "label": "Paint Palette",
+        "emoji": "🎨",
+        "image": "emoji/palette.png"
+      },
+      {
+        "id": "puzzle",
+        "label": "Puzzle Piece",
+        "emoji": "🧩",
+        "image": "emoji/puzzle.png"
+      },
+      {
+        "id": "yoyo",
+        "label": "Yo-Yo",
+        "emoji": "🪀",
+        "image": "emoji/yoyo.png"
+      },
+      {
+        "id": "bullseye",
+        "label": "Bullseye",
+        "emoji": "🎯",
+        "image": "emoji/bullseye.png"
+      },
+      {
+        "id": "dice",
+        "label": "Dice",
+        "emoji": "🎲",
+        "image": "emoji/dice.png"
+      },
+      {
+        "id": "trophy",
+        "label": "Trophy",
+        "emoji": "🏆",
+        "image": "emoji/trophy.png"
+      }
+    ]
+  },
+  "emoji": {
+    "ui": {
+      "ui_speaker": "emoji/ui_speaker.png",
+      "ui_pause": "emoji/ui_pause.png",
+      "ui_star": "emoji/ui_star.png"
+    }
+  }
+}

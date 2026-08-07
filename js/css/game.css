@@ -1,0 +1,300 @@
+/* Pip's castle, browser build.
+   Palette and sizing mirror assets/game/manifest.json theme, so the two
+   builds look like the same study. Notably: the selection highlight is blue,
+   never green or red -- those read as correct/incorrect to a child, and this
+   task has no correct answer. */
+:root {
+  --bg: #FAF6EF;
+  --panel: #FFFFFF;
+  --text: #33302B;
+  --muted: #7A7268;
+  --select: #7C9CD6;
+  --track: #EDE5D8;
+  --fill: #D9BE86;
+  --radius: 18px;
+  --touch: 96px;
+}
+
+/* The lab build loads a licensed display font here. It is not redistributable,
+   so this public copy ships without it and the stack below falls through to the
+   platform's UI font. Drop an @font-face back in to restore it. */
+
+html, body {
+  margin: 0; padding: 0; height: 100%;
+  background: var(--bg); color: var(--text);
+  font-family: "PipUI", system-ui, -apple-system, sans-serif;
+}
+.jspsych-display-element { height: 100%; }
+
+.screen {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 14px;
+  min-height: 100vh; padding: 20px; box-sizing: border-box; text-align: center;
+}
+.speech { font-size: clamp(20px, 2.4vw, 30px); margin: 4px 0; max-width: 46ch; }
+.hint   { font-size: 16px; color: var(--muted); margin: 2px 0; }
+.pip     { height: clamp(90px, 16vh, 170px); }
+.big-pip { height: clamp(120px, 24vh, 240px); }
+
+/* Trial: Pip centred above the choices, a bubble either side, progress below.
+   Both bubbles are always in the DOM at a fixed size, so a message appearing
+   cannot move the images out from under a child's finger.
+
+   .trial-main takes the free height and centres its contents; the progress row
+   is a plain last child that sits under it. Centring the SCREEN instead does
+   not work -- the progress row's `margin-top:auto` eats all the free space and
+   pins the stimuli to the top, which is what it used to do. */
+.trial-screen { justify-content: flex-start; gap: 10px; }
+.trial-main {
+  flex: 1 1 auto; min-height: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 14px;
+  width: 100%;
+}
+.band {
+  display: flex; align-items: center; justify-content: center; gap: 18px;
+  width: 100%; max-width: 1100px;
+}
+.bubble {
+  width: clamp(180px, 24vw, 340px); min-height: 96px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px; box-sizing: border-box;
+  font-size: clamp(16px, 1.7vw, 24px);
+  border-radius: var(--radius);
+}
+.bubble.prompt { background: var(--panel); border: 2px solid var(--track); }
+.bubble.aside  { background: transparent; border: none; }
+.bubble.aside.visible {
+  background: var(--panel); border: 2px solid var(--track);
+}
+
+.stimuli { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; }
+.stimulus {
+  padding: 5px; background: var(--panel);
+  border: 3px solid transparent; border-radius: 12px; cursor: pointer;
+}
+.stimulus:hover { border-color: var(--select); }
+.stimulus img {
+  width: clamp(140px, 22vw, 260px); height: clamp(140px, 22vw, 260px);
+  object-fit: cover; display: block; border-radius: 8px;
+}
+
+/* Tier 2 audio conditions. A-only has no image, so the card carries a speaker
+   and an explicit "pick this one"; AV puts the image back and the whole card
+   is the target. Both keep a per-item replay: sound is serial, and a child
+   cannot re-listen to sound 1 while sound 3 plays. */
+.audio-status {
+  font-size: clamp(16px, 1.8vw, 22px); color: var(--muted);
+  min-height: 1.6em; margin: 2px 0;   /* reserved, so text cannot shift cards */
+}
+.audio-row { align-items: stretch; }
+.audio-card {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 12px; background: var(--panel);
+  border: 3px solid transparent; border-radius: 12px; cursor: pointer;
+  width: clamp(160px, 24vw, 280px); box-sizing: border-box;
+}
+.audio-card:hover { border-color: var(--select); }
+.audio-card img {
+  width: 100%; aspect-ratio: 1; object-fit: cover;
+  display: block; border-radius: 8px;
+}
+.speaker {
+  font-size: clamp(56px, 9vw, 104px); line-height: 1.4;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; aspect-ratio: 1;
+  background: var(--track); border-radius: 8px;
+}
+.audio-card button {
+  width: 100%; min-height: 56px; border-radius: 14px;
+  font-family: inherit; font-size: clamp(14px, 1.5vw, 19px);
+  font-weight: 600; cursor: pointer;
+}
+.audio-card .replay {
+  background: transparent; color: var(--select); border: 3px solid var(--select);
+}
+.audio-card .pick {
+  background: var(--select); color: #fff; border: none;
+  min-height: var(--touch);           /* the actual response target */
+}
+
+.progress-row {
+  display: flex; align-items: center; gap: 14px;
+  width: min(90vw, 1000px); flex: 0 0 auto; padding-bottom: 10px;
+}
+.progress-track {
+  flex: 1; height: 26px; background: var(--track); border-radius: 13px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--fill); border-radius: 13px;
+  transition: width .42s cubic-bezier(.22,.61,.36,1);   /* fills as they answer */
+}
+.level { color: var(--muted); font-size: 16px; }
+
+button.big, button.quiet {
+  min-height: var(--touch); min-width: calc(var(--touch) * 2);
+  border-radius: var(--radius); font-size: 22px; font-weight: 600;
+  font-family: inherit; cursor: pointer;
+}
+button.big   { background: var(--select); color: #fff; border: none; }
+button.quiet { background: transparent; color: var(--select); border: 3px solid var(--select); }
+.btn-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+
+/* Cutscene: two stacked panels, the top one fading in over the one below, and
+   a dialogue box across the bottom. The artwork is composed to keep its
+   bottom ~20% calm because the box covers it. */
+.cutscene { justify-content: center; padding: 0; cursor: pointer; }
+.cut-stage {
+  position: relative; width: 100vw; height: 100vh;
+  background: var(--bg); overflow: hidden;
+}
+.cut-layer {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;             /* letterboxed onto the page background */
+}
+.cut-box {
+  position: absolute; left: 50%; bottom: 4vh; transform: translateX(-50%);
+  width: min(90vw, 1000px); box-sizing: border-box;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 14px 24px 10px;
+  background: rgba(255,255,255,.926); border-radius: 18px;
+}
+.cut-text { font-size: clamp(17px, 2vw, 26px); margin: 0; text-align: center; }
+.cut-hint {
+  align-self: flex-end; margin-top: 4px;
+  font-size: 14px; color: var(--muted);
+}
+
+/* Playground */
+.playground .room {
+  position: relative; width: min(92vw, 1100px); height: min(52vh, 460px);
+  background-size: cover; background-position: center;
+  background-color: var(--panel); border-radius: 12px; overflow: hidden;
+  touch-action: none;              /* the room owns the gesture, not the page */
+  cursor: grab;
+}
+.playground .room.dragging { cursor: grabbing; }
+/* Sizes are set inline from the room's measured box (STICKER_REL), matching
+   the desktop canvas, so a sticker is the same fraction of the room at any
+   window size -- and big enough not to be a motor-planning demand for 4-6s. */
+.sticker {
+  position: absolute; transform: translate(-50%, -50%);
+  user-select: none; pointer-events: none;   /* hit-testing is done in JS */
+  line-height: 1;
+}
+/* The sticker in the hand, drawn where it would actually LAND. The dashed
+   ring is the landing spot, so the clamping is never a surprise on release. */
+.ghost {
+  position: absolute; transform: translate(-50%, -50%);
+  display: flex; align-items: center; justify-content: center;
+  border: 3px dashed var(--select); border-radius: 50%;
+  user-select: none; pointer-events: none; line-height: 1;
+}
+/* `display:flex` above out-specifies the [hidden] attribute's UA
+   `display:none`, so without this the landing ring stays on screen over the
+   sticker just dropped, for the rest of the playground. */
+.ghost[hidden] { display: none; }
+.tray {
+  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
+  display: flex; gap: 10px; padding: 8px 14px;
+  background: rgba(255,255,255,.6); border-radius: 14px;
+}
+.tray-item { font-size: clamp(28px, 4vw, 44px); }
+.tray-item.next { outline: 3px solid var(--select); border-radius: 10px; }
+
+/* Sticker book: earned in colour, still-to-come as a grey shape. */
+.book { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 760px; }
+.slot {
+  width: 62px; height: 62px; display: flex; align-items: center;
+  justify-content: center; font-size: 34px; border-radius: 14px;
+}
+.slot.earned  { background: var(--panel); border: 2px solid var(--track); }
+.slot.mystery { border: 2px dashed var(--track); filter: grayscale(1) opacity(.28); }
+.awarded { font-size: clamp(36px, 6vw, 64px); margin: 6px 0; }
+
+/* Stickers are pictures, not emoji text -- see utilities/build_emoji_assets.py
+   for why. Each sits inside a box already sized by its container (the room's
+   sticker radius, a tray slot, a book cell), so it fills that box and keeps
+   its aspect. The em-based size is what makes the room's inline font-size,
+   set per render from the sticker radius, still drive the picture. */
+.sticker-art { width: 1em; height: 1em; object-fit: contain; display: block; }
+.tray-item .sticker-art,
+.slot .sticker-art,
+.awarded .sticker-art { width: 1em; height: 1em; }
+.awarded { display: flex; gap: 12px; justify-content: center; align-items: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-fill { transition: none; }
+}
+
+/* ---------------------------------------------------------------------------
+   Setup screen (experimenter, before the session starts).
+
+   Deliberately plain and dense: this screen is for the adult filling in
+   demographics, and it should not read as part of the child's game. It is the
+   one place in the build that looks like a form. */
+.setup {
+  max-width: 760px; margin: 0 auto; padding: 28px 20px 48px;
+  box-sizing: border-box;
+}
+.setup h1 { font-size: 26px; margin: 0 0 4px; }
+.setup-sub { color: var(--muted); font-size: 15px; margin: 0 0 20px; }
+
+.setup-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 20px;
+}
+@media (max-width: 560px) { .setup-grid { grid-template-columns: 1fr; } }
+
+.setup-grid label {
+  display: flex; flex-direction: column; gap: 5px;
+  font-size: 14px; color: var(--muted);
+}
+.setup-grid input[type="text"],
+.setup-grid input[type="number"],
+.setup-grid select {
+  font: inherit; font-size: 16px; color: var(--text);
+  padding: 9px 10px; border: 2px solid var(--track); border-radius: 10px;
+  background: var(--panel); min-width: 0;
+}
+.setup-grid input:focus, .setup-grid select:focus {
+  outline: none; border-color: var(--select);
+}
+/* Checkboxes sit in a grid cell of their own, so they need to align to the
+   inputs beside them rather than to the label text above them. */
+.setup-checks { justify-content: flex-end; gap: 8px; }
+.setup-check {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 15px; color: var(--text);
+}
+.setup-check input { width: 18px; height: 18px; accent-color: var(--select); }
+
+.setup-preview {
+  display: flex; flex-direction: column; gap: 3px;
+  margin: 22px 0 8px; padding: 14px 16px;
+  background: var(--panel); border: 2px solid var(--track);
+  border-radius: var(--radius); font-size: 15px;
+}
+.setup-preview strong { font-size: 14px; color: var(--muted); margin-bottom: 3px; }
+.setup-error { color: #B4544E; font-size: 15px; margin: 6px 0 0; }
+.setup .big { margin-top: 16px; width: 100%; }
+
+/* ---------------------------------------------------------------------------
+   Font, over jsPsych's own.
+
+   vendor/jspsych.css sets `font-family: "Open Sans", "Arial", sans-serif` on
+   .jspsych-display-element. That is a CLASS selector, so it beats the
+   `html, body` rule above no matter which stylesheet loads last -- and since
+   jsPsych renders the entire task inside that element, every trial, button and
+   cutscene line came out in Open Sans while the desktop build used the game
+   font. The setup screen is drawn before jsPsych initialises, so it kept the
+   game font and the two visibly disagreed mid-session.
+
+   Restated here at the same specificity, including the descendant rules
+   jspsych.css sets separately for inputs and buttons. */
+.jspsych-display-element,
+.jspsych-display-element input[type="text"],
+.jspsych-display-element button,
+.jspsych-btn {
+  font-family: "PipUI", system-ui, -apple-system, sans-serif;
+}

@@ -1,0 +1,518 @@
+{
+  "models": {
+    "audio_text": "LAION-CLAP (630k)",
+    "image_text": "OpenCLIP ViT-B-32"
+  },
+  "n_pairs": 100,
+  "mean_clap_audio_text": 0.43912041187286377,
+  "mean_clip_image_text": 0.25850456953048706,
+  "mean_cross_modal_coherence": 0.348812460899353,
+  "quality_counts": {
+    "excellent": 75,
+    "good": 22,
+    "fair": 3,
+    "poor": 0
+  },
+  "per_concept": {
+    "coin_in_vending_machine": {
+      "clap_audio_text_similarity": 0.6691755056381226,
+      "clip_image_text_similarity": 0.30481404066085815,
+      "cross_modal_coherence": 0.48699477314949036
+    },
+    "frying": {
+      "clap_audio_text_similarity": 0.6145676374435425,
+      "clip_image_text_similarity": 0.31342414021492004,
+      "cross_modal_coherence": 0.46399587392807007
+    },
+    "zipper": {
+      "clap_audio_text_similarity": 0.6294997930526733,
+      "clip_image_text_similarity": 0.2933225929737091,
+      "cross_modal_coherence": 0.46141117811203003
+    },
+    "cellphone_vibrating": {
+      "clap_audio_text_similarity": 0.6378619074821472,
+      "clip_image_text_similarity": 0.2802108824253082,
+      "cross_modal_coherence": 0.4590364098548889
+    },
+    "alarm_clock": {
+      "clap_audio_text_similarity": 0.6033908128738403,
+      "clip_image_text_similarity": 0.30686384439468384,
+      "cross_modal_coherence": 0.4551273286342621
+    },
+    "electric_shaver": {
+      "clap_audio_text_similarity": 0.6215336918830872,
+      "clip_image_text_similarity": 0.2777279019355774,
+      "cross_modal_coherence": 0.4496307969093323
+    },
+    "door_knocking": {
+      "clap_audio_text_similarity": 0.6736310720443726,
+      "clip_image_text_similarity": 0.21710267663002014,
+      "cross_modal_coherence": 0.44536685943603516
+    },
+    "blender": {
+      "clap_audio_text_similarity": 0.5678287744522095,
+      "clip_image_text_similarity": 0.3191913962364197,
+      "cross_modal_coherence": 0.4435100853443146
+    },
+    "sports_arena_buzzer": {
+      "clap_audio_text_similarity": 0.6187711954116821,
+      "clip_image_text_similarity": 0.25955820083618164,
+      "cross_modal_coherence": 0.4391646981239319
+    },
+    "newspaper_rustling": {
+      "clap_audio_text_similarity": 0.5563695430755615,
+      "clip_image_text_similarity": 0.3192831575870514,
+      "cross_modal_coherence": 0.43782633543014526
+    },
+    "cash_register": {
+      "clap_audio_text_similarity": 0.5364923477172852,
+      "clip_image_text_similarity": 0.32925087213516235,
+      "cross_modal_coherence": 0.43287160992622375
+    },
+    "cicadas": {
+      "clap_audio_text_similarity": 0.6020856499671936,
+      "clip_image_text_similarity": 0.25206825137138367,
+      "cross_modal_coherence": 0.42707693576812744
+    },
+    "toothbrushing": {
+      "clap_audio_text_similarity": 0.5388312339782715,
+      "clip_image_text_similarity": 0.31471917033195496,
+      "cross_modal_coherence": 0.4267752170562744
+    },
+    "microwave_running": {
+      "clap_audio_text_similarity": 0.5053331255912781,
+      "clip_image_text_similarity": 0.3417382836341858,
+      "cross_modal_coherence": 0.42353570461273193
+    },
+    "car_skidding": {
+      "clap_audio_text_similarity": 0.5617550611495972,
+      "clip_image_text_similarity": 0.2749633193016052,
+      "cross_modal_coherence": 0.4183591902256012
+    },
+    "siren": {
+      "clap_audio_text_similarity": 0.5997159481048584,
+      "clip_image_text_similarity": 0.23466472327709198,
+      "cross_modal_coherence": 0.4171903431415558
+    },
+    "running_water": {
+      "clap_audio_text_similarity": 0.5277401208877563,
+      "clip_image_text_similarity": 0.305669903755188,
+      "cross_modal_coherence": 0.41670501232147217
+    },
+    "electric_hand_drill": {
+      "clap_audio_text_similarity": 0.5400618314743042,
+      "clip_image_text_similarity": 0.29162418842315674,
+      "cross_modal_coherence": 0.41584300994873047
+    },
+    "crickets": {
+      "clap_audio_text_similarity": 0.5374523401260376,
+      "clip_image_text_similarity": 0.28313344717025757,
+      "cross_modal_coherence": 0.4102928936481476
+    },
+    "keys_jingling": {
+      "clap_audio_text_similarity": 0.5251559615135193,
+      "clip_image_text_similarity": 0.29494649171829224,
+      "cross_modal_coherence": 0.41005122661590576
+    },
+    "geese": {
+      "clap_audio_text_similarity": 0.5086539387702942,
+      "clip_image_text_similarity": 0.3052901327610016,
+      "cross_modal_coherence": 0.4069720506668091
+    },
+    "doorbell": {
+      "clap_audio_text_similarity": 0.4476955533027649,
+      "clip_image_text_similarity": 0.350028395652771,
+      "cross_modal_coherence": 0.39886197447776794
+    },
+    "telephone_ringing": {
+      "clap_audio_text_similarity": 0.5134919285774231,
+      "clip_image_text_similarity": 0.27915892004966736,
+      "cross_modal_coherence": 0.39632540941238403
+    },
+    "whistle": {
+      "clap_audio_text_similarity": 0.4376249611377716,
+      "clip_image_text_similarity": 0.34764131903648376,
+      "cross_modal_coherence": 0.3926331400871277
+    },
+    "chimes_in_the_wind": {
+      "clap_audio_text_similarity": 0.4728454351425171,
+      "clip_image_text_similarity": 0.31111177802085876,
+      "cross_modal_coherence": 0.3919786214828491
+    },
+    "duck_quack": {
+      "clap_audio_text_similarity": 0.5227659344673157,
+      "clip_image_text_similarity": 0.26109302043914795,
+      "cross_modal_coherence": 0.3919294774532318
+    },
+    "violin": {
+      "clap_audio_text_similarity": 0.44764024019241333,
+      "clip_image_text_similarity": 0.33157622814178467,
+      "cross_modal_coherence": 0.389608234167099
+    },
+    "walking_on_leaves": {
+      "clap_audio_text_similarity": 0.5259426832199097,
+      "clip_image_text_similarity": 0.249331533908844,
+      "cross_modal_coherence": 0.38763710856437683
+    },
+    "train_whistle": {
+      "clap_audio_text_similarity": 0.47875288128852844,
+      "clip_image_text_similarity": 0.29527270793914795,
+      "cross_modal_coherence": 0.387012779712677
+    },
+    "boiling_water": {
+      "clap_audio_text_similarity": 0.5564505457878113,
+      "clip_image_text_similarity": 0.2138768881559372,
+      "cross_modal_coherence": 0.38516372442245483
+    },
+    "kettle_whistling": {
+      "clap_audio_text_similarity": 0.44625067710876465,
+      "clip_image_text_similarity": 0.32210493087768555,
+      "cross_modal_coherence": 0.3841778039932251
+    },
+    "crumpling_paper": {
+      "clap_audio_text_similarity": 0.5603231191635132,
+      "clip_image_text_similarity": 0.20795375108718872,
+      "cross_modal_coherence": 0.38413843512535095
+    },
+    "flag_flapping": {
+      "clap_audio_text_similarity": 0.49552541971206665,
+      "clip_image_text_similarity": 0.27018338441848755,
+      "cross_modal_coherence": 0.3828544020652771
+    },
+    "heart_beat": {
+      "clap_audio_text_similarity": 0.5594109892845154,
+      "clip_image_text_similarity": 0.20145969092845917,
+      "cross_modal_coherence": 0.38043534755706787
+    },
+    "car_power_windows": {
+      "clap_audio_text_similarity": 0.5922630429267883,
+      "clip_image_text_similarity": 0.16498221457004547,
+      "cross_modal_coherence": 0.3786226212978363
+    },
+    "church_bells": {
+      "clap_audio_text_similarity": 0.39117681980133057,
+      "clip_image_text_similarity": 0.3622587323188782,
+      "cross_modal_coherence": 0.37671777606010437
+    },
+    "squeaky_toy": {
+      "clap_audio_text_similarity": 0.5935654044151306,
+      "clip_image_text_similarity": 0.15945009887218475,
+      "cross_modal_coherence": 0.3765077590942383
+    },
+    "crow": {
+      "clap_audio_text_similarity": 0.4212952256202698,
+      "clip_image_text_similarity": 0.33076921105384827,
+      "cross_modal_coherence": 0.3760322332382202
+    },
+    "hair_dryer": {
+      "clap_audio_text_similarity": 0.41214632987976074,
+      "clip_image_text_similarity": 0.3319054841995239,
+      "cross_modal_coherence": 0.37202590703964233
+    },
+    "frog_croaking": {
+      "clap_audio_text_similarity": 0.4203917384147644,
+      "clip_image_text_similarity": 0.31873998045921326,
+      "cross_modal_coherence": 0.36956584453582764
+    },
+    "tearing": {
+      "clap_audio_text_similarity": 0.4841524064540863,
+      "clip_image_text_similarity": 0.24266473948955536,
+      "cross_modal_coherence": 0.36340856552124023
+    },
+    "typing": {
+      "clap_audio_text_similarity": 0.44644248485565186,
+      "clip_image_text_similarity": 0.2736210823059082,
+      "cross_modal_coherence": 0.36003178358078003
+    },
+    "telephone_dialing": {
+      "clap_audio_text_similarity": 0.49272242188453674,
+      "clip_image_text_similarity": 0.22372783720493317,
+      "cross_modal_coherence": 0.35822513699531555
+    },
+    "pouring_liquid": {
+      "clap_audio_text_similarity": 0.478047639131546,
+      "clip_image_text_similarity": 0.2367067039012909,
+      "cross_modal_coherence": 0.35737717151641846
+    },
+    "running_up_stairs": {
+      "clap_audio_text_similarity": 0.43930941820144653,
+      "clip_image_text_similarity": 0.2750302255153656,
+      "cross_modal_coherence": 0.3571698069572449
+    },
+    "swimming": {
+      "clap_audio_text_similarity": 0.48933491110801697,
+      "clip_image_text_similarity": 0.2247626930475235,
+      "cross_modal_coherence": 0.35704880952835083
+    },
+    "dog_drinking": {
+      "clap_audio_text_similarity": 0.5644437074661255,
+      "clip_image_text_similarity": 0.14572690427303314,
+      "cross_modal_coherence": 0.3550853133201599
+    },
+    "songbird": {
+      "clap_audio_text_similarity": 0.5278570652008057,
+      "clip_image_text_similarity": 0.1801922619342804,
+      "cross_modal_coherence": 0.35402464866638184
+    },
+    "train_warning_bell": {
+      "clap_audio_text_similarity": 0.5069674253463745,
+      "clip_image_text_similarity": 0.19781450927257538,
+      "cross_modal_coherence": 0.35239097476005554
+    },
+    "walking_on_gravel": {
+      "clap_audio_text_similarity": 0.41705095767974854,
+      "clip_image_text_similarity": 0.2869046926498413,
+      "cross_modal_coherence": 0.3519778251647949
+    },
+    "velcro": {
+      "clap_audio_text_similarity": 0.44258996844291687,
+      "clip_image_text_similarity": 0.260356068611145,
+      "cross_modal_coherence": 0.35147303342819214
+    },
+    "car_alarm": {
+      "clap_audio_text_similarity": 0.4822993278503418,
+      "clip_image_text_similarity": 0.2144489288330078,
+      "cross_modal_coherence": 0.3483741283416748
+    },
+    "pouring_water_out_of_bottle": {
+      "clap_audio_text_similarity": 0.47428184747695923,
+      "clip_image_text_similarity": 0.21811099350452423,
+      "cross_modal_coherence": 0.34619641304016113
+    },
+    "stream": {
+      "clap_audio_text_similarity": 0.43695539236068726,
+      "clip_image_text_similarity": 0.25540676712989807,
+      "cross_modal_coherence": 0.34618109464645386
+    },
+    "cutting_with_scissors": {
+      "clap_audio_text_similarity": 0.35040104389190674,
+      "clip_image_text_similarity": 0.34174254536628723,
+      "cross_modal_coherence": 0.3460717797279358
+    },
+    "gargling": {
+      "clap_audio_text_similarity": 0.528833270072937,
+      "clip_image_text_similarity": 0.15710291266441345,
+      "cross_modal_coherence": 0.3429681062698364
+    },
+    "scratching": {
+      "clap_audio_text_similarity": 0.4662390351295471,
+      "clip_image_text_similarity": 0.21533532440662384,
+      "cross_modal_coherence": 0.3407871723175049
+    },
+    "crowd_cheering": {
+      "clap_audio_text_similarity": 0.4487108588218689,
+      "clip_image_text_similarity": 0.22953669726848602,
+      "cross_modal_coherence": 0.33912378549575806
+    },
+    "thunder": {
+      "clap_audio_text_similarity": 0.45860424637794495,
+      "clip_image_text_similarity": 0.2177879810333252,
+      "cross_modal_coherence": 0.3381960988044739
+    },
+    "guitar": {
+      "clap_audio_text_similarity": 0.3441305458545685,
+      "clip_image_text_similarity": 0.332205206155777,
+      "cross_modal_coherence": 0.33816787600517273
+    },
+    "bees_buzzing": {
+      "clap_audio_text_similarity": 0.37113630771636963,
+      "clip_image_text_similarity": 0.2933102250099182,
+      "cross_modal_coherence": 0.3322232663631439
+    },
+    "puppy_whining": {
+      "clap_audio_text_similarity": 0.3875834047794342,
+      "clip_image_text_similarity": 0.27647197246551514,
+      "cross_modal_coherence": 0.3320276737213135
+    },
+    "clock_ticking": {
+      "clap_audio_text_similarity": 0.3813759684562683,
+      "clip_image_text_similarity": 0.27832451462745667,
+      "cross_modal_coherence": 0.3298502564430237
+    },
+    "bike_bell": {
+      "clap_audio_text_similarity": 0.43445682525634766,
+      "clip_image_text_similarity": 0.2231099158525467,
+      "cross_modal_coherence": 0.3287833631038666
+    },
+    "chopping_food": {
+      "clap_audio_text_similarity": 0.3957045078277588,
+      "clip_image_text_similarity": 0.2593016028404236,
+      "cross_modal_coherence": 0.3275030553340912
+    },
+    "dishes_clanking": {
+      "clap_audio_text_similarity": 0.44078147411346436,
+      "clip_image_text_similarity": 0.2125781625509262,
+      "cross_modal_coherence": 0.3266798257827759
+    },
+    "basketball_dribbling": {
+      "clap_audio_text_similarity": 0.4055246114730835,
+      "clip_image_text_similarity": 0.24589943885803223,
+      "cross_modal_coherence": 0.32571202516555786
+    },
+    "dog_barking": {
+      "clap_audio_text_similarity": 0.5299965143203735,
+      "clip_image_text_similarity": 0.11897208541631699,
+      "cross_modal_coherence": 0.32448428869247437
+    },
+    "camera_snapping_photos": {
+      "clap_audio_text_similarity": 0.4198235273361206,
+      "clip_image_text_similarity": 0.22229118645191193,
+      "cross_modal_coherence": 0.32105734944343567
+    },
+    "wings_flapping": {
+      "clap_audio_text_similarity": 0.39598822593688965,
+      "clip_image_text_similarity": 0.24189117550849915,
+      "cross_modal_coherence": 0.3189396858215332
+    },
+    "spraying": {
+      "clap_audio_text_similarity": 0.3423595726490021,
+      "clip_image_text_similarity": 0.29536816477775574,
+      "cross_modal_coherence": 0.3188638687133789
+    },
+    "shuffling_cards": {
+      "clap_audio_text_similarity": 0.3872067928314209,
+      "clip_image_text_similarity": 0.24444325268268585,
+      "cross_modal_coherence": 0.3158250153064728
+    },
+    "baby_crying": {
+      "clap_audio_text_similarity": 0.4258057773113251,
+      "clip_image_text_similarity": 0.19596447050571442,
+      "cross_modal_coherence": 0.31088513135910034
+    },
+    "walking_on_hard_surface": {
+      "clap_audio_text_similarity": 0.3402029573917389,
+      "clip_image_text_similarity": 0.2666783332824707,
+      "cross_modal_coherence": 0.3034406304359436
+    },
+    "cat_meowing": {
+      "clap_audio_text_similarity": 0.4109894633293152,
+      "clip_image_text_similarity": 0.19149348139762878,
+      "cross_modal_coherence": 0.3012414574623108
+    },
+    "walking_with_heels": {
+      "clap_audio_text_similarity": 0.29775866866111755,
+      "clip_image_text_similarity": 0.2987372577190399,
+      "cross_modal_coherence": 0.29824796319007874
+    },
+    "water_splashing": {
+      "clap_audio_text_similarity": 0.3423371911048889,
+      "clip_image_text_similarity": 0.25406721234321594,
+      "cross_modal_coherence": 0.2982022166252136
+    },
+    "biting_and_chewing": {
+      "clap_audio_text_similarity": 0.3962624669075012,
+      "clip_image_text_similarity": 0.19101829826831818,
+      "cross_modal_coherence": 0.2936403751373291
+    },
+    "cymbal_crash": {
+      "clap_audio_text_similarity": 0.2643474340438843,
+      "clip_image_text_similarity": 0.32123392820358276,
+      "cross_modal_coherence": 0.2927906811237335
+    },
+    "water_dripping": {
+      "clap_audio_text_similarity": 0.41741734743118286,
+      "clip_image_text_similarity": 0.16379977762699127,
+      "cross_modal_coherence": 0.29060855507850647
+    },
+    "rubbing_hands": {
+      "clap_audio_text_similarity": 0.37792709469795227,
+      "clip_image_text_similarity": 0.20186865329742432,
+      "cross_modal_coherence": 0.2898978590965271
+    },
+    "helicopter": {
+      "clap_audio_text_similarity": 0.27922266721725464,
+      "clip_image_text_similarity": 0.29619792103767395,
+      "cross_modal_coherence": 0.2877103090286255
+    },
+    "flushing": {
+      "clap_audio_text_similarity": 0.3441074788570404,
+      "clip_image_text_similarity": 0.22796379029750824,
+      "cross_modal_coherence": 0.2860356271266937
+    },
+    "car_horn": {
+      "clap_audio_text_similarity": 0.33934977650642395,
+      "clip_image_text_similarity": 0.2313767969608307,
+      "cross_modal_coherence": 0.2853632867336273
+    },
+    "finger_tapping": {
+      "clap_audio_text_similarity": 0.2688218951225281,
+      "clip_image_text_similarity": 0.299879789352417,
+      "cross_modal_coherence": 0.28435084223747253
+    },
+    "coin_dropping": {
+      "clap_audio_text_similarity": 0.301021933555603,
+      "clip_image_text_similarity": 0.2637207806110382,
+      "cross_modal_coherence": 0.2823713421821594
+    },
+    "airplane_taking_off": {
+      "clap_audio_text_similarity": 0.30943557620048523,
+      "clip_image_text_similarity": 0.24758735299110413,
+      "cross_modal_coherence": 0.2785114645957947
+    },
+    "school_bell": {
+      "clap_audio_text_similarity": 0.28785672783851624,
+      "clip_image_text_similarity": 0.26333892345428467,
+      "cross_modal_coherence": 0.27559781074523926
+    },
+    "vacuum": {
+      "clap_audio_text_similarity": 0.2662196755409241,
+      "clip_image_text_similarity": 0.27639079093933105,
+      "cross_modal_coherence": 0.27130523324012756
+    },
+    "cello": {
+      "clap_audio_text_similarity": 0.2290695607662201,
+      "clip_image_text_similarity": 0.30865317583084106,
+      "cross_modal_coherence": 0.2688613533973694
+    },
+    "car_accelerating": {
+      "clap_audio_text_similarity": 0.3435196280479431,
+      "clip_image_text_similarity": 0.19075548648834229,
+      "cross_modal_coherence": 0.2671375572681427
+    },
+    "breathing": {
+      "clap_audio_text_similarity": 0.37648892402648926,
+      "clip_image_text_similarity": 0.15370747447013855,
+      "cross_modal_coherence": 0.2650982141494751
+    },
+    "piano": {
+      "clap_audio_text_similarity": 0.20678012073040009,
+      "clip_image_text_similarity": 0.3064192533493042,
+      "cross_modal_coherence": 0.25659969449043274
+    },
+    "drum_roll": {
+      "clap_audio_text_similarity": 0.2058531641960144,
+      "clip_image_text_similarity": 0.26572930812835693,
+      "cross_modal_coherence": 0.23579123616218567
+    },
+    "hammering": {
+      "clap_audio_text_similarity": 0.2172968089580536,
+      "clip_image_text_similarity": 0.25199079513549805,
+      "cross_modal_coherence": 0.23464380204677582
+    },
+    "applause": {
+      "clap_audio_text_similarity": 0.3133867681026459,
+      "clip_image_text_similarity": 0.1484384387731552,
+      "cross_modal_coherence": 0.23091259598731995
+    },
+    "wind": {
+      "clap_audio_text_similarity": 0.1799830198287964,
+      "clip_image_text_similarity": 0.26793429255485535,
+      "cross_modal_coherence": 0.22395865619182587
+    },
+    "motorcycle_reving": {
+      "clap_audio_text_similarity": 0.1980891078710556,
+      "clip_image_text_similarity": 0.24070371687412262,
+      "cross_modal_coherence": 0.2193964123725891
+    },
+    "printing": {
+      "clap_audio_text_similarity": 0.20862872898578644,
+      "clip_image_text_similarity": 0.22496789693832397,
+      "cross_modal_coherence": 0.2167983055114746
+    },
+    "road_traffic": {
+      "clap_audio_text_similarity": 0.12108509242534637,
+      "clip_image_text_similarity": 0.23022904992103577,
+      "cross_modal_coherence": 0.17565706372261047
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "developmental-embeddings-jspsych",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Browser build of the two-tier triplet odd-one-out task (jsPsych).",
+  "scripts": {
+    "test": "node test/run.mjs",
+    "serve": "python3 -m http.server 8000 --directory .."
+  }
+}
