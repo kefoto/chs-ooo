@@ -126,14 +126,11 @@ export function showSetup(cfg, root, search = window.location.search) {
 
           <label>Daily screen time
             <select id="s-screen">${options(SCREEN_TIME, cfg.Screen_Time)}</select></label>
-          <label class="setup-checks">
-            <span class="setup-check">
-              <input id="s-gamify" type="checkbox" checked>
-              Gamified presentation</span>
-            <span class="setup-check">
-              <input id="s-calm" type="checkbox">
-              Reduced motion</span>
-          </label>
+          <!-- The lab build offers "Gamified presentation" and "Reduced motion"
+               here. The public study runs one fixed configuration -- gamified,
+               reduced motion off -- so the controls are absent rather than
+               present and ignored: a checkbox that does not change the session
+               is worse than no checkbox. See utilities/export_public.py. -->
         </div>
 
         <div class="setup-preview" id="s-preview"></div>
@@ -214,10 +211,11 @@ export function showSetup(cfg, root, search = window.location.search) {
         Setting: el("#s-setting").value,
         VR_Exposure: el("#s-vr").value,
         Screen_Time: el("#s-screen").value,
-        // Written explicitly, not left to the config default, so the saved
-        // file states which arm the session actually ran as.
-        Gamify: el("#s-gamify").checked,
-        Gamify_Reduced_Motion: el("#s-calm").checked,
+        // Fixed for the public study, and still written explicitly so the
+        // saved file states which arm the session ran as. The form has no
+        // controls for these; see utilities/export_public.py.
+        Gamify: true,
+        Gamify_Reduced_Motion: false,
       });
     });
   });
