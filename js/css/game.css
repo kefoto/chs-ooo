@@ -15,9 +15,17 @@
   --touch: 96px;
 }
 
-/* The lab build loads a licensed display font here. It is not redistributable,
-   so this public copy ships without it and the stack below falls through to the
-   platform's UI font. Drop an @font-face back in to restore it. */
+/* The lab build uses a Fontworks display face that cannot be redistributed, so
+   this public copy ships Nunito instead: rounded like the original, but under
+   the SIL Open Font License and therefore free to serve from a public repo.
+   Latin subset only -- the dialogue is English and pure ASCII. Licence sits
+   beside the file at js/vendor/font/OFL.txt. */
+@font-face {
+  font-family: "PipUI";
+  src: url("../vendor/font/nunito-latin-variable.woff2") format("woff2");
+  font-weight: 400 800;      /* variable: the CSS asks for 600 and 700 */
+  font-display: swap;
+}
 
 html, body {
   margin: 0; padding: 0; height: 100%;

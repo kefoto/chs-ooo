@@ -54,10 +54,14 @@ datasets/    the stimuli: Tier1_THINGS_100/, Tier2_AV_Matched/
 - **Emoji-derived art** — see
   [`assets/game/emoji/ATTRIBUTION.txt`](assets/game/emoji/ATTRIBUTION.txt).
 - **jsPsych 8.2.1** — MIT, vendored in `js/vendor/`.
+- **Nunito** — SIL Open Font License, in `js/vendor/font/` with its
+  [`OFL.txt`](js/vendor/font/OFL.txt). Latin subset only, since the dialogue is
+  English.
 
-**The display font is not included.** The lab build uses a licensed font that
-cannot be redistributed, so this copy ships without it and falls back to the
-platform UI font. `js/css/game.css` marks where to put an `@font-face` back.
+**The display font differs from the lab build.** That build uses a Fontworks
+face which is licensed and cannot be redistributed, so this public copy ships
+Nunito in its place — rounded in the same spirit, and free to serve from a
+public repository. `js/css/game.css` holds the `@font-face`.
 
 Stimulus sets carry the terms of their original sources; check those before
 reusing anything in `datasets/`.
