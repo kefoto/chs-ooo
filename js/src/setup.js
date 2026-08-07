@@ -68,7 +68,7 @@ export function showSetup(cfg, root, search = window.location.search) {
     root.innerHTML = `
       <div class="setup">
         <h1>Session setup</h1>
-        <p class="setup-sub">Fill this in before handing the screen to the child.</p>
+        <p class="setup-sub">Fill the blank fields in before handing the screen to the child.</p>
 
         <div class="setup-grid">
           <label>Participant ID
