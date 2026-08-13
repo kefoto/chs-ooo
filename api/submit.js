@@ -71,12 +71,18 @@ export default async function handler(req, res) {
     return;
   }
 
-  const raw = req.body;
-  if (!raw || typeof raw !== "object" || !raw.payload) {
-    res.status(400).json({ ok: false, error: "expected {payload, block?}" });
+  // The body IS the payload -- js/src/save.js's postPayload() sends the same
+  // raw JSON any upload_url gets, unwrapped, so this endpoint isn't a special
+  // case a generic collection endpoint would need to know about. The block
+  // index (a per-block checkpoint vs. the final save) travels as a header
+  // instead -- see postPayload's docstring for why it can't live in the body.
+  const payload = req.body;
+  const blockHeader = req.headers["x-session-block"];
+  const block = blockHeader === undefined ? undefined : Number(blockHeader);
+  if (!payload || typeof payload !== "object" || !payload.participant_data) {
+    res.status(400).json({ ok: false, error: "expected a session payload" });
     return;
   }
-  const { payload, block } = raw;
   if (JSON.stringify(payload).length > MAX_BODY_BYTES) {
     res.status(413).json({ ok: false, error: "payload too large" });
     return;

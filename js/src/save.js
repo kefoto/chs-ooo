@@ -150,23 +150,23 @@ export function downloadPayload(payload) {
 /**
  * POST to a collection endpoint, if the config names one.
  *
- * `block` (a room index) marks a per-block upload rather than the final one
- * -- api/submit.js tags the two differently in storage, but the wire shape
- * is the same either way: {payload, block}, `block` omitted for the final
- * call. `ticket` is the session-admission ticket from js/src/captcha.js
- * (undefined when this deploy has no Turnstile gate configured, e.g. local
- * dev -- api/submit.js's own gate then rejects it, same as any other
- * misconfigured/backend-less host; see main.js's save()).
+ * The body is always the raw payload, byte-for-byte what a downloaded file
+ * would contain -- upload_url's contract predates api/submit.js and can
+ * point at any external endpoint (js/README.md: "the same JSON the desktop
+ * build writes"), so this must not change shape just because the built-in
+ * backend has its own opinions. Metadata api/submit.js DOES need --
+ * `block`, marking a per-block checkpoint rather than the final save, and
+ * `ticket`, the session-admission ticket from js/src/captcha.js -- travel as
+ * headers instead, which any endpoint that doesn't care is free to ignore.
  */
 export async function postPayload(url, payload, { ticket, block } = {}) {
   const headers = { "Content-Type": "application/json" };
   if (ticket) headers.Authorization = `Bearer ${ticket}`;
-  const body = { payload };
-  if (Number.isFinite(block)) body.block = block;
+  if (Number.isFinite(block)) headers["X-Session-Block"] = String(block);
   const res = await fetch(url, {
     method: "POST",
     headers,
-    body: JSON.stringify(body),
+    body: JSON.stringify(payload),
   });
   if (!res.ok) throw new Error(`upload failed: ${res.status}`);
   return res;

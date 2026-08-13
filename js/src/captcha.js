@@ -29,17 +29,37 @@ export function getTicket() {
   return ticket;
 }
 
+// A <script> tag that never fires either load or error is not hypothetical:
+// jsdom (this file's own test harness) never fires either for an externally
+// loaded script by design, and a real browser can stall the same way behind
+// a slow network or an ad-blocker that silently drops the request. Without a
+// timeout, admitSession() below would hang on "One moment…" forever instead
+// of failing into the reload-and-try-again screen main.js shows.
+const SCRIPT_LOAD_TIMEOUT_MS = 10_000;
+
+function withTimeout(promise, ms, message) {
+  return new Promise((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error(message)), ms);
+    promise.then((v) => { clearTimeout(t); resolve(v); },
+                 (e) => { clearTimeout(t); reject(e); });
+  });
+}
+
 function loadTurnstileScript() {
   if (window.turnstile) return Promise.resolve();
   if (!scriptPromise) {
-    scriptPromise = new Promise((resolve, reject) => {
+    scriptPromise = withTimeout(new Promise((resolve, reject) => {
       const el = document.createElement("script");
       el.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
       el.async = true;
       el.onload = resolve;
       el.onerror = () => reject(new Error("Turnstile script failed to load"));
       document.head.appendChild(el);
-    });
+    }), SCRIPT_LOAD_TIMEOUT_MS, "Turnstile script timed out loading")
+      // A failed attempt must not wedge every later one behind the same
+      // rejected promise -- clear it so a retry (e.g. the operator reloads)
+      // starts a fresh load instead of instantly re-rejecting.
+      .catch((e) => { scriptPromise = null; throw e; });
   }
   return scriptPromise;
 }
@@ -76,14 +96,18 @@ export async function admitSession({ siteKey, pid, target }) {
       <div id="turnstile-widget"></div>
     </div>`;
 
-  const token = await new Promise((resolve, reject) => {
+  // Generous: Managed mode usually clears itself in well under a second, but
+  // a visible challenge (rare -- only traffic Cloudflare considers
+  // suspicious gets one) is a person solving a puzzle, not a script waiting
+  // on a network call.
+  const token = await withTimeout(new Promise((resolve, reject) => {
     window.turnstile.render("#turnstile-widget", {
       sitekey: siteKey,
       callback: resolve,
       "error-callback": () => reject(new Error("Turnstile could not verify this browser")),
       "expired-callback": () => reject(new Error("Turnstile challenge expired")),
     });
-  });
+  }), 120_000, "Turnstile did not respond in time");
 
   const r = await fetch("/api/verify-start", {
     method: "POST",

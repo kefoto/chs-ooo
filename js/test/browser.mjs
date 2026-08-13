@@ -135,7 +135,14 @@ globalThis.fetch = async (url, init) => {
   // the only place its data appears. Capture it the way the Blob is captured
   // above, or the harness would be blind to exactly the path CHS relies on.
   if (init?.method === "POST") {
-    savedJson = init.body;
+    // Per-block checkpoints (X-Session-Block header set -- see
+    // js/src/save.js's postPayload) fire mid-session, one per completed
+    // room; only the FINAL save (no such header) is "the" payload the
+    // driving loop below should stop on. Capturing every POST here would
+    // make it stop clicking after the first room, same bug an actual
+    // upload_url endpoint would see if it treated a checkpoint as the
+    // session being over.
+    if (!("X-Session-Block" in (init.headers ?? {}))) savedJson = init.body;
     return { ok: true, status: 200, json: async () => ({}) };
   }
   const rel = String(url).replace(/^https?:\/\/[^/]+\//, "").replace(/^\.\.\//, "");
@@ -250,7 +257,7 @@ const idxs = rows.map((r) => r.trial_index);
 // that reads the payload applies only to the cases that do.
 if (!SETUP) {
   check(payload !== null, "session never produced a payload");
-  check(payload?.participant_data.completion_status === 1, "session did not complete");
+  check(payload?.participant_data?.completion_status === 1, "session did not complete");
   check(rows.length > 0, "no responses recorded");
   check(JSON.stringify(idxs) === JSON.stringify([...idxs].sort((a, b) => a - b)),
         `trial_index not monotonic: ${idxs}`);
