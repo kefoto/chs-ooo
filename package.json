@@ -1,0 +1,10 @@
+{
+  "name": "chs-ooo-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Vercel serverless functions backing the study: Turnstile-gated session admission and response storage. See api/ and js/README.md's 'Hosting with a backend' section.",
+  "dependencies": {
+    "@vercel/postgres": "^0.10.0"
+  }
+}

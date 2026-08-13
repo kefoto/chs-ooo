@@ -147,12 +147,26 @@ export function downloadPayload(payload) {
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
-/** POST to a collection endpoint, if the config names one. */
-export async function postPayload(url, payload) {
+/**
+ * POST to a collection endpoint, if the config names one.
+ *
+ * `block` (a room index) marks a per-block upload rather than the final one
+ * -- api/submit.js tags the two differently in storage, but the wire shape
+ * is the same either way: {payload, block}, `block` omitted for the final
+ * call. `ticket` is the session-admission ticket from js/src/captcha.js
+ * (undefined when this deploy has no Turnstile gate configured, e.g. local
+ * dev -- api/submit.js's own gate then rejects it, same as any other
+ * misconfigured/backend-less host; see main.js's save()).
+ */
+export async function postPayload(url, payload, { ticket, block } = {}) {
+  const headers = { "Content-Type": "application/json" };
+  if (ticket) headers.Authorization = `Bearer ${ticket}`;
+  const body = { payload };
+  if (Number.isFinite(block)) body.block = block;
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    headers,
+    body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error(`upload failed: ${res.status}`);
   return res;

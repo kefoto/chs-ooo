@@ -113,21 +113,31 @@ almost every screen here is one (`TripletPlugin`, `AudioTripletPlugin`,
 **external study** — CHS keeps recruitment, eligibility and consent, and links
 out to this page.
 
-**1. Host it.** Enable GitHub Pages on this repository (Settings → Pages →
-deploy from `main`, folder `/`). The whole repo is served, so `index.html` keeps
-its position above `assets/` and `datasets/` and the relative paths in
-`config.js` resolve unchanged. A `.nojekyll` file at the repo root stops Pages
-running the content through Jekyll. The study is then at:
+**1. Host it.** This repo now ships a backend (`/api`, see "Hosting with a
+backend" below) for the Turnstile bot gate and response storage, and GitHub
+Pages cannot run it — Pages only serves static files. Deploy to
+[Vercel](https://vercel.com) instead: "Add New… → Project", import this repo,
+and accept the defaults (no framework, no build command — it is a static
+site plus a handful of serverless functions under `/api`, which Vercel
+detects on its own). `index.html` keeps its position above `assets/` and
+`datasets/`, so the relative paths in `config.js` resolve unchanged. The
+study is then at:
 
 ```
-https://<user>.github.io/<repo>/js/index.html
+https://<project>.vercel.app/js/index.html
 ```
+
+(GitHub Pages still works for the static frontend alone — set `upload=` to
+an external endpoint and skip the "Hosting with a backend" section — but then
+there is no CAPTCHA gate and no built-in storage; that combination only makes
+sense if you already have a collection endpoint elsewhere.)
 
 **2. Set the Study URL** on the CHS study page, with any of the params above
-baked in — CHS keeps your query string and appends its own:
+baked in — CHS keeps your query string and appends its own. `upload=` can be
+omitted now: it defaults to this deploy's own `/api/submit`.
 
 ```
-https://<user>.github.io/<repo>/js/index.html?tier=1&upload=https://your-endpoint
+https://<project>.vercel.app/js/index.html?tier=1
 ```
 
 **3. What CHS sends.** When a family presses "Participate now", CHS appends the
@@ -143,10 +153,11 @@ hash becomes the `participant_id` that seeds the session, `setting` is recorded
 as `home`, and **no file download is offered** — a save prompt on a parent's
 computer is not a data pipeline.
 
-**4. Give it somewhere to put the data.** `upload=` is therefore mandatory for a
-CHS session: it is the only route out, and without it the session is lost. The
-endpoint receives the same JSON the desktop build writes, POSTed as
-`application/json`.
+**4. Give it somewhere to put the data.** `upload_url` is therefore mandatory
+for a CHS session: it is the only route out, and without it the session is
+lost. It defaults to this deploy's own `/api/submit` (see "Hosting with a
+backend" below) — only pass `?upload=` yourself to point at something else
+instead. The endpoint receives the same JSON the desktop build writes.
 
 **5. Age comes later, not from the link.** CHS does not put the child's age in
 the URL, so `participant_data.age` is empty for these sessions. It lives in the
@@ -228,6 +239,85 @@ The file downloads at the end, named exactly as the desktop build names it
 analysis picks it up. **Closing the tab partway still saves**, with
 `completion_status: 0` and a `_partial` suffix — a child who disengages is
 data, not a hole.
+
+## Hosting with a backend (Turnstile + Postgres)
+
+`/api` is three Vercel serverless functions: a bot gate, response storage, and
+a researcher-only export. All three are optional in the sense that the study
+runs fine without them configured (see "degrades ungated" below) — but a
+public link with no bot gate and no server-side record of partial sessions is
+not what you want for a real deployment.
+
+**What each piece does:**
+
+| | |
+|---|---|
+| `api/verify-start.js` | Verifies one Cloudflare Turnstile solve per session, mints a signed session ticket |
+| `api/submit.js` | Stores a session's data (called once per completed room, and again at the end) into Postgres, gated on that ticket |
+| `api/export.js` | Lets *you* pull recorded sessions back out, gated on a separate admin secret |
+| `js/src/captcha.js` | Client side: renders the Turnstile widget, trades the solve for a ticket |
+
+**Why a ticket, not the raw Turnstile token, on every upload.** Turnstile
+tokens are single-use and expire in minutes; a session can run past an hour
+for young children (see the pacing table above). So Turnstile is checked
+**once**, at session start, and success mints an HMAC-signed ticket
+(`api/_lib/ticket.js`) that every later `/api/submit` call carries instead.
+
+**Why Postgres, not simpler object storage.** The payload carries a child's
+age, gender, ethnicity, race, handedness and first language. Vercel Blob's
+only access mode is "public" (anyone with the URL can read it, no
+credential) — fine for images, wrong for this. Rows in Postgres are reachable
+only through `/api/export`, which is the sole holder of the DB credential.
+
+### Setup
+
+1. **Create a Turnstile site** at
+   [the Cloudflare dashboard](https://dash.cloudflare.com/?to=/:account/turnstile) →
+   Turnstile → Add site. Use the **Managed** widget mode (usually solves
+   itself with no interaction). You get a **site key** (public) and a
+   **secret key** (not public).
+2. **Add a Postgres database** to the Vercel project: project → Storage → Create
+   Database → Postgres. Linking it to the project sets `POSTGRES_URL`
+   automatically — nothing to copy by hand. The table (`sessions`) is created
+   on first use; there is no separate migration step.
+3. **Set environment variables** on the Vercel project (Settings →
+   Environment Variables):
+
+   | Variable | Value |
+   |---|---|
+   | `TURNSTILE_SECRET_KEY` | the secret key from step 1 |
+   | `SESSION_TICKET_SECRET` | any long random string (e.g. `openssl rand -hex 32`) |
+   | `ADMIN_EXPORT_SECRET` | any long random string, different from the one above |
+
+4. **Put the site key in the client config**: `turnstile_site_key` in
+   `js/src/config.js`. This one is *not* secret — it is meant to ship to the
+   browser — so it can be committed directly.
+5. Redeploy. A session now shows a brief "One moment…" gate before anything
+   else loads.
+
+**Degrades ungated, deliberately, when `turnstile_site_key` is blank** — e.g.
+local dev via `python3 -m http.server`, or a checkout with no Vercel project
+behind it at all. A **configured** deploy that then hits a broken backend
+(CDN unreachable, `TURNSTILE_SECRET_KEY` unset) fails **closed** instead — see
+`js/src/captcha.js`'s docstring for the distinction. Either way `/api/submit`
+enforces its own ticket check regardless of what the client believes, so a
+crafted request straight to the API without ever solving Turnstile is
+rejected there too.
+
+### Getting the data back out
+
+```bash
+curl -H "Authorization: Bearer $ADMIN_EXPORT_SECRET" \
+  "https://<project>.vercel.app/api/export" > sessions.json
+```
+
+Returns the single most-complete row per participant (highest id — every
+row's payload already contains every response so far, not just one block's,
+so the latest row is always the fullest available). Add `?all=1` to get every
+block-by-block row instead, or `?participant_id=P07` to filter to one
+participant. Each row's `payload` field is the same JSON `data/responses/`
+already expects — save it there under whatever filename convention you use
+locally, same as a downloaded file would be.
 
 ## The rule this port had to preserve
 

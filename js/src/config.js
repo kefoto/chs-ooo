@@ -41,9 +41,20 @@ export const CONFIG = {
   // without its clips is not the task.
   Gamify_Mute_SFX: false,
 
-  // Where the finished session goes. Download is offered by default; set
-  // upload_url to also POST the same JSON to a collection endpoint.
-  upload_url: null,
+  // Where the finished (and per-block) session data goes. Download is
+  // offered by default; set upload_url to also POST the same JSON to a
+  // collection endpoint. Defaults to this deploy's own /api/submit (see
+  // api/submit.js) -- same-origin once hosted on Vercel, so a CHS study
+  // link needs no ?upload= of its own. On a host with no backend (GitHub
+  // Pages, local `python3 -m http.server`) the POST 404s and is caught the
+  // same way any other upload failure is -- see main.js's save().
+  upload_url: "/api/submit",
+
+  // Public Turnstile SITE key for this deploy (not secret -- it is meant to
+  // ship to the client; pairs with TURNSTILE_SECRET_KEY, set server-side
+  // only, in Vercel's env vars). Blank runs every session ungated -- see
+  // js/src/captcha.js. Get one at https://dash.cloudflare.com/?to=/:account/turnstile.
+  turnstile_site_key: "",
 
   // Children Helping Science, when this is running as a CHS *external* study.
   // CHS appends these two to the Study URL when a family presses "Participate

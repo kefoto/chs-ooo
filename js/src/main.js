@@ -16,6 +16,7 @@ import { TripletPlugin, ScreenPlugin } from "./plugins.js";
 import { AudioTripletPlugin, armPriming, stimulusAudioActive } from "./audio.js";
 import { initSfx, playSfx } from "./sfx.js";
 import { initVoice, speak, speakAll } from "./voice.js";
+import { admitSession, getTicket } from "./captcha.js";
 import { initMusic, playMusic, stopMusic } from "./music.js";
 import { initStickerPopup, showStickerReveal } from "./sticker_popup.js";
 import { CutscenePlugin, resolvePanels, probeImages } from "./cutscene.js";
@@ -59,6 +60,21 @@ const jget = async (url) => {
     cfg["Num Trials"] = plan.perBlock;
   }
   TIER2 = cfg.Tier === 2;
+
+  // Bot gate, once, before anything else loads -- a bot that never solves it
+  // never even downloads the manifests/stimuli, let alone runs a session.
+  // See js/src/captcha.js for why this degrades to ungated when no site key
+  // is configured (local dev, the test harness) but fails CLOSED when one
+  // IS configured and something breaks.
+  try {
+    await admitSession({ siteKey: cfg.turnstile_site_key, pid: cfg.participant_id, target });
+  } catch (e) {
+    target.innerHTML = `<div class="captcha-gate">
+      <p>Could not verify this session (${e.message}).</p>
+      <p>Please reload the page and try again.</p>
+    </div>`;
+    return;
+  }
   target.innerHTML = "";
 
   const datasetRoot = TIER2 ? cfg.tier2_dataset_root : cfg.dataset_root;
@@ -296,7 +312,7 @@ const jget = async (url) => {
     // disk. Kept loud for that reason.
     if (cfg.offer_download !== false) downloadPayload(payload);
     if (cfg.upload_url) {
-      try { await postPayload(cfg.upload_url, payload); }
+      try { await postPayload(cfg.upload_url, payload, { ticket: getTicket() }); }
       catch (e) {
         console.error(cfg.offer_download === false
           ? "upload failed and no download was offered -- this session is lost"
@@ -305,6 +321,21 @@ const jget = async (url) => {
     } else if (cfg.offer_download === false) {
       console.error("CHS session with no upload_url: nowhere to put the data");
     }
+  }
+
+  // Fired at every room boundary (see the on_finish hook near atRoomEnd,
+  // below), in addition to save()'s end-of-session call -- a child who
+  // disengages partway still has every room up to that point recorded
+  // server-side, not just whatever the browser tab happened to hold. Does
+  // NOT set the `saved` latch or trigger a download: this is purely a
+  // server-side checkpoint, and save() still owns "the session is over".
+  // `responses` at call time already includes every trial through the room
+  // that just ended, so this payload is self-contained, not a delta.
+  async function saveBlock(roomIndex) {
+    if (!cfg.upload_url) return;
+    const payload = buildPayload({ config: cfg, responses, castle, shop, startTime, completed: false });
+    try { await postPayload(cfg.upload_url, payload, { ticket: getTicket(), block: roomIndex }); }
+    catch (e) { console.error(`per-block upload failed (room ${roomIndex})`, e); }
   }
   // A child who stops partway still yields data: "trials completed before
   // disengagement" is one of the measures the pilot is built around.
@@ -440,6 +471,19 @@ const jget = async (url) => {
       ? { current: posInRoom[idx], total: roomSize[roomIndex],
           level: roomIndex + 1, n_levels: rooms }
       : null;
+
+    // Room boundary: also where a per-block save fires (below), so it needs
+    // to be known before on_finish is built, not after -- moved up from
+    // where it used to sit, right before the gamified reward screen.
+    //
+    // Keyed off the END OF THE ROOM, never off a count of regular trials.
+    // Attention checks are shuffled in among them, so a room's last trial is
+    // often an attention one; rewarding at the regular-trial count dropped the
+    // reward screen mid-room, and could put the playground BEFORE a trial that
+    // still belonged to the room the child had just been congratulated for.
+    const atRoomEnd =
+      idx === trials.length - 1 || roomOf(trials[idx + 1]) !== roomOf(t);
+
     const common = {
       concepts: t.concepts,
       is_attention: t.is_attention,
@@ -495,6 +539,11 @@ const jget = async (url) => {
           row.stimulus_autoplay_blocked = Boolean(d.autoplay_blocked);
         }
         responses.push(row);
+        // Fires for BOTH arms (gamified or plain), unlike the reward screen
+        // below which is Gamify-only -- a baseline-arm session has no room-
+        // complete screen to hang this off of otherwise, and losing only
+        // the plain arm's per-block saves would be an easy regression to miss.
+        if (atRoomEnd) saveBlock(roomIndex);
       },
     };
 
@@ -509,14 +558,6 @@ const jget = async (url) => {
           ...common });
 
     // Room boundary: award, then let the child arrange.
-    //
-    // Keyed off the END OF THE ROOM, never off a count of regular trials.
-    // Attention checks are shuffled in among them, so a room's last trial is
-    // often an attention one; rewarding at the regular-trial count dropped the
-    // reward screen mid-room, and could put the playground BEFORE a trial that
-    // still belonged to the room the child had just been congratulated for.
-    const atRoomEnd =
-      idx === trials.length - 1 || roomOf(trials[idx + 1]) !== roomOf(t);
 
     if (cfg.Gamify && atRoomEnd && castle && !castle.rooms[roomIndex].completed) {
       const thisRoom = roomIndex;
