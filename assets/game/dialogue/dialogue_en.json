@@ -25,7 +25,7 @@
   "cutscene_open": [
     "Pip's castle is almost built, but the rooms are still empty.",
     "Oh, hello! I'm Pip, and this is my castle.",
-    "I'm still working out what goes where. Will you help me sort things, room by room?"
+    "I can't decide what goes where! Will you help me sort things, room by room?"
   ],
 
   "cutscene_close": [
@@ -111,29 +111,29 @@
   ],
 
   "level_complete": [
-    "That's a whole room done! Here's what you found.",
-    "Room finished! These are for your book.",
-    "That's the end of that room. Sticker time."
-  ],
-
-  "playground_prompt": [
-    "Put them anywhere you like!",
-    "Where should these go? You choose!"
+    "That's a whole room done! Thank you, here's what you found.",
+    "Room finished! Thank you, these are for your book.",
+    "That's the end of that room, thank you. Sticker time!"
   ],
 
   "break_prompt": [
-    "Want to keep going, or take a rest?",
-    "Ready for the next room? Or we can pause."
+    "Would you like to keep going, or take a rest?",
+    "Would you like the next room? Or we can pause, if you like."
+  ],
+
+  "mansion_prompt": [
+    "Would you like to visit the mansion, or keep going?",
+    "The mansion is open, if you'd like to visit! Or we can go straight on."
   ],
 
   "resting": [
-    "No problem, take as long as you like. I'll wait!",
-    "Let's rest. Tap when you're ready to play again."
+    "No problem at all, please take as long as you like. I'll wait!",
+    "Let's rest. Please tap whenever you're ready to play again."
   ],
 
   "paused": [
-    "We're paused. Nothing's lost, tap when you want to carry on.",
-    "Taking a break! Your stickers are safe."
+    "We're paused, nothing's lost. Please tap whenever you'd like to carry on.",
+    "Taking a break is just fine! Your stickers are safe."
   ],
 
   "nudge": [
@@ -143,7 +143,7 @@
 
   "finish": [
     "All done! Thank you so much for playing with me.",
-    "That's the end! Thank you for sticking with it."
+    "That's the end! Thank you very much for sticking with it."
   ],
 
   "_unsafe_examples_do_not_use": [

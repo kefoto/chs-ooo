@@ -80,7 +80,7 @@ export const CONFIG = {
   // absolute origin to serve the media from somewhere else -- that host then
   // needs CORS, since the manifests are fetched rather than <img>-loaded.
   asset_root: "../assets/game",
-  dataset_root: "../datasets/Tier1_THINGS_100",
+  dataset_root: "../datasets/Tier1_THINGS_560",
   tier2_dataset_root: "../datasets/Tier2_AV_Matched",
 };
 
@@ -106,7 +106,7 @@ export function applyUrlOverrides(cfg, search = window.location.search) {
   if (q.get("media")) {
     const base = q.get("media").replace(/\/+$/, "");
     cfg.asset_root = `${base}/assets/game`;
-    cfg.dataset_root = `${base}/datasets/Tier1_THINGS_100`;
+    cfg.dataset_root = `${base}/datasets/Tier1_THINGS_560`;
     cfg.tier2_dataset_root = `${base}/datasets/Tier2_AV_Matched`;
   }
 

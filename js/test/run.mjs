@@ -13,18 +13,30 @@ import { generateBalancedTriplets, buildTrialList } from "../src/triplets.js";
 import { resolvePanels } from "../src/cutscene.js";
 import { blockConditions, latinSquareIndex, buildTrialListTier2,
          LATIN_SQUARE_ORDERS } from "../src/tier2.js";
-import { CastleState, allocate, MIN_PER_ROOM, MAX_PER_ROOM } from "../src/castle.js";
+import { CastleState, allocate, allocateCoins, allocateRevealPositions,
+         MIN_PER_ROOM, MAX_PER_ROOM, MIN_COINS_PER_TRIAL, MAX_COINS_PER_TRIAL,
+         COIN_VALUES, COIN_WEIGHTS,
+       } from "../src/castle.js";
+import { ShopState } from "../src/shop.js";
 import { buildPayload, makeResponse } from "../src/save.js";
 import { sessionPlan, ageBin, FIXED_TRIALS_PER_SESSION } from "../src/session.js";
 import { CONFIG, applyUrlOverrides } from "../src/config.js";
 import { setupNeeded } from "../src/setup.js";
 import { initSfx, playSfx } from "../src/sfx.js";
+import { initMusic, playMusic, stopMusic } from "../src/music.js";
 
 let pass = 0;
 const test = (name, fn) => {
   try { fn(); pass++; console.log(`  PASS  ${name}`); }
   catch (e) { console.error(`  FAIL  ${name}\n        ${e.message}`); process.exitCode = 1; }
 };
+// Only the timed music-fade test needs to actually wait on a clock; every
+// other test in this file is synchronous.
+const testAsync = async (name, fn) => {
+  try { await fn(); pass++; console.log(`  PASS  ${name}`); }
+  catch (e) { console.error(`  FAIL  ${name}\n        ${e.message}`); process.exitCode = 1; }
+};
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const CONCEPTS = Array.from({ length: 100 }, (_, i) => `c${i}`);
 const POOL = Array.from({ length: 101 }, (_, i) => ({ id: `s${i}`, emoji: "*" }));
@@ -367,10 +379,160 @@ test("the reward schedule cannot see a response", () => {
 });
 
 test("rooms pay out once, and only once", () => {
+  // completeRoom returns only the CATCH-UP leftover (see the per-trial
+  // reveal schedule), so a second call must return [] rather than
+  // replaying the first call's list.
   const st = CastleState.create(3, POOL, stream("P1", "c"), "P1");
   const first = st.completeRoom(0);
-  assert.deepEqual(st.completeRoom(0), first, "second call differed");
+  assert.deepEqual(st.completeRoom(0), [], "second call must pay nothing");
   assert.equal(st.awarded.length, first.length, "double award");
+});
+
+test("the coin schedule cannot see a response either", () => {
+  const sigOf = (fn) => fn.toString().slice(fn.toString().indexOf("("),
+                                            fn.toString().indexOf(")") + 1);
+  const sig = sigOf(allocateCoins).toLowerCase();
+  for (const banned of ["response", "choice", "selected", "correct", "answer"]) {
+    assert.ok(!sig.includes(banned), `allocateCoins can see the response via "${banned}"`);
+  }
+  const alloc = allocateCoins(60, stream("P1", "c"));
+  assert.ok(alloc.every((n) => n >= MIN_COINS_PER_TRIAL && n <= MAX_COINS_PER_TRIAL));
+  assert.ok(new Set(alloc).size > 1, "coin allocation never varies");
+});
+
+test("1 coin is the most likely draw, matching COIN_WEIGHTS", () => {
+  assert.equal(COIN_VALUES[0], 1);
+  assert.equal(COIN_WEIGHTS[0], Math.max(...COIN_WEIGHTS));
+  const alloc = allocateCoins(2000, stream("P1", "weights"));
+  const counts = Object.fromEntries(COIN_VALUES.map((v) => [v, alloc.filter((n) => n === v).length]));
+  assert.ok(counts[1] > counts[2] && counts[2] > counts[3],
+    `draw did not favour 1: ${JSON.stringify(counts)}`);
+});
+
+test("the coin schedule is reproducible from the participant id", () => {
+  const a = CastleState.create(5, POOL, stream("P1", "c"), "P1", [], 20);
+  const b = CastleState.create(5, POOL, stream("P1", "c"), "P1", [], 20);
+  assert.deepEqual(a.coin_allocation, b.coin_allocation);
+  const c = CastleState.create(5, POOL, stream("P2", "c"), "P2", [], 20);
+  assert.notDeepEqual(a.coin_allocation, c.coin_allocation,
+    "different participants got an identical coin schedule");
+});
+
+test("coins ride the same draw as stickers, one continuous stream", () => {
+  // If coins were a second independent trigger, drawing them wouldn't need
+  // to happen between the sticker allocation and the sticker shuffle. Here
+  // it does -- create()'s sticker identities must match a lone allocate()
+  // call at the same seed, proving nothing else was drawn from the rng
+  // before the sticker order is fixed except the coin allocation itself,
+  // in the documented order.
+  const seed = 99;
+  const stickersAlone = allocate(4, stream(String(seed), "seedcheck"));
+  const st = CastleState.create(4, POOL, stream(String(seed), "seedcheck"), "X", [], 20);
+  assert.deepEqual(st.allocation, stickersAlone,
+    "CastleState.create must draw stickers first, exactly like allocate() alone");
+});
+
+test("a trial pays out coins once, and only once", () => {
+  const st = CastleState.create(3, POOL, stream("P1", "c"), "P1", [], 10);
+  const planned = st.coin_allocation[0];
+  const paid = st.awardTrialCoins(0);
+  assert.equal(paid, planned);
+  assert.equal(st.coins_awarded, planned);
+  assert.equal(st.trials_paid, 1);
+  st.awardTrialCoins(0);
+  assert.equal(st.coins_awarded, planned, "double award of coins");
+  assert.equal(st.trials_paid, 1);
+});
+
+test("trial coins must be claimed in order", () => {
+  const st = CastleState.create(3, POOL, stream("P1", "c"), "P1", [], 10);
+  assert.equal(st.awardTrialCoins(3), 0, "an out-of-order claim must not pay");
+  assert.equal(st.coins_awarded, 0);
+  assert.equal(st.awardTrialCoins(0), st.coin_allocation[0]);
+  assert.equal(st.awardTrialCoins(0), 0, "a repeated claim must not pay twice");
+  assert.equal(st.awardTrialCoins(1), st.coin_allocation[1]);
+});
+
+test("the sticker reveal schedule cannot see a response", () => {
+  const sigOf = (fn) => fn.toString().slice(fn.toString().indexOf("("),
+                                            fn.toString().indexOf(")") + 1);
+  const sig = sigOf(allocateRevealPositions).toLowerCase();
+  for (const banned of ["response", "choice", "selected", "correct", "answer"]) {
+    assert.ok(!sig.includes(banned), `allocateRevealPositions can see the response via "${banned}"`);
+  }
+});
+
+test("reveal positions stay within the room and arrive sorted", () => {
+  const positions = allocateRevealPositions([3, 2, 4], [11, 11, 2], stream("P1", "reveal"));
+  assert.equal(positions.length, 3);
+  assert.deepEqual(positions[0], [...positions[0]].sort((a, b) => a - b));
+  assert.ok(positions[0].every((p) => p >= 0 && p < 11));
+  assert.equal(new Set(positions[0]).size, 3, "room 0's 3 stickers must land on 3 distinct trials");
+  // Room 2 has 4 stickers but only 2 trials: everyone gets a distinct slot
+  // first, then the rest double up on the LAST trial rather than being lost.
+  assert.deepEqual(positions[2], [0, 1, 1, 1]);
+});
+
+test("a room reveals its stickers one at a time, in the pre-drawn order", () => {
+  const st = CastleState.create(3, POOL, stream("P1", "c"), "P1", [], 30, [10, 10, 10]);
+  const room = st.rooms[0];
+  assert.ok(room.reveal_positions.length >= 2, "test needs a room with >=2 stickers");
+
+  // Nothing scheduled at position -1 (never happens in practice, just
+  // proving a non-matching position pays nothing).
+  assert.deepEqual(st.awardTrialStickers(0, -1), []);
+
+  const [firstPos, secondPos] = room.reveal_positions;
+  const got = st.awardTrialStickers(0, firstPos);
+  assert.deepEqual(got, [room.sticker_ids[0]]);
+  assert.equal(room.revealed, 1);
+  // A repeat of the SAME position must not pay twice.
+  assert.deepEqual(st.awardTrialStickers(0, firstPos), []);
+  assert.equal(room.revealed, 1);
+
+  if (secondPos !== undefined) {
+    assert.deepEqual(st.awardTrialStickers(0, secondPos), [room.sticker_ids[1]]);
+  }
+});
+
+test("completeRoom catches up any stickers a short room never reached", () => {
+  // 1 trial, up to 4 stickers planned: every extra sticker doubles up on
+  // that one trial's position, so awardTrialStickers(0, 0) should already
+  // deliver everything -- but completeRoom must still make the child whole
+  // even if it somehow didn't (e.g. the session ended before that trial's
+  // feedback ran).
+  const st = CastleState.create(1, POOL, stream("P1", "c"), "P1", [], 1, [1]);
+  const room = st.rooms[0];
+  const leftover = st.completeRoom(0);
+  assert.deepEqual(new Set(leftover), new Set(room.sticker_ids));
+  assert.equal(st.awarded.length, room.stickers_planned);
+  assert.equal(room.revealed, room.sticker_ids.length);
+});
+
+test("furniture placement is separate from stickers", () => {
+  const st = CastleState.create(2, POOL, stream("P1", "c"), "P1");
+  const sid = st.rooms[0].sticker_ids[0];
+  st.place(sid, 0, 0.5, 0.5);
+  st.placeFurniture("tapestry", 0, 0.2, 0.2);
+  assert.equal(st.placements.length, 1, "furniture leaked into the sticker list");
+  assert.equal(st.furniture_placements.length, 1);
+});
+
+test("furniture is placed once globally, not per room", () => {
+  const st = CastleState.create(3, POOL, stream("P1", "c"), "P1");
+  assert.deepEqual(st.unplacedFurniture(["tapestry", "cushion"]), ["tapestry", "cushion"]);
+  st.placeFurniture("tapestry", 1, 0.4, 0.4);
+  assert.deepEqual(st.unplacedFurniture(["tapestry", "cushion"]), ["cushion"]);
+  assert.equal(st.furniturePlacedInRoom(1)[0].sticker_id, "tapestry");
+  assert.deepEqual(st.furniturePlacedInRoom(0), []);
+});
+
+test("replacing furniture moves it rather than duplicating", () => {
+  const st = CastleState.create(2, POOL, stream("P1", "c"), "P1");
+  st.placeFurniture("tapestry", 0, 0.1, 0.1);
+  st.placeFurniture("tapestry", 1, 0.9, 0.9);
+  assert.equal(st.furniture_placements.length, 1);
+  assert.equal(st.furniture_placements[0].room_index, 1);
 });
 
 test("re-placing a sticker moves it rather than duplicating", () => {
@@ -415,6 +577,26 @@ test("the saved schema is the one the Python analysis reads", () => {
   assert.deepEqual(responses[0].concept_similar_pair, ["a", "c"]);
   assert.equal(responses[1].correct, true);      // picked the unique one
   assert.equal(p.participant_data.completion_status, 1);
+});
+
+test("the saved schema carries shop state alongside castle when present", () => {
+  const castle = CastleState.create(2, POOL, stream("P1", "c"), "P1");
+  castle.completeRoom(0);
+  const shop = new ShopState();
+  shop.buyFurniture("tapestry", 0, castle.coins_awarded, 0);
+
+  const p = buildPayload({ config: { participant_id: "P1", Tier: 1,
+    "Num Blocks": 2, "Num Trials": 4, Age: "6", Gamify: true },
+    responses: [], castle, shop, startTime: "2026-01-01 00:00:00", completed: true });
+
+  assert.deepEqual(Object.keys(p.game_state).sort(), ["castle", "shop"]);
+  assert.deepEqual(p.game_state.shop.owned_furniture, ["tapestry"]);
+
+  // Backward compatible: no shop passed -> game_state still has just castle.
+  const pNoShop = buildPayload({ config: { participant_id: "P1", Tier: 1,
+    "Num Blocks": 2, "Num Trials": 4, Age: "6", Gamify: true },
+    responses: [], castle, startTime: "2026-01-01 00:00:00", completed: true });
+  assert.deepEqual(Object.keys(pNoShop.game_state), ["castle"]);
 });
 
 test("demographics reach the payload under the names Python writes", () => {
@@ -524,12 +706,212 @@ test("quiet mode silences the game, and reduced motion implies it", () => {
   assert.equal(applyUrlOverrides({ ...CONFIG }, "").Gamify_Mute_SFX, false);
 });
 
+test("cutscene music starts and stops without overlapping itself", () => {
+  const state = [];
+  class FakeAudio {
+    constructor(src) { this.src = src; this.volume = 1; this.paused = true; }
+    play() { this.paused = false; state.push(["play", this.src]); return { catch() {} }; }
+    pause() { this.paused = true; state.push(["pause", this.src]); }
+  }
+  globalThis.Audio = FakeAudio;
+
+  const music = { open: "music/theme.mp3", close: "music/theme.mp3" };
+  // fadeMs: 0 isolates the start/stop/switch logic from the ramp itself,
+  // which gets its own timed test below.
+  initMusic({ assetRoot: "../assets/game", music, muted: false, fadeMs: 0 });
+
+  playMusic("open");
+  assert.deepEqual(state, [["play", "../assets/game/music/theme.mp3"]]);
+
+  // Starting the next cue must stop the first, never layer two tracks.
+  playMusic("close");
+  assert.deepEqual(state.slice(1), [
+    ["pause", "../assets/game/music/theme.mp3"],
+    ["play", "../assets/game/music/theme.mp3"],
+  ]);
+
+  stopMusic();
+  assert.equal(state.at(-1)[0], "pause");
+  // Idempotent: nothing playing, nothing to pause a second time.
+  stopMusic();
+  assert.equal(state.length, 4);
+
+  // An unmapped key is silent rather than an exception mid-session.
+  playMusic("no_such_cue");
+  assert.equal(state.length, 4);
+});
+
+test("quiet mode silences cutscene music too", () => {
+  const played = [];
+  globalThis.Audio = class { constructor(s) { this.src = s; }
+                             play() { played.push(this.src); return { catch() {} }; }
+                             pause() {} };
+
+  initMusic({ assetRoot: "a", music: { open: "m.mp3" }, muted: true });
+  playMusic("open");
+  assert.equal(played.length, 0, "quiet mode still started music");
+});
+
+await testAsync("cutscene music fades in and out rather than cutting", async () => {
+  const created = [];
+  class FakeAudio {
+    constructor(src) { this.src = src; this.volume = 1; this.paused = true; created.push(this); }
+    play() { this.paused = false; return { catch() {} }; }
+    pause() { this.paused = true; }
+  }
+  globalThis.Audio = FakeAudio;
+
+  const FADE = 120;
+  initMusic({ assetRoot: "a", music: { open: "m.mp3" }, muted: false, fadeMs: FADE });
+
+  playMusic("open");
+  const el = created.at(-1);
+  assert.equal(el.volume, 0, "must start silent, not snap to full volume");
+
+  await sleep(FADE / 2);
+  assert.ok(el.volume > 0 && el.volume < 0.35,
+    `expected a mid-fade volume, got ${el.volume}`);
+  assert.equal(el.paused, false, "must already be audible while fading in");
+
+  await sleep(FADE);
+  assert.ok(Math.abs(el.volume - 0.35) < 0.01, `fade-in must settle at target, got ${el.volume}`);
+
+  stopMusic();
+  assert.equal(el.paused, false, "must not cut silent the instant stopMusic is called");
+  await sleep(FADE / 2);
+  assert.ok(el.volume > 0 && el.volume < 0.35,
+    `expected a mid-fade-out volume, got ${el.volume}`);
+  assert.equal(el.paused, false, "still fading out -- must not be paused yet");
+
+  await sleep(FADE);
+  assert.equal(el.paused, true, "must pause once the fade-out reaches silence");
+  assert.ok(el.volume < 0.01, `fade-out must settle at zero, got ${el.volume}`);
+});
+
 test("a partial session is flagged, not silently pooled", () => {
   const p = buildPayload({ config: { participant_id: "P1", Tier: 1,
     "Num Blocks": 5, "Num Trials": 4 }, responses: [], castle: null,
     startTime: "2026-01-01 00:00:00", completed: false });
   assert.equal(p.participant_data.completion_status, 0);
   assert.equal(p.participant_data.planned_regular_trials, 20);
+});
+
+// --- Shop / economy: mirrors tests/test_shop_state.py -------------------
+
+const FURNITURE_POOL = [
+  { ref: "birdbath", type: "furniture" },
+  { ref: "chandelier", type: "furniture" },
+  { ref: "aurora", type: "background" },
+];
+
+test("shop: can afford is a plain balance >= cost check", () => {
+  assert.equal(ShopState.canAfford(10, 10), true);
+  assert.equal(ShopState.canAfford(10, 11), false);
+  assert.equal(ShopState.canAfford(0, 0), true);
+});
+
+test("shop: buying furniture is rejected on insufficient balance", () => {
+  const shop = new ShopState();
+  assert.equal(shop.buyFurniture("tapestry", 8, 5, 0), false);
+  assert.deepEqual(shop.owned_furniture, []);
+  assert.deepEqual(shop.purchases, []);
+});
+
+test("shop: furniture cannot be re-bought once owned", () => {
+  const shop = new ShopState();
+  assert.equal(shop.buyFurniture("tapestry", 8, 20, 0), true);
+  assert.equal(shop.buyFurniture("tapestry", 8, 20, 1), false,
+    "re-bought an already-owned furniture item");
+  assert.deepEqual(shop.owned_furniture, ["tapestry"]);
+  assert.equal(shop.purchases.length, 1);
+});
+
+test("shop: buying a background does not auto-equip it", () => {
+  const shop = new ShopState();
+  assert.equal(shop.buyBackground("starlit", 12, 20, 0), true);
+  assert.ok(shop.owned_backgrounds.includes("starlit"));
+  assert.deepEqual(shop.background_overrides, {},
+    "buying a background must not equip it automatically");
+});
+
+test("shop: equipping a background requires ownership and costs nothing", () => {
+  const shop = new ShopState();
+  assert.equal(shop.equipBackground(0, "starlit"), false,
+    "equipped a background that was never bought");
+  shop.buyBackground("starlit", 12, 20, 0);
+  const spentBefore = shop.totalSpent;
+  assert.equal(shop.equipBackground(2, "starlit"), true);
+  assert.equal(shop.background_overrides[2], "starlit");
+  assert.equal(shop.totalSpent, spentBefore, "equipBackground must not spend");
+});
+
+test("shop: mystery box draws from the supplied pool and rng", () => {
+  const shop = new ShopState();
+  const p = shop.buyMysteryBox("mystery_box", 15, 20, 0, stream("P1", "shop"), FURNITURE_POOL);
+  assert.ok(p);
+  assert.ok(["birdbath", "chandelier", "aurora"].includes(p.won_item_id));
+  if (p.won_item_type === "furniture") {
+    assert.ok(shop.owned_furniture.includes(p.won_item_id));
+  } else {
+    assert.ok(shop.owned_backgrounds.includes(p.won_item_id));
+  }
+  assert.deepEqual(shop.purchases, [p]);
+});
+
+test("shop: mystery box rejects insufficient balance", () => {
+  const shop = new ShopState();
+  const p = shop.buyMysteryBox("mystery_box", 15, 5, 0, stream("P1", "shop"), FURNITURE_POOL);
+  assert.equal(p, null);
+  assert.deepEqual(shop.purchases, []);
+});
+
+test("shop: mystery box is reproducible from its rng stream", () => {
+  const a = new ShopState().buyMysteryBox("mystery_box", 15, 20, 0, stream("P7", "shop"), FURNITURE_POOL);
+  const b = new ShopState().buyMysteryBox("mystery_box", 15, 20, 0, stream("P7", "shop"), FURNITURE_POOL);
+  assert.equal(a.won_item_id, b.won_item_id);
+});
+
+test("shop: applyPurchase replays an already-decided purchase without redrawing", () => {
+  // ShopPlugin's trial() already made the real decision live (including any
+  // mystery-box rng draw); applyPurchase only replays it into the real
+  // ShopState from on_finish -- it must never draw again itself.
+  const shop = new ShopState();
+  const purchase = { item_type: "mystery_box", item_id: "mystery_box", cost: 15,
+                     room_index: 0, won_item_id: "chandelier", won_item_type: "furniture" };
+  shop.applyPurchase(purchase);
+  assert.ok(shop.owned_furniture.includes("chandelier"));
+  assert.equal(shop.purchases.length, 1);
+  assert.equal(shop.totalSpent, 15);
+});
+
+test("shop: total spent sums every purchase", () => {
+  const shop = new ShopState();
+  shop.buyFurniture("tapestry", 8, 100, 0);
+  shop.buyBackground("starlit", 12, 100, 0);
+  shop.buyMysteryBox("mystery_box", 15, 100, 1, stream("P1", "shop"), FURNITURE_POOL);
+  assert.equal(shop.totalSpent, 8 + 12 + 15);
+});
+
+test("shop: toJSON matches the field names the Python analysis reads", () => {
+  // No fromJSON exists here, same as CastleState -- the browser build never
+  // reloads a save mid-session (session-only by design). What must hold is
+  // that toJSON's shape survives a JSON round-trip byte-for-byte and uses
+  // the same snake_case field names as shop_state.py's to_dict(), since
+  // that's the file both builds' saved data actually has to agree on.
+  const shop = new ShopState();
+  shop.buyFurniture("tapestry", 8, 100, 0);
+  shop.buyBackground("starlit", 12, 100, 0);
+  shop.equipBackground(2, "starlit");
+  shop.buyMysteryBox("mystery_box", 15, 100, 1, stream("P1", "shop"), FURNITURE_POOL);
+
+  const json = JSON.parse(JSON.stringify(shop.toJSON()));
+  assert.deepEqual(Object.keys(json).sort(), ["background_overrides",
+    "owned_backgrounds", "owned_furniture", "purchases", "schema_version", "shop_ms"]);
+  assert.deepEqual(json.owned_furniture, ["tapestry"]);
+  assert.deepEqual(json.owned_backgrounds, ["starlit"]);
+  assert.deepEqual(json.background_overrides, { 2: "starlit" });
+  assert.equal(json.purchases.length, 3);
+  assert.equal(json.purchases.reduce((a, p) => a + p.cost, 0), shop.totalSpent);
 });
 
 console.log(`\n${pass} passed`);

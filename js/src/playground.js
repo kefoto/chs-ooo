@@ -26,10 +26,21 @@
  */
 
 const EDGE = 0.05;        // EDGE_MARGIN_REL: keep a sticker fully on screen
+// The top edge has no fixed floor of its own -- see clamp()'s per-kind
+// margin below, which is what actually keeps an item on screen there.
+// Mirrors experiments/playground.py's TOP_EDGE_MARGIN_REL.
+const TOP_EDGE = 0;
 const TRAY_TOP = 0.80;    // below this the tray lives
-const STICKER_REL = 0.13; // radius as a fraction of the room's smaller side
+const STICKER_REL = 0.13;   // radius as a fraction of the room's smaller side
+// Furniture (shop addition) and animals (bought pets) are larger placeable
+// decorations than a sticker -- "larger" is the whole distinction between
+// the categories. Mirrors experiments/playground.py's RoomCanvas._sticker_radius.
+const FURNITURE_REL = 0.22;
 
-/** A sticker as markup: its picture where there is one, else the emoji.
+const relFor = (kind) => (kind === "furniture" || kind === "animal" ? FURNITURE_REL : STICKER_REL);
+
+/** A sticker (or furniture item) as markup: its picture where there is one,
+ * else the emoji.
  *
  * Drawn as text the glyph comes from whatever emoji font the machine has,
  * which is a tofu box on a Linux box with none installed -- the same reason
@@ -94,9 +105,9 @@ export class PlaygroundPlugin {
     let held = null;
     let fromTray = false;
 
-    const radius = () => {
+    const radius = (kind = "sticker") => {
       const r = room.getBoundingClientRect();
-      return Math.min(r.width, r.height) * STICKER_REL;
+      return Math.min(r.width, r.height) * relFor(kind);
     };
 
     const hintText = () =>
@@ -106,23 +117,40 @@ export class PlaygroundPlugin {
 
     /** Nearest valid drop point. A drop on the tray is nudged just above it
         rather than rejected -- a child aiming low should not have their
-        gesture silently discarded. */
-    const clamp = (xRel, yRel) => [
-      Math.min(Math.max(xRel, EDGE), 1 - EDGE),
-      Math.min(Math.max(yRel, EDGE), TRAY_TOP - 0.06),
-    ];
+        gesture silently discarded.
 
-    const relFrom = (clientX, clientY) => {
+        The margin widens to at least the DRAGGED ITEM'S OWN radius
+        (`radius(kind)`, converted to a fraction of the room's width/height)
+        -- EDGE/TOP_EDGE alone were sized for a sticker, and furniture/
+        animals (relFor's larger FURNITURE_REL) are big enough that clamping
+        their centre to a sticker-sized margin let a real chunk of the item
+        hang off the room's edge: this is the DATA bound (where the centre
+        may sit), and it has to stay at least as large as the DISPLAY bound
+        (how far the drawn item actually reaches) or the two drift apart at
+        the edge. Mirrors experiments/playground.py's RoomCanvas.clamp.
+     */
+    const clamp = (xRel, yRel, kind = "sticker") => {
       const r = room.getBoundingClientRect();
-      return clamp((clientX - r.left) / r.width, (clientY - r.top) / r.height);
+      const rad = radius(kind);
+      const mx = Math.max(EDGE, rad / r.width);
+      const top = Math.max(TOP_EDGE, rad / r.height);
+      return [
+        Math.min(Math.max(xRel, mx), 1 - mx),
+        Math.min(Math.max(yRel, top), TRAY_TOP - 0.06),
+      ];
+    };
+
+    const relFrom = (clientX, clientY, kind = "sticker") => {
+      const r = room.getBoundingClientRect();
+      return clamp((clientX - r.left) / r.width, (clientY - r.top) / r.height, kind);
     };
 
     /** Topmost placed sticker under a point, or -1. Reverse order so the one
         drawn on top is the one picked up. */
     const hitPlaced = (clientX, clientY) => {
       const rect = room.getBoundingClientRect();
-      const r = radius();
       for (let i = placed.length - 1; i >= 0; i--) {
+        const r = radius(placed[i].kind);
         const px = rect.left + placed[i].x * rect.width;
         const py = rect.top + placed[i].y * rect.height;
         if (Math.abs(px - clientX) <= r && Math.abs(py - clientY) <= r) return i;
@@ -131,9 +159,9 @@ export class PlaygroundPlugin {
     };
 
     function render() {
-      const size = radius() * 2;
       room.querySelectorAll(".sticker").forEach((n) => n.remove());
       for (const p of placed) {
+        const size = radius(p.kind) * 2;
         const el = document.createElement("div");
         el.className = "sticker";
         el.innerHTML = stickerHtml(p);
@@ -153,7 +181,7 @@ export class PlaygroundPlugin {
     }
 
     const showGhost = (xRel, yRel) => {
-      const size = radius() * 2;
+      const size = radius(held?.kind) * 2;
       ghost.hidden = false;
       ghost.innerHTML = stickerHtml(held);
       ghost.style.left = `${xRel * 100}%`;
@@ -180,25 +208,26 @@ export class PlaygroundPlugin {
       }
       room.setPointerCapture?.(e.pointerId);
       room.classList.add("dragging");
-      const [x, y] = relFrom(e.clientX, e.clientY);
+      const [x, y] = relFrom(e.clientX, e.clientY, held.kind || "sticker");
       render();
       showGhost(x, y);
     };
 
     const dragTo = (e) => {
       if (!held) return;
-      const [x, y] = relFrom(e.clientX, e.clientY);
+      const [x, y] = relFrom(e.clientX, e.clientY, held.kind || "sticker");
       showGhost(x, y);
     };
 
     const drop = (e) => {
       if (!held) return;
-      const [x, y] = relFrom(e.clientX, e.clientY);
+      const [x, y] = relFrom(e.clientX, e.clientY, held.kind || "sticker");
       if (fromTray) pending.shift();
-      placed.push({ id: held.id, emoji: held.emoji, img: held.img, x, y });
+      const kind = held.kind || "sticker";
+      placed.push({ id: held.id, emoji: held.emoji, img: held.img, x, y, kind });
       // castle_state.place() MOVES an already-placed sticker rather than
       // duplicating it, so re-recording a moved sticker is the move.
-      events.push({ sticker_id: held.id, room_index: trial.room_index, x, y });
+      events.push({ sticker_id: held.id, room_index: trial.room_index, x, y, kind });
       held = null;
       fromTray = false;
       ghost.hidden = true;
@@ -220,8 +249,9 @@ export class PlaygroundPlugin {
         const x = Math.min(Math.max(0.22 + (n % 4) * 0.19, EDGE), 1 - EDGE);
         const y = Math.min(0.28 + Math.floor(n / 4) * 0.2, 0.66);
         const s = pending.shift();
-        placed.push({ id: s.id, emoji: s.emoji, img: s.img, x, y });
-        events.push({ sticker_id: s.id, room_index: trial.room_index, x, y });
+        const kind = s.kind || "sticker";
+        placed.push({ id: s.id, emoji: s.emoji, img: s.img, x, y, kind });
+        events.push({ sticker_id: s.id, room_index: trial.room_index, x, y, kind });
       }
       render();
     });

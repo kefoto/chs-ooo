@@ -96,6 +96,7 @@ export class AudioTripletPlugin {
       mascot: { type: "STRING", default: "" },
       dialogue: { type: "OBJECT", default: {} },
       progress: { type: "OBJECT", default: null },
+      currency_icon: { type: "STRING", default: "\u{1FA99}" },
       feedback_ms: { type: "INT", default: 800 },
       lead_in_ms: { type: "INT", default: LEAD_IN_MS },
       per_sound_ms: { type: "INT", default: PER_SOUND_MS },
@@ -152,6 +153,8 @@ export class AudioTripletPlugin {
           <div class="progress-row">
             <div class="progress-track"><div class="progress-fill" id="pfill"
               style="width:${(trial.progress.current / trial.progress.total) * 100}%"></div></div>
+            ${trial.coin_balance ? `<span class="coins" id="coins">
+              ${trial.currency_icon} ${trial.coin_balance()}</span>` : ""}
             <span class="level">Level ${trial.progress.level} of ${trial.progress.n_levels}</span>
           </div>` : ""}
       </div>`;
@@ -236,6 +239,18 @@ export class AudioTripletPlugin {
           fill.style.width =
             `${((trial.progress.current + 1) / trial.progress.total) * 100}%`;
         }
+        // Coins: pre-drawn once per trial at session start (see
+        // CastleState.awardTrialCoins), never contingent on WHAT was
+        // picked. Every trial pays, attention checks included.
+        if (trial.award_coins) {
+          const balance = trial.award_coins();
+          const coinEl = display.querySelector("#coins");
+          if (coinEl) coinEl.textContent = `${trial.currency_icon} ${balance}`;
+        }
+        // Stickers: which trial reveals which was also pre-drawn at session
+        // start (see CastleState.awardTrialStickers), never contingent on
+        // WHAT was picked. The popup/sfx live in the closure itself.
+        if (trial.award_stickers) trial.award_stickers();
       }
 
       this.jsPsych.pluginAPI.setTimeout(() => {

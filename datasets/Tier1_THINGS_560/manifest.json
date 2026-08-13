@@ -1,0 +1,4450 @@
+[
+  {
+    "concept_id": "accordion",
+    "concept_name": "accordion",
+    "image_file": "images/accordion_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 2,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "air_pump",
+    "concept_name": "air pump",
+    "image_file": "images/air_pump_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 6,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "almond",
+    "concept_name": "almond",
+    "image_file": "images/almond_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 13,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "alpaca",
+    "concept_name": "alpaca",
+    "image_file": "images/alpaca_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 15,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "aluminum_foil",
+    "concept_name": "aluminum foil",
+    "image_file": "images/aluminum_foil_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 17,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "ankle",
+    "concept_name": "ankle",
+    "image_file": "images/ankle_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 22,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "anklet",
+    "concept_name": "anklet",
+    "image_file": "images/anklet_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 23,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "appetizer",
+    "concept_name": "appetizer",
+    "image_file": "images/appetizer_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 29,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "apple",
+    "concept_name": "apple",
+    "image_file": "images/apple_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 30,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "applesauce",
+    "concept_name": "applesauce",
+    "image_file": "images/applesauce_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 32,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "aquarium",
+    "concept_name": "aquarium",
+    "image_file": "images/aquarium_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 34,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "arch",
+    "concept_name": "arch",
+    "image_file": "images/arch_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 35,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "badge",
+    "concept_name": "badge",
+    "image_file": "images/badge_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 52,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bagel",
+    "concept_name": "bagel",
+    "image_file": "images/bagel_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 55,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "baklava",
+    "concept_name": "baklava",
+    "image_file": "images/baklava_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 57,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "balloon",
+    "concept_name": "balloon",
+    "image_file": "images/balloon_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 60,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bamboo",
+    "concept_name": "bamboo",
+    "image_file": "images/bamboo_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 62,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bandanna",
+    "concept_name": "bandanna",
+    "image_file": "images/bandanna_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 67,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "banjo",
+    "concept_name": "banjo",
+    "image_file": "images/banjo_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 68,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bank",
+    "concept_name": "bank",
+    "image_file": "images/bank_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 69,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "banner",
+    "concept_name": "banner",
+    "image_file": "images/banner_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 70,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "barnacle",
+    "concept_name": "barnacle",
+    "image_file": "images/barnacle_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 75,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "barrette",
+    "concept_name": "barrette",
+    "image_file": "images/barrette_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 77,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "baseball",
+    "concept_name": "baseball",
+    "image_file": "images/baseball_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 78,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "baseball_glove",
+    "concept_name": "baseball glove",
+    "image_file": "images/baseball_glove_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 80,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "basil",
+    "concept_name": "basil",
+    "image_file": "images/basil_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 81,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "basket",
+    "concept_name": "basket",
+    "image_file": "images/basket_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 82,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "basketball_hoop",
+    "concept_name": "basketball hoop",
+    "image_file": "images/basketball_hoop_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 84,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bathrobe",
+    "concept_name": "bathrobe",
+    "image_file": "images/bathrobe_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 90,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "baton4",
+    "concept_name": "baton",
+    "image_file": "images/baton4_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 95,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "batter",
+    "concept_name": "batter",
+    "image_file": "images/batter_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 96,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "periscope",
+    "concept_name": "periscope",
+    "image_file": "images/periscope_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1155,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "beachball",
+    "concept_name": "beachball",
+    "image_file": "images/beachball_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 99,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "beanie",
+    "concept_name": "beanie",
+    "image_file": "images/beanie_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 104,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "beard",
+    "concept_name": "beard",
+    "image_file": "images/beard_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 106,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bell",
+    "concept_name": "bell",
+    "image_file": "images/bell_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 116,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bell_pepper",
+    "concept_name": "bell pepper",
+    "image_file": "images/bell_pepper_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 117,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "belt",
+    "concept_name": "belt",
+    "image_file": "images/belt_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 118,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "belt_buckle",
+    "concept_name": "belt buckle",
+    "image_file": "images/belt_buckle_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 119,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bib",
+    "concept_name": "bib",
+    "image_file": "images/bib_01n.jpg",
+    "source": "THINGS",
+    "spose_index": 122,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bike",
+    "concept_name": "bike",
+    "image_file": "images/bike_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 123,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bin",
+    "concept_name": "bin",
+    "image_file": "images/bin_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 125,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "birdbath",
+    "concept_name": "birdbath",
+    "image_file": "images/birdbath_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 129,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "birdhouse",
+    "concept_name": "birdhouse",
+    "image_file": "images/birdhouse_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 131,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "birthday_cake",
+    "concept_name": "birthday cake",
+    "image_file": "images/birthday_cake_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 132,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "blimp",
+    "concept_name": "blimp",
+    "image_file": "images/blimp_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 139,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "blinder",
+    "concept_name": "blinder",
+    "image_file": "images/blinder_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 141,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "blindfold",
+    "concept_name": "blindfold",
+    "image_file": "images/blindfold_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 142,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "blueberry",
+    "concept_name": "blueberry",
+    "image_file": "images/blueberry_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 149,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "boat",
+    "concept_name": "boat",
+    "image_file": "images/boat_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 154,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bok_choy",
+    "concept_name": "bok choy",
+    "image_file": "images/bok_choy_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 156,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "space_shuttle",
+    "concept_name": "space shuttle",
+    "image_file": "images/space_shuttle_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1501,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bone",
+    "concept_name": "bone",
+    "image_file": "images/bone_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 161,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bonnet",
+    "concept_name": "bonnet",
+    "image_file": "images/bonnet_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 163,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bonsai",
+    "concept_name": "bonsai",
+    "image_file": "images/bonsai_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 164,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "book",
+    "concept_name": "book",
+    "image_file": "images/book_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 165,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bow3",
+    "concept_name": "bow",
+    "image_file": "images/bow3_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 176,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bowling_ball",
+    "concept_name": "bowling ball",
+    "image_file": "images/bowling_ball_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 179,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "boxing_gloves",
+    "concept_name": "boxing gloves",
+    "image_file": "images/boxing_gloves_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 183,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bracelet2",
+    "concept_name": "bracelet",
+    "image_file": "images/bracelet2_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 188,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "breakfast",
+    "concept_name": "breakfast",
+    "image_file": "images/breakfast_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 197,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "camcorder",
+    "concept_name": "camcorder",
+    "image_file": "images/camcorder_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 244,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bug",
+    "concept_name": "bug",
+    "image_file": "images/bug_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 212,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bull",
+    "concept_name": "bull",
+    "image_file": "images/bull_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 214,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bulletproof_vest",
+    "concept_name": "bulletproof vest",
+    "image_file": "images/bulletproof_vest_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 218,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "butterfly",
+    "concept_name": "butterfly",
+    "image_file": "images/butterfly_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 229,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "button2",
+    "concept_name": "button",
+    "image_file": "images/button2_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 231,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cabinet",
+    "concept_name": "cabinet",
+    "image_file": "images/cabinet_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 233,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cable",
+    "concept_name": "cable",
+    "image_file": "images/cable_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 234,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cage",
+    "concept_name": "cage",
+    "image_file": "images/cage_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 236,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "camel",
+    "concept_name": "camel",
+    "image_file": "images/camel_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 245,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "camera2",
+    "concept_name": "camera",
+    "image_file": "images/camera2_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 247,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "camper",
+    "concept_name": "camper",
+    "image_file": "images/camper_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 249,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "can_opener",
+    "concept_name": "can opener",
+    "image_file": "images/can_opener_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 251,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "candelabra",
+    "concept_name": "candelabra",
+    "image_file": "images/candelabra_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 252,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "candy",
+    "concept_name": "candy",
+    "image_file": "images/candy_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 255,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "melon",
+    "concept_name": "melon",
+    "image_file": "images/melon_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 994,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "canvas",
+    "concept_name": "canvas",
+    "image_file": "images/canvas_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 264,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cardigan",
+    "concept_name": "cardigan",
+    "image_file": "images/cardigan_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 273,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "carriage",
+    "concept_name": "carriage",
+    "image_file": "images/carriage_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 276,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sled",
+    "concept_name": "sled",
+    "image_file": "images/sled_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1460,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "chalice",
+    "concept_name": "chalice",
+    "image_file": "images/chalice_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 301,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "soda",
+    "concept_name": "soda",
+    "image_file": "images/soda_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1490,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "charger",
+    "concept_name": "charger",
+    "image_file": "images/charger_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 308,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cheese",
+    "concept_name": "cheese",
+    "image_file": "images/cheese_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 312,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cherry",
+    "concept_name": "cherry",
+    "image_file": "images/cherry_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 316,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "chessboard",
+    "concept_name": "chessboard",
+    "image_file": "images/chessboard_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 318,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "chest2",
+    "concept_name": "chest",
+    "image_file": "images/chest2_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 320,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "chime",
+    "concept_name": "chime",
+    "image_file": "images/chime_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 328,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "chinaware",
+    "concept_name": "chinaware",
+    "image_file": "images/chinaware_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 331,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "chinchilla",
+    "concept_name": "chinchilla",
+    "image_file": "images/chinchilla_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 332,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "chopsticks",
+    "concept_name": "chopsticks",
+    "image_file": "images/chopsticks_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 339,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "christmas_card",
+    "concept_name": "christmas card",
+    "image_file": "images/christmas_card_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 340,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "coal",
+    "concept_name": "coal",
+    "image_file": "images/coal_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 367,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cinnamon",
+    "concept_name": "cinnamon",
+    "image_file": "images/cinnamon_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 348,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "clay",
+    "concept_name": "clay",
+    "image_file": "images/clay_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 352,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "clipper2",
+    "concept_name": "clipper",
+    "image_file": "images/clipper2_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 357,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "clothesline",
+    "concept_name": "clothesline",
+    "image_file": "images/clothesline_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 362,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "clove",
+    "concept_name": "clove",
+    "image_file": "images/clove_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 365,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cockatoo",
+    "concept_name": "cockatoo",
+    "image_file": "images/cockatoo_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 372,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "coconut",
+    "concept_name": "coconut",
+    "image_file": "images/coconut_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 375,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cocoon",
+    "concept_name": "cocoon",
+    "image_file": "images/cocoon_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 376,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "coffee_filter",
+    "concept_name": "coffee filter",
+    "image_file": "images/coffee_filter_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 379,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "coffeemaker",
+    "concept_name": "coffeemaker",
+    "image_file": "images/coffeemaker_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 382,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "coil",
+    "concept_name": "coil",
+    "image_file": "images/coil_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 384,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "coleslaw",
+    "concept_name": "coleslaw",
+    "image_file": "images/coleslaw_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 386,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "comb",
+    "concept_name": "comb",
+    "image_file": "images/comb_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 389,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "comic_book",
+    "concept_name": "comic book",
+    "image_file": "images/comic_book_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 391,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "compass",
+    "concept_name": "compass",
+    "image_file": "images/compass_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 392,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "coop",
+    "concept_name": "coop",
+    "image_file": "images/coop_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 404,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "coral",
+    "concept_name": "coral",
+    "image_file": "images/coral_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 406,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cord",
+    "concept_name": "cord",
+    "image_file": "images/cord_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 407,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "corkboard",
+    "concept_name": "corkboard",
+    "image_file": "images/corkboard_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 410,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "corn",
+    "concept_name": "corn",
+    "image_file": "images/corn_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 412,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "corsage",
+    "concept_name": "corsage",
+    "image_file": "images/corsage_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 417,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cot",
+    "concept_name": "cot",
+    "image_file": "images/cot_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 420,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "couch",
+    "concept_name": "couch",
+    "image_file": "images/couch_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 422,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "counter",
+    "concept_name": "counter",
+    "image_file": "images/counter_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 424,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "crate",
+    "concept_name": "crate",
+    "image_file": "images/crate_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 433,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cream_cheese",
+    "concept_name": "cream cheese",
+    "image_file": "images/cream_cheese_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 437,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "credit_card",
+    "concept_name": "credit card",
+    "image_file": "images/credit_card_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 438,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "creme_brulee",
+    "concept_name": "creme brulee",
+    "image_file": "images/creme_brulee_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 439,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "crib",
+    "concept_name": "crib",
+    "image_file": "images/crib_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 441,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cross",
+    "concept_name": "cross",
+    "image_file": "images/cross_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 443,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "crown",
+    "concept_name": "crown",
+    "image_file": "images/crown_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 448,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "crystal1",
+    "concept_name": "crystal",
+    "image_file": "images/crystal1_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 453,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cuckoo_clock",
+    "concept_name": "cuckoo clock",
+    "image_file": "images/cuckoo_clock_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 456,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cummerbund",
+    "concept_name": "cummerbund",
+    "image_file": "images/cummerbund_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 459,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cupcake",
+    "concept_name": "cupcake",
+    "image_file": "images/cupcake_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 461,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "curling_iron",
+    "concept_name": "curling iron",
+    "image_file": "images/curling_iron_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 463,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cushion",
+    "concept_name": "cushion",
+    "image_file": "images/cushion_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 466,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "cutting_board",
+    "concept_name": "cutting board",
+    "image_file": "images/cutting_board_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 467,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "chisel",
+    "concept_name": "chisel",
+    "image_file": "images/chisel_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 336,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "dart",
+    "concept_name": "dart",
+    "image_file": "images/dart_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 473,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "defibrillator",
+    "concept_name": "defibrillator",
+    "image_file": "images/defibrillator_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 477,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "diamond",
+    "concept_name": "diamond",
+    "image_file": "images/diamond_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 484,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "diaper",
+    "concept_name": "diaper",
+    "image_file": "images/diaper_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 485,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "dirt_bike",
+    "concept_name": "dirt bike",
+    "image_file": "images/dirt_bike_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 488,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "dishwasher",
+    "concept_name": "dishwasher",
+    "image_file": "images/dishwasher_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 491,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "dishwashing_liquid",
+    "concept_name": "dishwashing liquid",
+    "image_file": "images/dishwashing_liquid_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 492,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "dogfood",
+    "concept_name": "dogfood",
+    "image_file": "images/dogfood_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 496,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "donkey",
+    "concept_name": "donkey",
+    "image_file": "images/donkey_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 504,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "doorbell",
+    "concept_name": "doorbell",
+    "image_file": "images/doorbell_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 507,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "dragonfly",
+    "concept_name": "dragonfly",
+    "image_file": "images/dragonfly_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 514,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "drink",
+    "concept_name": "drink",
+    "image_file": "images/drink_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 521,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "drum",
+    "concept_name": "drum",
+    "image_file": "images/drum_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 522,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "drumstick",
+    "concept_name": "drumstick",
+    "image_file": "images/drumstick_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 523,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "duct",
+    "concept_name": "duct",
+    "image_file": "images/duct_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 527,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "duffel_bag",
+    "concept_name": "duffel bag",
+    "image_file": "images/duffel_bag_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 529,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "dumbwaiter",
+    "concept_name": "dumbwaiter",
+    "image_file": "images/dumbwaiter_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 531,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "dumpster",
+    "concept_name": "dumpster",
+    "image_file": "images/dumpster_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 533,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "extinguisher",
+    "concept_name": "extinguisher",
+    "image_file": "images/extinguisher_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 563,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "earring",
+    "concept_name": "earring",
+    "image_file": "images/earring_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 540,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "egg_roll",
+    "concept_name": "egg roll",
+    "image_file": "images/egg_roll_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 547,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "eggshell",
+    "concept_name": "eggshell",
+    "image_file": "images/eggshell_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 551,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "elbow",
+    "concept_name": "elbow",
+    "image_file": "images/elbow_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 552,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "stretcher",
+    "concept_name": "stretcher",
+    "image_file": "images/stretcher_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1572,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "elephant",
+    "concept_name": "elephant",
+    "image_file": "images/elephant_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 554,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "espresso",
+    "concept_name": "espresso",
+    "image_file": "images/espresso_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 560,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "exerciser",
+    "concept_name": "exerciser",
+    "image_file": "images/exerciser_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 561,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "eyedropper",
+    "concept_name": "eyedropper",
+    "image_file": "images/eyedropper_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 566,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "feather",
+    "concept_name": "feather",
+    "image_file": "images/feather_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 574,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "fence",
+    "concept_name": "fence",
+    "image_file": "images/fence_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 575,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "file1",
+    "concept_name": "file",
+    "image_file": "images/file1_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 583,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "filter",
+    "concept_name": "filter",
+    "image_file": "images/filter_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 587,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "fire",
+    "concept_name": "fire",
+    "image_file": "images/fire_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 590,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "fire_alarm",
+    "concept_name": "fire alarm",
+    "image_file": "images/fire_alarm_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 591,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "firecracker",
+    "concept_name": "firecracker",
+    "image_file": "images/firecracker_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 594,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "fireplace",
+    "concept_name": "fireplace",
+    "image_file": "images/fireplace_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 595,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "first-aid_kit",
+    "concept_name": "first-aid kit",
+    "image_file": "images/first-aid_kit_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 599,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "fish",
+    "concept_name": "fish",
+    "image_file": "images/fish_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 600,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "fishbowl",
+    "concept_name": "fishbowl",
+    "image_file": "images/fishbowl_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 601,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "flipper",
+    "concept_name": "flipper",
+    "image_file": "images/flipper_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 615,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "flour",
+    "concept_name": "flour",
+    "image_file": "images/flour_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 618,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "folder",
+    "concept_name": "folder",
+    "image_file": "images/folder_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 625,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "football_helmet",
+    "concept_name": "football helmet",
+    "image_file": "images/football_helmet_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 630,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "footrest",
+    "concept_name": "footrest",
+    "image_file": "images/footrest_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 633,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "fork",
+    "concept_name": "fork",
+    "image_file": "images/fork_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 634,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "forklift",
+    "concept_name": "forklift",
+    "image_file": "images/forklift_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 635,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "frame",
+    "concept_name": "frame",
+    "image_file": "images/frame_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 639,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "frog",
+    "concept_name": "frog",
+    "image_file": "images/frog_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 644,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "funnel",
+    "concept_name": "funnel",
+    "image_file": "images/funnel_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 649,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "garbage",
+    "concept_name": "garbage",
+    "image_file": "images/garbage_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 655,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "garbage_truck",
+    "concept_name": "garbage truck",
+    "image_file": "images/garbage_truck_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 656,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "garlic",
+    "concept_name": "garlic",
+    "image_file": "images/garlic_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 658,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "gasket",
+    "concept_name": "gasket",
+    "image_file": "images/gasket_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 661,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "gate",
+    "concept_name": "gate",
+    "image_file": "images/gate_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 662,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "gauge",
+    "concept_name": "gauge",
+    "image_file": "images/gauge_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 663,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "gear",
+    "concept_name": "gear",
+    "image_file": "images/gear_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 667,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "generator",
+    "concept_name": "generator",
+    "image_file": "images/generator_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 671,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "ginger",
+    "concept_name": "ginger",
+    "image_file": "images/ginger_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 673,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "gingerbread_man",
+    "concept_name": "gingerbread man",
+    "image_file": "images/gingerbread_man_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 674,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "globe",
+    "concept_name": "globe",
+    "image_file": "images/globe_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 679,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "goalpost",
+    "concept_name": "goalpost",
+    "image_file": "images/goalpost_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 683,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "goblet",
+    "concept_name": "goblet",
+    "image_file": "images/goblet_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 685,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "goggles",
+    "concept_name": "goggles",
+    "image_file": "images/goggles_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 686,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "gondola",
+    "concept_name": "gondola",
+    "image_file": "images/gondola_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 691,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "gopher",
+    "concept_name": "gopher",
+    "image_file": "images/gopher_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 694,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "grape",
+    "concept_name": "grape",
+    "image_file": "images/grape_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 702,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "grate",
+    "concept_name": "grate",
+    "image_file": "images/grate_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 707,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "grater",
+    "concept_name": "grater",
+    "image_file": "images/grater_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 708,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "jackhammer",
+    "concept_name": "jackhammer",
+    "image_file": "images/jackhammer_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 837,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "grinder",
+    "concept_name": "grinder",
+    "image_file": "images/grinder_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 716,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "gumball",
+    "concept_name": "gumball",
+    "image_file": "images/gumball_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 725,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "gurney",
+    "concept_name": "gurney",
+    "image_file": "images/gurney_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 728,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "gutter",
+    "concept_name": "gutter",
+    "image_file": "images/gutter_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 729,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hairbrush",
+    "concept_name": "hairbrush",
+    "image_file": "images/hairbrush_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 734,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hairdryer",
+    "concept_name": "hairdryer",
+    "image_file": "images/hairdryer_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 735,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hairspray",
+    "concept_name": "hairspray",
+    "image_file": "images/hairspray_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 738,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "ham",
+    "concept_name": "ham",
+    "image_file": "images/ham_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 739,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hammer",
+    "concept_name": "hammer",
+    "image_file": "images/hammer_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 741,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "headband",
+    "concept_name": "headband",
+    "image_file": "images/headband_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 762,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "handlebar",
+    "concept_name": "handlebar",
+    "image_file": "images/handlebar_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 749,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "handprint",
+    "concept_name": "handprint",
+    "image_file": "images/handprint_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 750,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "harness",
+    "concept_name": "harness",
+    "image_file": "images/harness_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 754,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "harp",
+    "concept_name": "harp",
+    "image_file": "images/harp_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 755,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "headrest",
+    "concept_name": "headrest",
+    "image_file": "images/headrest_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 767,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hearse",
+    "concept_name": "hearse",
+    "image_file": "images/hearse_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 771,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hedge",
+    "concept_name": "hedge",
+    "image_file": "images/hedge_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 773,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hedgehog",
+    "concept_name": "hedgehog",
+    "image_file": "images/hedgehog_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 774,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "helicopter",
+    "concept_name": "helicopter",
+    "image_file": "images/helicopter_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 775,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "highlighter",
+    "concept_name": "highlighter",
+    "image_file": "images/highlighter_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 778,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hinge",
+    "concept_name": "hinge",
+    "image_file": "images/hinge_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 779,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hobbyhorse",
+    "concept_name": "hobbyhorse",
+    "image_file": "images/hobbyhorse_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 782,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hoe",
+    "concept_name": "hoe",
+    "image_file": "images/hoe_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 784,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "honey",
+    "concept_name": "honey",
+    "image_file": "images/honey_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 788,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hoodie",
+    "concept_name": "hoodie",
+    "image_file": "images/hoodie_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 792,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hot-air_balloon",
+    "concept_name": "hot-air balloon",
+    "image_file": "images/hot-air_balloon_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 801,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hot-water_bottle",
+    "concept_name": "hot-water bottle",
+    "image_file": "images/hot-water_bottle_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 802,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hovercraft",
+    "concept_name": "hovercraft",
+    "image_file": "images/hovercraft_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 808,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "hummingbird",
+    "concept_name": "hummingbird",
+    "image_file": "images/hummingbird_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 811,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "ice-cream_cone",
+    "concept_name": "ice-cream cone",
+    "image_file": "images/ice-cream_cone_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 816,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "ice_cream",
+    "concept_name": "ice cream",
+    "image_file": "images/ice_cream_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 818,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "icemaker",
+    "concept_name": "icemaker",
+    "image_file": "images/icemaker_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 821,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "icicle",
+    "concept_name": "icicle",
+    "image_file": "images/icicle_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 824,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "incubator",
+    "concept_name": "incubator",
+    "image_file": "images/incubator_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 827,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "iron",
+    "concept_name": "iron",
+    "image_file": "images/iron_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 832,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "ivy",
+    "concept_name": "ivy",
+    "image_file": "images/ivy_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 834,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "jeep",
+    "concept_name": "jeep",
+    "image_file": "images/jeep_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 843,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "jelly_bean",
+    "concept_name": "jelly bean",
+    "image_file": "images/jelly_bean_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 844,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "jellyfish",
+    "concept_name": "jellyfish",
+    "image_file": "images/jellyfish_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 845,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "joystick",
+    "concept_name": "joystick",
+    "image_file": "images/joystick_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 852,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "jump_rope",
+    "concept_name": "jump rope",
+    "image_file": "images/jump_rope_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 858,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "ketchup",
+    "concept_name": "ketchup",
+    "image_file": "images/ketchup_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 867,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "kite",
+    "concept_name": "kite",
+    "image_file": "images/kite_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 874,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "kneepad",
+    "concept_name": "kneepad",
+    "image_file": "images/kneepad_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 878,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "knob",
+    "concept_name": "knob",
+    "image_file": "images/knob_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 882,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "knot",
+    "concept_name": "knot",
+    "image_file": "images/knot_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 883,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lab_coat",
+    "concept_name": "lab coat",
+    "image_file": "images/lab_coat_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 885,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "ladder",
+    "concept_name": "ladder",
+    "image_file": "images/ladder_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 886,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "ladybug",
+    "concept_name": "ladybug",
+    "image_file": "images/ladybug_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 888,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lamb",
+    "concept_name": "lamb",
+    "image_file": "images/lamb_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 889,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lamb_chop",
+    "concept_name": "lamb chop",
+    "image_file": "images/lamb_chop_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 890,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lamp",
+    "concept_name": "lamp",
+    "image_file": "images/lamp_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 891,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lamppost",
+    "concept_name": "lamppost",
+    "image_file": "images/lamppost_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 892,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lampshade",
+    "concept_name": "lampshade",
+    "image_file": "images/lampshade_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 893,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "laser_pointer",
+    "concept_name": "laser pointer",
+    "image_file": "images/laser_pointer_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 899,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "latte",
+    "concept_name": "latte",
+    "image_file": "images/latte_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 901,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lava",
+    "concept_name": "lava",
+    "image_file": "images/lava_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 903,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "leaf",
+    "concept_name": "leaf",
+    "image_file": "images/leaf_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 906,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lectern",
+    "concept_name": "lectern",
+    "image_file": "images/lectern_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 908,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "leech",
+    "concept_name": "leech",
+    "image_file": "images/leech_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 909,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lens",
+    "concept_name": "lens",
+    "image_file": "images/lens_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 916,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "licorice",
+    "concept_name": "licorice",
+    "image_file": "images/licorice_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 922,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "life_jacket",
+    "concept_name": "life jacket",
+    "image_file": "images/life_jacket_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 924,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lifesaver",
+    "concept_name": "lifesaver",
+    "image_file": "images/lifesaver_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 925,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lighter",
+    "concept_name": "lighter",
+    "image_file": "images/lighter_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 928,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "blouse",
+    "concept_name": "blouse",
+    "image_file": "images/blouse_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 144,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lipstick",
+    "concept_name": "lipstick",
+    "image_file": "images/lipstick_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 936,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lizard",
+    "concept_name": "lizard",
+    "image_file": "images/lizard_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 937,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lobster",
+    "concept_name": "lobster",
+    "image_file": "images/lobster_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 939,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lock",
+    "concept_name": "lock",
+    "image_file": "images/lock_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 940,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "locker",
+    "concept_name": "locker",
+    "image_file": "images/locker_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 941,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "log",
+    "concept_name": "log",
+    "image_file": "images/log_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 943,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "loom",
+    "concept_name": "loom",
+    "image_file": "images/loom_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 946,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "lumber",
+    "concept_name": "lumber",
+    "image_file": "images/lumber_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 949,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "maggot",
+    "concept_name": "maggot",
+    "image_file": "images/maggot_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 955,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "mailbox",
+    "concept_name": "mailbox",
+    "image_file": "images/mailbox_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 960,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "makeup",
+    "concept_name": "makeup",
+    "image_file": "images/makeup_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 961,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "mantle",
+    "concept_name": "mantle",
+    "image_file": "images/mantle_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 969,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "maple_syrup",
+    "concept_name": "maple syrup",
+    "image_file": "images/maple_syrup_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 971,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "aloe",
+    "concept_name": "aloe",
+    "image_file": "images/aloe_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 14,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "marmalade",
+    "concept_name": "marmalade",
+    "image_file": "images/marmalade_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 976,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "marshmallow",
+    "concept_name": "marshmallow",
+    "image_file": "images/marshmallow_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 977,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "mascara",
+    "concept_name": "mascara",
+    "image_file": "images/mascara_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 978,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "armor",
+    "concept_name": "armor",
+    "image_file": "images/armor_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 37,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "match",
+    "concept_name": "match",
+    "image_file": "images/match_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 983,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "matchbox",
+    "concept_name": "matchbox",
+    "image_file": "images/matchbox_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 984,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "measuring_cup",
+    "concept_name": "measuring cup",
+    "image_file": "images/measuring_cup_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 986,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "meat_grinder",
+    "concept_name": "meat grinder",
+    "image_file": "images/meat_grinder_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 988,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "medal",
+    "concept_name": "medal",
+    "image_file": "images/medal_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 991,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "metal_detector",
+    "concept_name": "metal detector",
+    "image_file": "images/metal_detector_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 996,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "mitten",
+    "concept_name": "mitten",
+    "image_file": "images/mitten_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1008,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "modem",
+    "concept_name": "modem",
+    "image_file": "images/modem_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1011,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "mongoose",
+    "concept_name": "mongoose",
+    "image_file": "images/mongoose_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1016,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "mop",
+    "concept_name": "mop",
+    "image_file": "images/mop_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1019,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "moth",
+    "concept_name": "moth",
+    "image_file": "images/moth_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1023,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "mousepad",
+    "concept_name": "mousepad",
+    "image_file": "images/mousepad_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1028,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "mud",
+    "concept_name": "mud",
+    "image_file": "images/mud_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1033,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "muff",
+    "concept_name": "muff",
+    "image_file": "images/muff_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1034,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "mushroom",
+    "concept_name": "mushroom",
+    "image_file": "images/mushroom_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1040,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "mussel",
+    "concept_name": "mussel",
+    "image_file": "images/mussel_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1042,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "napkin",
+    "concept_name": "napkin",
+    "image_file": "images/napkin_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1050,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "napkin_ring",
+    "concept_name": "napkin ring",
+    "image_file": "images/napkin_ring_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1051,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "navel",
+    "concept_name": "navel",
+    "image_file": "images/navel_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1052,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "neck",
+    "concept_name": "neck",
+    "image_file": "images/neck_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1053,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "necklace",
+    "concept_name": "necklace",
+    "image_file": "images/necklace_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1054,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "nest",
+    "concept_name": "nest",
+    "image_file": "images/nest_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1056,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "nightstand",
+    "concept_name": "nightstand",
+    "image_file": "images/nightstand_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1059,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "noisemaker",
+    "concept_name": "noisemaker",
+    "image_file": "images/noisemaker_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1060,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "notepad",
+    "concept_name": "notepad",
+    "image_file": "images/notepad_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1065,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "odometer",
+    "concept_name": "odometer",
+    "image_file": "images/odometer_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1071,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "orange_rind",
+    "concept_name": "orange rind",
+    "image_file": "images/orange_rind_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1079,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "outfit",
+    "concept_name": "outfit",
+    "image_file": "images/outfit_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1087,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "overalls",
+    "concept_name": "overalls",
+    "image_file": "images/overalls_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1090,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "oyster",
+    "concept_name": "oyster",
+    "image_file": "images/oyster_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1092,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "paddle",
+    "concept_name": "paddle",
+    "image_file": "images/paddle_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1094,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "painting",
+    "concept_name": "painting",
+    "image_file": "images/painting_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1098,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pajamas",
+    "concept_name": "pajamas",
+    "image_file": "images/pajamas_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1099,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "palette",
+    "concept_name": "palette",
+    "image_file": "images/palette_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1100,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "palm_tree",
+    "concept_name": "palm tree",
+    "image_file": "images/palm_tree_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1102,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pancake",
+    "concept_name": "pancake",
+    "image_file": "images/pancake_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1104,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "papaya",
+    "concept_name": "papaya",
+    "image_file": "images/papaya_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1111,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "paper_plate",
+    "concept_name": "paper plate",
+    "image_file": "images/paper_plate_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1114,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "paper_towel",
+    "concept_name": "paper towel",
+    "image_file": "images/paper_towel_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1115,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "paperclip",
+    "concept_name": "paperclip",
+    "image_file": "images/paperclip_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1116,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "paperweight",
+    "concept_name": "paperweight",
+    "image_file": "images/paperweight_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1117,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "parachute",
+    "concept_name": "parachute",
+    "image_file": "images/parachute_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1118,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "peach",
+    "concept_name": "peach",
+    "image_file": "images/peach_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1129,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "peacock",
+    "concept_name": "peacock",
+    "image_file": "images/peacock_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1130,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pedal",
+    "concept_name": "pedal",
+    "image_file": "images/pedal_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1136,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pedometer",
+    "concept_name": "pedometer",
+    "image_file": "images/pedometer_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1137,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "peg",
+    "concept_name": "peg",
+    "image_file": "images/peg_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1139,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pelican",
+    "concept_name": "pelican",
+    "image_file": "images/pelican_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1140,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pencil",
+    "concept_name": "pencil",
+    "image_file": "images/pencil_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1142,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pendulum",
+    "concept_name": "pendulum",
+    "image_file": "images/pendulum_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1144,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pepper1",
+    "concept_name": "pepper",
+    "image_file": "images/pepper1_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1149,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "peppermint",
+    "concept_name": "peppermint",
+    "image_file": "images/peppermint_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1152,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pesto",
+    "concept_name": "pesto",
+    "image_file": "images/pesto_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1156,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "petri_dish",
+    "concept_name": "petri dish",
+    "image_file": "images/petri_dish_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1159,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pickle",
+    "concept_name": "pickle",
+    "image_file": "images/pickle_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1167,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pin",
+    "concept_name": "pin",
+    "image_file": "images/pin_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1177,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pine_needle",
+    "concept_name": "pine needle",
+    "image_file": "images/pine_needle_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1180,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pinecone",
+    "concept_name": "pinecone",
+    "image_file": "images/pinecone_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1183,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pinwheel",
+    "concept_name": "pinwheel",
+    "image_file": "images/pinwheel_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1185,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pipe2",
+    "concept_name": "pipe",
+    "image_file": "images/pipe2_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1187,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pita",
+    "concept_name": "pita",
+    "image_file": "images/pita_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1189,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "place_mat",
+    "concept_name": "place mat",
+    "image_file": "images/place_mat_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1193,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "plaster_cast",
+    "concept_name": "plaster cast",
+    "image_file": "images/plaster_cast_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1195,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "platypus",
+    "concept_name": "platypus",
+    "image_file": "images/platypus_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1198,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "plum",
+    "concept_name": "plum",
+    "image_file": "images/plum_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1203,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pogo_stick",
+    "concept_name": "pogo stick",
+    "image_file": "images/pogo_stick_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1208,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "poinsettia",
+    "concept_name": "poinsettia",
+    "image_file": "images/poinsettia_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1209,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "poker",
+    "concept_name": "poker",
+    "image_file": "images/poker_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1210,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "polar_bear",
+    "concept_name": "polar bear",
+    "image_file": "images/polar_bear_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1211,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "polaroid",
+    "concept_name": "polaroid",
+    "image_file": "images/polaroid_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1212,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pole",
+    "concept_name": "pole",
+    "image_file": "images/pole_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1213,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "polygraph",
+    "concept_name": "polygraph",
+    "image_file": "images/polygraph_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1217,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pomegranate",
+    "concept_name": "pomegranate",
+    "image_file": "images/pomegranate_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1219,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "poppy",
+    "concept_name": "poppy",
+    "image_file": "images/poppy_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1224,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "porcupine",
+    "concept_name": "porcupine",
+    "image_file": "images/porcupine_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1226,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "potholder",
+    "concept_name": "potholder",
+    "image_file": "images/potholder_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1232,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "potpourri",
+    "concept_name": "potpourri",
+    "image_file": "images/potpourri_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1235,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "praying_mantis",
+    "concept_name": "praying mantis",
+    "image_file": "images/praying_mantis_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1238,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "printer",
+    "concept_name": "printer",
+    "image_file": "images/printer_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1240,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pudding",
+    "concept_name": "pudding",
+    "image_file": "images/pudding_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1246,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "puddle",
+    "concept_name": "puddle",
+    "image_file": "images/puddle_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1247,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pug",
+    "concept_name": "pug",
+    "image_file": "images/pug_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1249,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pulpit",
+    "concept_name": "pulpit",
+    "image_file": "images/pulpit_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1251,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "purse",
+    "concept_name": "purse",
+    "image_file": "images/purse_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1259,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rabbit",
+    "concept_name": "rabbit",
+    "image_file": "images/rabbit_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1265,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "racehorse",
+    "concept_name": "racehorse",
+    "image_file": "images/racehorse_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1267,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rack1",
+    "concept_name": "rack",
+    "image_file": "images/rack1_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1268,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "radar",
+    "concept_name": "radar",
+    "image_file": "images/radar_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1271,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "radish",
+    "concept_name": "radish",
+    "image_file": "images/radish_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1274,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "raincoat",
+    "concept_name": "raincoat",
+    "image_file": "images/raincoat_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1279,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rattlesnake",
+    "concept_name": "rattlesnake",
+    "image_file": "images/rattlesnake_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1288,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "ravioli",
+    "concept_name": "ravioli",
+    "image_file": "images/ravioli_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1289,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "razor",
+    "concept_name": "razor",
+    "image_file": "images/razor_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1290,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rearview_mirror",
+    "concept_name": "rearview mirror",
+    "image_file": "images/rearview_mirror_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1293,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rhubarb",
+    "concept_name": "rhubarb",
+    "image_file": "images/rhubarb_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1307,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rice",
+    "concept_name": "rice",
+    "image_file": "images/rice_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1309,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "pickax",
+    "concept_name": "pickax",
+    "image_file": "images/pickax_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1166,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rim",
+    "concept_name": "rim",
+    "image_file": "images/rim_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1312,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "ring",
+    "concept_name": "ring",
+    "image_file": "images/ring_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1313,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "robot",
+    "concept_name": "robot",
+    "image_file": "images/robot_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1318,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rock",
+    "concept_name": "rock",
+    "image_file": "images/rock_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1319,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rocket",
+    "concept_name": "rocket",
+    "image_file": "images/rocket_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1320,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "roof_rack",
+    "concept_name": "roof rack",
+    "image_file": "images/roof_rack_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1329,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rooster",
+    "concept_name": "rooster",
+    "image_file": "images/rooster_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1330,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "root",
+    "concept_name": "root",
+    "image_file": "images/root_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1331,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rope",
+    "concept_name": "rope",
+    "image_file": "images/rope_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1332,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rose",
+    "concept_name": "rose",
+    "image_file": "images/rose_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1334,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "dartboard",
+    "concept_name": "dartboard",
+    "image_file": "images/dartboard_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 474,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "router",
+    "concept_name": "router",
+    "image_file": "images/router_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1336,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rubber_band",
+    "concept_name": "rubber band",
+    "image_file": "images/rubber_band_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1337,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rug",
+    "concept_name": "rug",
+    "image_file": "images/rug_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1340,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "rust",
+    "concept_name": "rust",
+    "image_file": "images/rust_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1342,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "saffron",
+    "concept_name": "saffron",
+    "image_file": "images/saffron_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1345,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sail",
+    "concept_name": "sail",
+    "image_file": "images/sail_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1346,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "salami",
+    "concept_name": "salami",
+    "image_file": "images/salami_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1349,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "saltshaker",
+    "concept_name": "saltshaker",
+    "image_file": "images/saltshaker_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1350,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sandal",
+    "concept_name": "sandal",
+    "image_file": "images/sandal_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1352,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sandbag",
+    "concept_name": "sandbag",
+    "image_file": "images/sandbag_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1353,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sandbox",
+    "concept_name": "sandbox",
+    "image_file": "images/sandbox_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1354,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sandcastle",
+    "concept_name": "sandcastle",
+    "image_file": "images/sandcastle_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1355,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "satellite_dish",
+    "concept_name": "satellite dish",
+    "image_file": "images/satellite_dish_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1361,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sauce",
+    "concept_name": "sauce",
+    "image_file": "images/sauce_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1362,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sauerkraut",
+    "concept_name": "sauerkraut",
+    "image_file": "images/sauerkraut_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1364,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sawhorse",
+    "concept_name": "sawhorse",
+    "image_file": "images/sawhorse_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1367,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "scallion",
+    "concept_name": "scallion",
+    "image_file": "images/scallion_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1372,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "scorpion",
+    "concept_name": "scorpion",
+    "image_file": "images/scorpion_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1384,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "screen2",
+    "concept_name": "screen",
+    "image_file": "images/screen2_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1389,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "screw",
+    "concept_name": "screw",
+    "image_file": "images/screw_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1390,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sea_urchin",
+    "concept_name": "sea urchin",
+    "image_file": "images/sea_urchin_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1393,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "seahorse",
+    "concept_name": "seahorse",
+    "image_file": "images/seahorse_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1396,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "seal",
+    "concept_name": "seal",
+    "image_file": "images/seal_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1397,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "seatbelt",
+    "concept_name": "seatbelt",
+    "image_file": "images/seatbelt_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1399,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sewage",
+    "concept_name": "sewage",
+    "image_file": "images/sewage_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1405,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "shaker",
+    "concept_name": "shaker",
+    "image_file": "images/shaker_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1408,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "shark",
+    "concept_name": "shark",
+    "image_file": "images/shark_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1409,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "shawl",
+    "concept_name": "shawl",
+    "image_file": "images/shawl_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1411,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sheath",
+    "concept_name": "sheath",
+    "image_file": "images/sheath_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1413,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sheep",
+    "concept_name": "sheep",
+    "image_file": "images/sheep_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1414,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "shelf",
+    "concept_name": "shelf",
+    "image_file": "images/shelf_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1416,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "shell1",
+    "concept_name": "shell",
+    "image_file": "images/shell1_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1417,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "shell3",
+    "concept_name": "shell",
+    "image_file": "images/shell3_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1419,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "shirt",
+    "concept_name": "shirt",
+    "image_file": "images/shirt_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1422,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "shoe_polish",
+    "concept_name": "shoe polish",
+    "image_file": "images/shoe_polish_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1424,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "shower_cap",
+    "concept_name": "shower cap",
+    "image_file": "images/shower_cap_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1434,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "shrimp",
+    "concept_name": "shrimp",
+    "image_file": "images/shrimp_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1438,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "shears",
+    "concept_name": "shears",
+    "image_file": "images/shears_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1412,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sidecar",
+    "concept_name": "sidecar",
+    "image_file": "images/sidecar_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1442,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sifter",
+    "concept_name": "sifter",
+    "image_file": "images/sifter_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1443,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "silverware",
+    "concept_name": "silverware",
+    "image_file": "images/silverware_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1445,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sim_card",
+    "concept_name": "sim card",
+    "image_file": "images/sim_card_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1446,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wooden_leg",
+    "concept_name": "wooden leg",
+    "image_file": "images/wooden_leg_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1834,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "eyepiece",
+    "concept_name": "eyepiece",
+    "image_file": "images/eyepiece_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 568,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "skunk",
+    "concept_name": "skunk",
+    "image_file": "images/skunk_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1459,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "slicer",
+    "concept_name": "slicer",
+    "image_file": "images/slicer_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1463,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "slug",
+    "concept_name": "slug",
+    "image_file": "images/slug_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1472,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "smoke_alarm",
+    "concept_name": "smoke alarm",
+    "image_file": "images/smoke_alarm_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1473,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "smoothie",
+    "concept_name": "smoothie",
+    "image_file": "images/smoothie_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1474,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "snake",
+    "concept_name": "snake",
+    "image_file": "images/snake_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1477,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "snow",
+    "concept_name": "snow",
+    "image_file": "images/snow_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1479,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "snowboard",
+    "concept_name": "snowboard",
+    "image_file": "images/snowboard_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1481,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "snowshoe",
+    "concept_name": "snowshoe",
+    "image_file": "images/snowshoe_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1485,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "soccer_ball",
+    "concept_name": "soccer ball",
+    "image_file": "images/soccer_ball_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1488,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sock",
+    "concept_name": "sock",
+    "image_file": "images/sock_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1489,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "soda_fountain",
+    "concept_name": "soda fountain",
+    "image_file": "images/soda_fountain_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1491,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sofa_bed",
+    "concept_name": "sofa bed",
+    "image_file": "images/sofa_bed_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1492,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sorbet",
+    "concept_name": "sorbet",
+    "image_file": "images/sorbet_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1497,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "soup",
+    "concept_name": "soup",
+    "image_file": "images/soup_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1499,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "spacesuit",
+    "concept_name": "spacesuit",
+    "image_file": "images/spacesuit_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1502,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "spaghetti",
+    "concept_name": "spaghetti",
+    "image_file": "images/spaghetti_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1503,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sparkler",
+    "concept_name": "sparkler",
+    "image_file": "images/sparkler_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1507,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "speaker",
+    "concept_name": "speaker",
+    "image_file": "images/speaker_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1509,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "crowbar",
+    "concept_name": "crowbar",
+    "image_file": "images/crowbar_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 447,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "speedboat",
+    "concept_name": "speedboat",
+    "image_file": "images/speedboat_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1511,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "spider_web",
+    "concept_name": "spider web",
+    "image_file": "images/spider_web_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1514,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "springboard",
+    "concept_name": "springboard",
+    "image_file": "images/springboard_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1522,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "squid",
+    "concept_name": "squid",
+    "image_file": "images/squid_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1528,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "squirt_gun",
+    "concept_name": "squirt gun",
+    "image_file": "images/squirt_gun_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1530,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "staple_gun",
+    "concept_name": "staple gun",
+    "image_file": "images/staple_gun_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1538,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "starfish",
+    "concept_name": "starfish",
+    "image_file": "images/starfish_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1541,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "stiletto",
+    "concept_name": "stiletto",
+    "image_file": "images/stiletto_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1554,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "stir_fry",
+    "concept_name": "stir fry",
+    "image_file": "images/stir_fry_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1557,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "stirrup",
+    "concept_name": "stirrup",
+    "image_file": "images/stirrup_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1558,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "stool",
+    "concept_name": "stool",
+    "image_file": "images/stool_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1561,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "stove1",
+    "concept_name": "stove",
+    "image_file": "images/stove1_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1563,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "stove2",
+    "concept_name": "stove",
+    "image_file": "images/stove2_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1564,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "chaps",
+    "concept_name": "chaps",
+    "image_file": "images/chaps_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 306,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sundial",
+    "concept_name": "sundial",
+    "image_file": "images/sundial_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1583,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "sunroof",
+    "concept_name": "sunroof",
+    "image_file": "images/sunroof_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1586,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "swab",
+    "concept_name": "swab",
+    "image_file": "images/swab_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1590,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "swimsuit",
+    "concept_name": "swimsuit",
+    "image_file": "images/swimsuit_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1597,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "swing_set",
+    "concept_name": "swing set",
+    "image_file": "images/swing_set_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1599,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "syringe",
+    "concept_name": "syringe",
+    "image_file": "images/syringe_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1604,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tablecloth",
+    "concept_name": "tablecloth",
+    "image_file": "images/tablecloth_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1609,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tackle",
+    "concept_name": "tackle",
+    "image_file": "images/tackle_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1612,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "taffy",
+    "concept_name": "taffy",
+    "image_file": "images/taffy_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1615,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tape",
+    "concept_name": "tape",
+    "image_file": "images/tape_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1622,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "taxi",
+    "concept_name": "taxi",
+    "image_file": "images/taxi_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1630,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "teabag",
+    "concept_name": "teabag",
+    "image_file": "images/teabag_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1632,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "teapot",
+    "concept_name": "teapot",
+    "image_file": "images/teapot_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1634,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "teepee",
+    "concept_name": "teepee",
+    "image_file": "images/teepee_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1637,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tent",
+    "concept_name": "tent",
+    "image_file": "images/tent_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1643,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "test_tube",
+    "concept_name": "test tube",
+    "image_file": "images/test_tube_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1645,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "thermometer",
+    "concept_name": "thermometer",
+    "image_file": "images/thermometer_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1646,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "thermos",
+    "concept_name": "thermos",
+    "image_file": "images/thermos_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1647,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "thread",
+    "concept_name": "thread",
+    "image_file": "images/thread_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1651,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tiara",
+    "concept_name": "tiara",
+    "image_file": "images/tiara_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1655,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tick",
+    "concept_name": "tick",
+    "image_file": "images/tick_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1656,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "toaster",
+    "concept_name": "toaster",
+    "image_file": "images/toaster_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1666,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "toaster_oven",
+    "concept_name": "toaster oven",
+    "image_file": "images/toaster_oven_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1667,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tooth",
+    "concept_name": "tooth",
+    "image_file": "images/tooth_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1678,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "toothpaste",
+    "concept_name": "toothpaste",
+    "image_file": "images/toothpaste_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1680,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tortellini",
+    "concept_name": "tortellini",
+    "image_file": "images/tortellini_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1686,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tortilla",
+    "concept_name": "tortilla",
+    "image_file": "images/tortilla_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1687,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "totem_pole",
+    "concept_name": "totem pole",
+    "image_file": "images/totem_pole_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1689,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tractor",
+    "concept_name": "tractor",
+    "image_file": "images/tractor_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1695,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "train_car",
+    "concept_name": "train car",
+    "image_file": "images/train_car_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1699,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "chicken_wire",
+    "concept_name": "chicken wire",
+    "image_file": "images/chicken_wire_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 324,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "treadmill",
+    "concept_name": "treadmill",
+    "image_file": "images/treadmill_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1706,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "triangle",
+    "concept_name": "triangle",
+    "image_file": "images/triangle_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1710,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tricycle",
+    "concept_name": "tricycle",
+    "image_file": "images/tricycle_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1711,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wand",
+    "concept_name": "wand",
+    "image_file": "images/wand_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1780,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "trombone",
+    "concept_name": "trombone",
+    "image_file": "images/trombone_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1716,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "truck",
+    "concept_name": "truck",
+    "image_file": "images/truck_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1720,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tuba",
+    "concept_name": "tuba",
+    "image_file": "images/tuba_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1723,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tube_top",
+    "concept_name": "tube top",
+    "image_file": "images/tube_top_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1724,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tumbleweed",
+    "concept_name": "tumbleweed",
+    "image_file": "images/tumbleweed_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1727,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tuning_fork",
+    "concept_name": "tuning fork",
+    "image_file": "images/tuning_fork_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1728,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tupperware",
+    "concept_name": "tupperware",
+    "image_file": "images/tupperware_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1729,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "turban",
+    "concept_name": "turban",
+    "image_file": "images/turban_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1730,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "turntable",
+    "concept_name": "turntable",
+    "image_file": "images/turntable_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1735,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "typewriter",
+    "concept_name": "typewriter",
+    "image_file": "images/typewriter_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1741,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "undershirt",
+    "concept_name": "undershirt",
+    "image_file": "images/undershirt_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1744,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "blazer",
+    "concept_name": "blazer",
+    "image_file": "images/blazer_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 137,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "bathtub",
+    "concept_name": "bathtub",
+    "image_file": "images/bathtub_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 91,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "vending_machine",
+    "concept_name": "vending machine",
+    "image_file": "images/vending_machine_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1757,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "videocassette",
+    "concept_name": "videocassette",
+    "image_file": "images/videocassette_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1761,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "violin",
+    "concept_name": "violin",
+    "image_file": "images/violin_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1764,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "vise",
+    "concept_name": "vise",
+    "image_file": "images/vise_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1765,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "visor",
+    "concept_name": "visor",
+    "image_file": "images/visor_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1766,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "vulture",
+    "concept_name": "vulture",
+    "image_file": "images/vulture_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1768,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "waffle",
+    "concept_name": "waffle",
+    "image_file": "images/waffle_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1770,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wagon",
+    "concept_name": "wagon",
+    "image_file": "images/wagon_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1772,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "walker2",
+    "concept_name": "walker",
+    "image_file": "images/walker2_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1774,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "washboard",
+    "concept_name": "washboard",
+    "image_file": "images/washboard_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1782,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "washcloth",
+    "concept_name": "washcloth",
+    "image_file": "images/washcloth_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1783,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "water_cooler",
+    "concept_name": "water cooler",
+    "image_file": "images/water_cooler_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1788,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "water_fountain",
+    "concept_name": "water fountain",
+    "image_file": "images/water_fountain_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1790,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "watering_can",
+    "concept_name": "watering can",
+    "image_file": "images/watering_can_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1792,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "waterwheel",
+    "concept_name": "waterwheel",
+    "image_file": "images/waterwheel_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1794,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wax_paper",
+    "concept_name": "wax paper",
+    "image_file": "images/wax_paper_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1796,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "weather_vane",
+    "concept_name": "weather vane",
+    "image_file": "images/weather_vane_01s.jpg",
+    "source": "THINGS",
+    "spose_index": 1798,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wedding_cake",
+    "concept_name": "wedding cake",
+    "image_file": "images/wedding_cake_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1800,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wedge",
+    "concept_name": "wedge",
+    "image_file": "images/wedge_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1801,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "whale",
+    "concept_name": "whale",
+    "image_file": "images/whale_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1804,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wheat",
+    "concept_name": "wheat",
+    "image_file": "images/wheat_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1805,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wheelchair",
+    "concept_name": "wheelchair",
+    "image_file": "images/wheelchair_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1808,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "whipped_cream",
+    "concept_name": "whipped cream",
+    "image_file": "images/whipped_cream_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1810,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wick",
+    "concept_name": "wick",
+    "image_file": "images/wick_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1815,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "window",
+    "concept_name": "window",
+    "image_file": "images/window_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1818,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "windsock",
+    "concept_name": "windsock",
+    "image_file": "images/windsock_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1822,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "tea",
+    "concept_name": "tea",
+    "image_file": "images/tea_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1631,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wing",
+    "concept_name": "wing",
+    "image_file": "images/wing_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1827,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wok",
+    "concept_name": "wok",
+    "image_file": "images/wok_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1830,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "worm",
+    "concept_name": "worm",
+    "image_file": "images/worm_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1836,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wrap",
+    "concept_name": "wrap",
+    "image_file": "images/wrap_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1837,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wrapping_paper",
+    "concept_name": "wrapping paper",
+    "image_file": "images/wrapping_paper_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1838,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wreck",
+    "concept_name": "wreck",
+    "image_file": "images/wreck_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1840,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "wrench",
+    "concept_name": "wrench",
+    "image_file": "images/wrench_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1841,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "yolk",
+    "concept_name": "yolk",
+    "image_file": "images/yolk_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1850,
+    "in_tier2": false
+  },
+  {
+    "concept_id": "zucchini",
+    "concept_name": "zucchini",
+    "image_file": "images/zucchini_01b.jpg",
+    "source": "THINGS",
+    "spose_index": 1853,
+    "in_tier2": false
+  }
+]

@@ -44,6 +44,7 @@ export class TripletPlugin {
       mascot: { type: "STRING", default: "" },
       dialogue: { type: "OBJECT", default: {} },
       progress: { type: "OBJECT", default: null },
+      currency_icon: { type: "STRING", default: "\u{1FA99}" },
       feedback_ms: { type: "INT", default: 800 },
     },
     data: {
@@ -84,6 +85,8 @@ export class TripletPlugin {
           <div class="progress-row">
             <div class="progress-track"><div class="progress-fill" id="pfill"
               style="width:${(trial.progress.current / trial.progress.total) * 100}%"></div></div>
+            ${trial.coin_balance ? `<span class="coins" id="coins">
+              ${trial.currency_icon} ${trial.coin_balance()}</span>` : ""}
             <span class="level">Level ${trial.progress.level} of ${trial.progress.n_levels}</span>
           </div>` : ""}
       </div>`;
@@ -115,6 +118,21 @@ export class TripletPlugin {
           fill.style.width =
             `${((trial.progress.current + 1) / trial.progress.total) * 100}%`;
         }
+        // Coins: pre-drawn once per trial at session start (see
+        // CastleState.awardTrialCoins), never contingent on WHAT was
+        // picked -- the same rule the neutral aside text above follows.
+        // Every trial pays, attention checks included.
+        if (trial.award_coins) {
+          const balance = trial.award_coins();
+          const coinEl = display.querySelector("#coins");
+          if (coinEl) coinEl.textContent = `${trial.currency_icon} ${balance}`;
+        }
+        // Stickers: which trial reveals which was also pre-drawn at session
+        // start (see CastleState.awardTrialStickers), never contingent on
+        // WHAT was picked. Rare compared to coins -- most calls return
+        // nothing. The popup/sfx live in the closure itself; nothing to do
+        // with the result here.
+        if (trial.award_stickers) trial.award_stickers();
       }
 
       this.jsPsych.pluginAPI.setTimeout(() => {
@@ -145,8 +163,12 @@ export class ScreenPlugin {
       html: { type: "HTML_STRING", default: "" },
       button: { type: "STRING", default: "Next" },
       allow_space: { type: "BOOL", default: true },
+      // Optional secondary, visually recessive button (shop addition) --
+      // e.g. "Visit the shop" alongside "Put them in the castle!". Omit for
+      // every screen that doesn't need one; existing callers are unaffected.
+      quiet_button: { type: "STRING", default: "" },
     },
-    data: { rt: { type: "FLOAT" } },
+    data: { rt: { type: "FLOAT" }, chose_quiet: { type: "BOOL" } },
   };
 
   constructor(jsPsych) { this.jsPsych = jsPsych; }
@@ -154,17 +176,22 @@ export class ScreenPlugin {
   trial(display, trial) {
     display.innerHTML = `
       <div class="screen">${trial.html}
-        <div class="btn-row"><button class="big" id="go">${trial.button}</button></div>
+        <div class="btn-row">
+          ${trial.quiet_button ? `<button class="quiet" id="quiet">${trial.quiet_button}</button>` : ""}
+          <button class="big" id="go">${trial.button}</button>
+        </div>
       </div>`;
     const t0 = performance.now();
-    const done = () => {
+    const done = (choseQuiet) => {
       if (key) document.removeEventListener("keydown", key);
       display.innerHTML = "";
-      this.jsPsych.finishTrial({ rt: performance.now() - t0 });
+      this.jsPsych.finishTrial({ rt: performance.now() - t0, chose_quiet: choseQuiet });
     };
-    display.querySelector("#go").addEventListener("click", done);
+    display.querySelector("#go").addEventListener("click", () => done(false));
+    const quietBtn = display.querySelector("#quiet");
+    if (quietBtn) quietBtn.addEventListener("click", () => done(true));
     const key = trial.allow_space
-      ? (e) => { if (e.code === "Space") done(); }
+      ? (e) => { if (e.code === "Space") done(false); }
       : null;
     if (key) document.addEventListener("keydown", key);
   }

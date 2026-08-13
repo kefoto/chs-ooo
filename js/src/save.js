@@ -31,7 +31,7 @@ function fileStamp(d = new Date()) {
          `${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`;
 }
 
-export function buildPayload({ config, responses, castle, startTime, completed }) {
+export function buildPayload({ config, responses, castle, shop, startTime, completed }) {
   const attention = responses.filter((r) => r.is_attention_trial);
   const correct = attention.filter((r) => r.correct).length;
   const score = attention.length ? (correct / attention.length) * 100 : 100;
@@ -82,7 +82,10 @@ export function buildPayload({ config, responses, castle, startTime, completed }
   };
 
   const payload = { participant_data, responses };
-  if (castle) payload.game_state = { castle: castle.toJSON() };
+  if (castle) {
+    payload.game_state = { castle: castle.toJSON() };
+    if (shop) payload.game_state.shop = shop.toJSON();
+  }
   return payload;
 }
 

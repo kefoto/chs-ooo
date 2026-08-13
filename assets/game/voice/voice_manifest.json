@@ -1,0 +1,67 @@
+{
+  "voice_id": "",
+  "voice_name": "Andrew Beta - Funny Cartoon Voice Talent",
+  "model": "",
+  "lines": {
+    "cutscene_open_0": {
+      "text_sha1": "ae2ca352d8d1f6ade5f18c4316c3b0f689c57eae",
+      "source": "manual_web_ui"
+    },
+    "cutscene_open_1": {
+      "text_sha1": "8dd88f2c1775e1f505b3d7f5b93cd3a5c6249e5f",
+      "source": "manual_web_ui"
+    },
+    "cutscene_open_2": {
+      "text_sha1": "0e553e2ed5399903da3a796cd962f3f5fa91230f",
+      "source": "manual_web_ui"
+    },
+    "cutscene_close_0": {
+      "text_sha1": "5c78ae319a3d40317b51685905e2190b71ba98aa",
+      "source": "manual_web_ui"
+    },
+    "cutscene_close_1": {
+      "text_sha1": "59285a1de08c483e9b53f03a7f2e12a180072778",
+      "source": "manual_web_ui"
+    },
+    "welcome_0": {
+      "text_sha1": "160815cffe0386c59db5069a70d9f5f1677dfc17",
+      "source": "manual_web_ui"
+    },
+    "welcome_1": {
+      "text_sha1": "34c4acaa52213339ae10890a4ca708aa29b4f46f",
+      "source": "manual_web_ui"
+    },
+    "instructions_tier1_0": {
+      "text_sha1": "c547715397d5aa445ff2f7d97dd1449399f8d848",
+      "source": "manual_web_ui"
+    },
+    "instructions_tier1_1": {
+      "text_sha1": "8d372b392c2c5fccb2502412a9b0bc6572717d67",
+      "source": "manual_web_ui"
+    },
+    "instructions_tier1_2": {
+      "text_sha1": "f9282ebbd1d3448c835fac4656c30023ce8e88d8",
+      "source": "manual_web_ui"
+    },
+    "instructions_tier2_0": {
+      "text_sha1": "5f60aa86edb4e833862be995574bbfcf82b0d38b",
+      "source": "manual_web_ui"
+    },
+    "instructions_tier2_1": {
+      "text_sha1": "8d372b392c2c5fccb2502412a9b0bc6572717d67",
+      "source": "manual_web_ui"
+    },
+    "instructions_tier2_2": {
+      "text_sha1": "f9282ebbd1d3448c835fac4656c30023ce8e88d8",
+      "source": "manual_web_ui"
+    },
+    "room_intro_visual_0": {
+      "text_sha1": "fe30aff3a66a9c797d973ea81fb2940cd23f77c3",
+      "source": "manual_web_ui"
+    },
+    "room_intro_visual_1": {
+      "text_sha1": "75db85367a88fb5a08201eb4288296a70cbe8554",
+      "source": "manual_web_ui"
+    }
+  }
+}
