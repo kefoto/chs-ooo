@@ -3,65 +3,117 @@
   "voice_name": "Andrew Beta - Funny Cartoon Voice Talent",
   "model": "",
   "lines": {
-    "cutscene_open_0": {
-      "text_sha1": "ae2ca352d8d1f6ade5f18c4316c3b0f689c57eae",
-      "source": "manual_web_ui"
-    },
     "cutscene_open_1": {
       "text_sha1": "8dd88f2c1775e1f505b3d7f5b93cd3a5c6249e5f",
-      "source": "manual_web_ui"
+      "text": "Oh, hello! I'm Pip, and this is my castle.",
+      "file": "voice/cutscene_open_1.wav",
+      "chars": 42,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
     },
     "cutscene_open_2": {
       "text_sha1": "0e553e2ed5399903da3a796cd962f3f5fa91230f",
-      "source": "manual_web_ui"
+      "text": "I can't decide what goes where! Will you help me sort things, room by room?",
+      "file": "voice/cutscene_open_2.wav",
+      "chars": 75,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
     },
     "cutscene_close_0": {
       "text_sha1": "5c78ae319a3d40317b51685905e2190b71ba98aa",
-      "source": "manual_web_ui"
+      "text": "Look at that, every single room has something in it now.",
+      "file": "voice/cutscene_close_0.wav",
+      "chars": 56,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
     },
     "cutscene_close_1": {
       "text_sha1": "59285a1de08c483e9b53f03a7f2e12a180072778",
-      "source": "manual_web_ui"
-    },
-    "welcome_0": {
-      "text_sha1": "160815cffe0386c59db5069a70d9f5f1677dfc17",
-      "source": "manual_web_ui"
-    },
-    "welcome_1": {
-      "text_sha1": "34c4acaa52213339ae10890a4ca708aa29b4f46f",
-      "source": "manual_web_ui"
+      "text": "Thank you for showing me how you would sort things.",
+      "file": "voice/cutscene_close_1.wav",
+      "chars": 51,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
     },
     "instructions_tier1_0": {
       "text_sha1": "c547715397d5aa445ff2f7d97dd1449399f8d848",
-      "source": "manual_web_ui"
+      "text": "In each room I'll show you three pictures.",
+      "file": "voice/instructions_tier1_0.wav",
+      "chars": 42,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
     },
-    "instructions_tier1_1": {
-      "text_sha1": "8d372b392c2c5fccb2502412a9b0bc6572717d67",
-      "source": "manual_web_ui"
+    "level_complete_0": {
+      "text_sha1": "0fc85aa9ba4d39322149c5c9834b252493bd0c31",
+      "text": "That's a whole room done! Thank you, here's what you found.",
+      "file": "voice/level_complete_0.wav",
+      "chars": 59,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
     },
-    "instructions_tier1_2": {
-      "text_sha1": "f9282ebbd1d3448c835fac4656c30023ce8e88d8",
-      "source": "manual_web_ui"
+    "level_complete_1": {
+      "text_sha1": "3f445db386c0a20c94e06ee6d8f288445e50ea7d",
+      "text": "Room finished! Thank you, these are for your book.",
+      "file": "voice/level_complete_1.wav",
+      "chars": 50,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
     },
-    "instructions_tier2_0": {
-      "text_sha1": "5f60aa86edb4e833862be995574bbfcf82b0d38b",
-      "source": "manual_web_ui"
+    "level_complete_2": {
+      "text_sha1": "f8bb621e2655b31e8da7a4561489ec5d2d7c17e1",
+      "text": "That's the end of that room, thank you. Sticker time!",
+      "file": "voice/level_complete_2.wav",
+      "chars": 53,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
     },
-    "instructions_tier2_1": {
-      "text_sha1": "8d372b392c2c5fccb2502412a9b0bc6572717d67",
-      "source": "manual_web_ui"
+    "break_prompt_0": {
+      "text_sha1": "9b395fff2aff3d175f9e0c866341b8447b1fc129",
+      "text": "Would you like to keep going, or take a rest?",
+      "file": "voice/break_prompt_0.wav",
+      "chars": 45,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
     },
-    "instructions_tier2_2": {
-      "text_sha1": "f9282ebbd1d3448c835fac4656c30023ce8e88d8",
-      "source": "manual_web_ui"
+    "break_prompt_1": {
+      "text_sha1": "8a80463e021a95bf27ef9dca901df46b762a3c73",
+      "text": "Would you like the next room? Or we can pause, if you like.",
+      "file": "voice/break_prompt_1.wav",
+      "chars": 59,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
     },
-    "room_intro_visual_0": {
-      "text_sha1": "fe30aff3a66a9c797d973ea81fb2940cd23f77c3",
-      "source": "manual_web_ui"
+    "mansion_prompt_0": {
+      "text_sha1": "0b3125a50a9c948d6f0c167300a2b42f4c0ccdc8",
+      "text": "Would you like to visit the mansion, or keep going?",
+      "file": "voice/mansion_prompt_0.wav",
+      "chars": 51,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
     },
-    "room_intro_visual_1": {
-      "text_sha1": "75db85367a88fb5a08201eb4288296a70cbe8554",
-      "source": "manual_web_ui"
+    "mansion_prompt_1": {
+      "text_sha1": "430ab7a803887e4945671591bc9d1bb2dc496d86",
+      "text": "The mansion is open, if you'd like to visit! Or we can go straight on.",
+      "file": "voice/mansion_prompt_1.wav",
+      "chars": 70,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
+    },
+    "resting_0": {
+      "text_sha1": "43024006cfcad11b3f20e2c0639e38068bb327dc",
+      "text": "No problem at all, please take as long as you like. I'll wait!",
+      "file": "voice/resting_0.wav",
+      "chars": 62,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
+    },
+    "finish_1": {
+      "text_sha1": "db64279bc59f2a428928f956a8745cc80c869502",
+      "text": "That's the end! Thank you very much for sticking with it.",
+      "file": "voice/finish_1.wav",
+      "chars": 57,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-13T18:39:58"
     }
   }
 }

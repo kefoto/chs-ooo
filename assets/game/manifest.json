@@ -50,17 +50,14 @@
     "repeat_from": 7
   },
   "sounds": {
-    "_variety_doc": "A value may be a single path (unchanged) or a LIST of paths, in which case GameLayer.play() picks one at random per call via its own rng and caches per resolved file rather than per key -- see game_layer.py. `sticker` uses this for placement-sound variety; `sticker_2`/`sticker_3` are optional and the list just has one entry until they exist.",
+    "_variety_doc": "A value may be a single path (unchanged) or a LIST of paths, in which case one is picked at random per call and cached per resolved file rather than per key -- see GameLayer.play() (desktop) and js/src/sfx.js (browser). `sticker` used this for placement-sound variety, but sticker_2/sticker_3 were never recorded: a list naming files that do not exist made the placement sound silent for every draw that picked one, so the list is back to the one clip that exists. Re-add the entries when the recordings do.",
     "select": "sounds/select.wav",
     "level_up": "sounds/level_up.wav",
-    "sticker": [
-      "sounds/sticker.wav",
-      "sounds/sticker_2.wav",
-      "sounds/sticker_3.wav"
-    ],
-    "pickup": "sounds/pickup.wav",
+    "sticker": "sounds/sticker.wav",
+    "pickup": "sounds/select.wav",
     "nudge": "sounds/nudge.wav",
-    "finish": "sounds/finish.wav"
+    "finish": "sounds/finish.wav",
+    "_pickup_doc": "Lifting a sticker or a piece of furniture. There is no pickup.wav yet, so this points at select.wav as a stand-in -- naming a file that does not exist is what made the gesture silent on BOTH builds. Point it at a real recording when one exists; nothing else has to change."
   },
   "music": {
     "_doc": "Background music under the opening/closing cutscenes, the playground, and the shop. Cutscene tracks start the moment the cutscene begins -- panel art or the text-only fallback alike -- and stop the moment it ends, so they can never land over a trial or a Tier 2 stimulus clip. Same track for both open/close by default; give `close` its own file to differ. `playground` and `shop` LOOP for as long as their screen is open (untimed, see GameLayer.play_music's `loop` param) and stop the moment the child leaves for a different 'place' -- see _show_playground_screen/_leave_playground/_enter_shop/_leave_shop in two_tier_experiment.py. See GameLayer.play_music/stop_music (experiments/game_layer.py) and js/src/music.js.",

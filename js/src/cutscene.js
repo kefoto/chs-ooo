@@ -19,6 +19,8 @@
  * Advancing is a click anywhere, or SPACE for an adult sitting alongside.
  */
 
+import { assetUrl } from "./assets.js";
+
 export class CutscenePlugin {
   static info = {
     name: "castle-cutscene",
@@ -29,6 +31,17 @@ export class CutscenePlugin {
       panels: { type: "OBJECT", array: true, default: [] },
       fade_ms: { type: "INT", default: 450 },
       box_rel: { type: "FLOAT", default: 0.18 },
+      // { onPanel(index) } -- called each time a panel comes up, including
+      // the first, so the caller can speak that panel's recording. The whole
+      // scene is one trial here, so jsPsych's on_start fires once and cannot
+      // narrate panel by panel.
+      //
+      // An OBJECT rather than a bare function parameter: jsPsych EVALUATES a
+      // function-valued parameter before the trial starts (that is how
+      // `balance: () => ...` arrives as a number elsewhere), so a callback
+      // passed directly would be invoked once, with no arguments, and its
+      // return value handed to the plugin.
+      voice: { type: "OBJECT", default: null },
     },
     data: {
       panels_shown: { type: "INT" },
@@ -66,6 +79,7 @@ export class CutscenePlugin {
     const paint = (n) => {
       text.textContent = panels[n].text || "";
       hint.textContent = n === panels.length - 1 ? "tap to begin" : "tap to continue";
+      trial.voice?.onPanel?.(n);
     };
 
     under.src = panels[0].image || "";
@@ -134,10 +148,17 @@ export function resolvePanels(manifest, dialogue, which, assetRoot, usable) {
   let anyArt = false;
   const panels = spec.filter((e) => e && typeof e === "object").map((e) => {
     const idx = e.line ?? 0;
-    const url = e.image ? `${assetRoot}/${e.image}` : "";
+    // Through assets.js, so a panel arrives as the ~20KB web copy rather
+    // than the 4MB source it is generated from. Falls back to
+    // `${assetRoot}/${e.image}` by itself when no derivative exists.
+    const url = e.image ? assetUrl(e.image, "x1", assetRoot) : "";
     const ok = url && (!usable || usable.has(url));
     if (ok) anyArt = true;
-    return { image: ok ? url : "", text: (idx >= 0 && idx < lines.length) ? lines[idx] : "" };
+    // `line` rides along so the caller can speak the panel's recording: a
+    // panel's own position is not its line index, since one image can hold
+    // across two beats (see the manifest's _panels_doc).
+    return { image: ok ? url : "", line: idx,
+             text: (idx >= 0 && idx < lines.length) ? lines[idx] : "" };
   });
   return anyArt ? panels : [];
 }

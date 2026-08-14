@@ -10,21 +10,24 @@ import { stream } from "./rng.js";
 import { buildTrialList, generateBalancedTriplets } from "./triplets.js";
 import { blockConditions, latinSquareIndex, buildTrialListTier2,
          CONDITION_INSTRUCTIONS, CONDITION_DIALOGUE } from "./tier2.js";
-import { CastleState } from "./castle.js";
+import { CastleState, ARCADE_ROOMS } from "./castle.js";
 import { ShopState } from "./shop.js";
 import { TripletPlugin, ScreenPlugin } from "./plugins.js";
 import { AudioTripletPlugin, armPriming, stimulusAudioActive } from "./audio.js";
 import { initSfx, playSfx } from "./sfx.js";
-import { initVoice, speak, speakAll } from "./voice.js";
-import { admitSession, getTicket } from "./captcha.js";
+import { initVoice, speak, speakKeys, stopVoice } from "./voice.js";
 import { initMusic, playMusic, stopMusic } from "./music.js";
 import { initStickerPopup, showStickerReveal } from "./sticker_popup.js";
+import { initItemPopup } from "./item_popup.js";
 import { CutscenePlugin, resolvePanels, probeImages } from "./cutscene.js";
 import { PlaygroundPlugin } from "./playground.js";
+import { MansionPlugin } from "./mansion.js";
 import { ShopPlugin } from "./shop_plugin.js";
 import { buildPayload, makeResponse, downloadPayload, postPayload } from "./save.js";
+import { admitSession, getTicket } from "./captcha.js";
 import { sessionPlan } from "./session.js";
 import { setupNeeded, showSetup } from "./setup.js";
+import { initAssets, assetUrl, assetSavings, prefetch, idlePrefetch } from "./assets.js";
 
 let cfg = applyUrlOverrides({ ...CONFIG });
 let TIER2 = cfg.Tier === 2;
@@ -169,6 +172,8 @@ const jget = async (url) => {
 
   // Mid-trial sticker-reveal popup -- see js/src/sticker_popup.js.
   initStickerPopup({ reducedMotion: Boolean(cfg.Gamify_Reduced_Motion) });
+  // Shop-purchase popup -- see js/src/item_popup.js.
+  initItemPopup({ reducedMotion: Boolean(cfg.Gamify_Reduced_Motion) });
 
   if (TIER2) {
     // Warm the cache for exactly the clips this session uses, so the first
@@ -182,10 +187,33 @@ const jget = async (url) => {
     }
   }
 
+  // Same idea for TripletPlugin/AudioTripletPlugin's stimulus images -- both
+  // tiers show them (Tier 2 AV as well as V), so this isn't gated on TIER2.
+  // Unlike the Tier 2 audio above, these come from datasetRoot, not
+  // assets/game/, so they are outside assets.js's WebP pipeline; setting
+  // `.src` on a detached Image starts the fetch immediately and the browser
+  // cache serves the real <img> in TripletPlugin later, same fire-and-forget
+  // shape as the Audio().load() above.
+  for (const c of new Set(trials.flatMap((t) => t.concepts))) {
+    new Image().src = imageFor[c];
+  }
+
+  // Web-sized art where it has been built, the original PNG where it has
+  // not -- see js/src/assets.js. Read once here so every URL below goes
+  // through it; nothing waits on it, because assetUrl() falls back until it
+  // resolves.
+  await initAssets(cfg.asset_root);
+  const webAssets = assetSavings();
+  if (webAssets) {
+    console.log(`[assets] ${webAssets.count} images, `
+      + `${(webAssets.web / 1e6).toFixed(1)}MB web-sized `
+      + `(${(webAssets.src / 1e6).toFixed(1)}MB as PNG)`);
+  }
+
   const mascot = cfg.Gamify
-    ? `${cfg.asset_root}/${manifest.mascot_variants.neutral.idle}` : "";
+    ? assetUrl(manifest.mascot_variants.neutral.idle) : "";
   const mascotHappy = cfg.Gamify
-    ? `${cfg.asset_root}/${manifest.mascot_variants.neutral.happy}` : "";
+    ? assetUrl(manifest.mascot_variants.neutral.happy) : "";
 
   // Each room's OWN trial count, in room order -- what the sticker reveal
   // schedule needs to pick a valid trial-within-room to reveal each of that
@@ -226,12 +254,88 @@ const jget = async (url) => {
   const shop = cfg.Gamify ? new ShopState() : null;
   const shopRng = stream(pid, "shop");
 
+  // The mini-games' own rng stream, sibling of "castle"/"backdrop"/"shop": a
+  // spawn position drawn from the trial stream would shift which triplets the
+  // child sees, which is the property test_trial_determinism.py protects.
+  const gameRng = stream(pid, "minigames");
+
+  // Where the guests move to at each block boundary. Its own stream for the
+  // same reason as every one above it -- and separate from "shop" in
+  // particular, so where a pet wanders does not depend on how much the child
+  // happened to buy.
+  const guestRng = stream(pid, "guests");
+
+  /** The art behind one MANSION room. Reuses the room progression the task
+   * rooms draw from, so the mansion looks like the same castle -- and gives
+   * the two game rooms with dedicated art (star catcher, bubble pop) their own
+   * backdrops where the manifest has them. */
+  const roomArt = manifest.rooms?.progression ?? [];
+  const arcadeArt = {
+    star_catcher: "room/arcade/star_catcher.png",
+    bubble_pop: "room/arcade/bubble_pop.png",
+  };
+  const progressionArt = (index) =>
+    roomArt[index % Math.max(1, roomArt.length)] || "";
+  const mansionBackdrop = (index) => {
+    // A shop-bought background, equipped into this room, overrides whatever
+    // the room would otherwise show -- checked first, same precedence
+    // _room_backdrop_rel gives it on the desktop build.
+    const overrideId = shop?.background_overrides?.[index];
+    if (overrideId) {
+      const rel = backgroundItem(overrideId).rel;
+      if (rel) return rel;
+    }
+    const game = ARCADE_ROOMS[index];
+    // Only star_catcher and bubble_pop have art drawn FOR them. The other two
+    // used to borrow star_catcher's, which put the same night sky behind
+    // three of the four game rooms -- the arcade read as one room the child
+    // kept walking back into. Falling through to this room's own entry in
+    // the progression instead gives every game room a different backdrop,
+    // and costs nothing: `progression` already has one distinct image per
+    // mansion index, and the entries at the two borrowing rooms (3 and 6)
+    // are exactly the ones a decoration room there would have used.
+    if (game) return arcadeArt[game] || progressionArt(index);
+    return progressionArt(index);
+  };
+
+  // Which animals turn up to watch a round. Decorative only: they sit below
+  // the play area and cannot be caught or clicked. Port of the desktop's
+  // _arcade_spectators -- the child's OWN invited animals first (an animal
+  // that lives in the mansion coming to watch is a nicer thing than a
+  // stranger), THEN the rest of the pool, shuffled, to fill the bench --
+  // the desktop always pads up to MAX_SPECTATORS this way, even before any
+  // animal has been invited, by design (own comment: "fill the bench").
+  // Computed LIVE, at the moment a round actually starts (see showArcade's
+  // trial.spectators() call), not once at timeline-build time as the
+  // previous version did -- that meant a mid-session invitation could never
+  // move an animal to the front of the bench, and the same fixed first-4-
+  // in-manifest-order animals showed up regardless of who was actually
+  // owned. Drawn from the shop's own rng stream, never the trial rng, same
+  // rule every other shop-adjacent draw in this file follows.
+  const MAX_SPECTATORS = 4;
+  const arcadeSpectators = () => {
+    if (!shop) return [];
+    const mine = [...shop.owned_animals];
+    const others = (manifest.animals?.pool ?? []).map((a) => a.id)
+      .filter((id) => id && !mine.includes(id));
+    shopRng.shuffle(others);
+    return [...mine, ...others].slice(0, MAX_SPECTATORS)
+      .map((id) => animalsById[id]?.image).filter(Boolean);
+  };
+
+  //: Each game names its own scoring sound, so the rooms sound different
+  //: without the screen knowing which game it built.
+  const gameSound = (key) => ({
+    star_catcher: "sticker", bubble_pop: "pickup",
+    firefly_catch: "select", kite_flyer: "sticker",
+  }[key] || "select");
+
   // Which cutscene panels actually exist. game_layer.cutscene_panels checks
   // the filesystem; a browser can only ask by loading, so ask once up front
   // and let the timeline builder decide art-vs-text from the answer. Loading
   // now also means the opening does not stutter on its first fade.
   const artUrls = ["open", "close"].flatMap((w) =>
-    (manifest.cutscene?.[w] ?? []).map((p) => p?.image && `${cfg.asset_root}/${p.image}`));
+    (manifest.cutscene?.[w] ?? []).map((p) => p?.image && assetUrl(p.image)));
   const usableArt = cfg.Gamify ? await probeImages(artUrls) : new Set();
 
   // Reduced-stimulation mode obeys the same cap the selection animation does:
@@ -254,7 +358,10 @@ const jget = async (url) => {
    */
   const sticker = (id) => {
     const s = stickerById[id] || {};
-    return { id, emoji: s.emoji, img: s.image ? `${cfg.asset_root}/${s.image}` : null };
+    // `rel` is the manifest path, kept alongside the resolved URL so the
+    // prefetcher can ask assets.js for a different size of the same art.
+    return { id, emoji: s.emoji, rel: s.image || null,
+             img: s.image ? assetUrl(s.image) : null };
   };
   const stickerHtml = (s) => (s && s.img
     ? `<img class="sticker-art" src="${s.img}" alt="${s.emoji || ""}">`
@@ -265,34 +372,75 @@ const jget = async (url) => {
   // difference between the three.
   const furnitureById = Object.fromEntries(
     (manifest.furniture?.pool ?? []).map((f) => [f.id, f]));
+  // A direct catalog purchase's `ref` is a BASE id ("tapestry"), not a
+  // variant id ("tapestry_c") -- the variant is only drawn once bought (see
+  // ShopState.buyFurniture, no rng, unlike the desktop). Bases carry a
+  // generic label/emoji and no image; furnitureItem() below tries the
+  // variant pool first (real art, for an owned/won item) and falls back to
+  // the base pool (label/emoji only) for a not-yet-bought catalog entry.
+  const furnitureBaseById = Object.fromEntries(
+    (manifest.furniture?.bases ?? []).map((f) => [f.id, f]));
   const backgroundsById = Object.fromEntries(
     (manifest.backgrounds?.pool ?? []).map((b) => [b.id, b]));
+  const animalsById = Object.fromEntries(
+    (manifest.animals?.pool ?? []).map((a) => [a.id, a]));
   const itemOf = (byId) => (id) => {
     const s = byId[id] || {};
-    return { id, label: s.label, emoji: s.emoji,
-             img: s.image ? `${cfg.asset_root}/${s.image}` : null };
+    return { id, label: s.label, emoji: s.emoji, rel: s.image || null,
+             img: s.image ? assetUrl(s.image) : null };
   };
-  const furnitureItem = itemOf(furnitureById);
+  const furnitureItem = (id) =>
+    (furnitureById[id] ? itemOf(furnitureById) : itemOf(furnitureBaseById))(id);
+  // A base's own palette -- what a furniture purchase draws from (see
+  // ShopState.buyFurniture) and what the shop cell's "N/total found" reads
+  // against. Grouped by the variant's own `base` field, resolved once like
+  // furnitureItem() itself.
+  const furnitureVariants = (baseId) =>
+    (manifest.furniture?.pool ?? []).filter((f) => f.base === baseId).map((f) => furnitureItem(f.id));
   const backgroundItem = itemOf(backgroundsById);
+  const animalItem = itemOf(animalsById);
 
   // Shop catalog, resolved once: each entry carries its own art/label so
   // ShopPlugin never has to look anything up in the manifest itself.
-  const shopCatalog = (manifest.shop?.catalog ?? []).map((entry) => (
-    entry.type === "mystery_box"
-      ? { ...entry, pool: (entry.pool ?? []).map((p) => ({
-            ...p,
-            item: p.type === "furniture" ? furnitureItem(p.ref) : backgroundItem(p.ref),
-          })) }
-      : { ...entry,
-          item: entry.type === "furniture" ? furnitureItem(entry.ref) : backgroundItem(entry.ref) }
-  ));
+  const shopCatalog = (manifest.shop?.catalog ?? []).map((entry) => {
+    if (entry.type === "mystery_box") {
+      return { ...entry, pool: (entry.pool ?? []).map((p) => ({
+        ...p,
+        item: p.type === "furniture" ? furnitureItem(p.ref)
+            : p.type === "animal" ? animalItem(p.ref)
+            : backgroundItem(p.ref),
+      })) };
+    }
+    if (entry.type === "invitation") {
+      // Carries its own label/emoji directly -- an invitation letter has no
+      // `ref` into any pool, since who it invites isn't decided (or shown)
+      // until it's bought. Mirrors the desktop's _shop_cell "invitation"
+      // branch, which reads entry.get("label")/entry.get("emoji") the
+      // same way instead of resolving an item pool.
+      return { ...entry, item: { id: entry.id, label: entry.label, emoji: entry.emoji, img: null } };
+    }
+    return { ...entry,
+             item: entry.type === "furniture" ? furnitureItem(entry.ref) : backgroundItem(entry.ref) };
+  });
   const currencyIcon = manifest.shop?.currency?.icon ?? "\u{1FA99}";
 
   // Coins earned so far (response-blind, see castle.js) minus everything
   // spent (player-choice-gated, see shop.js) -- just arithmetic over the
   // two, computed here so neither state object needs a reference to the
   // other. Mirrors _coin_balance() in the desktop build.
-  const coinBalance = () => (castle && shop ? castle.coins_awarded - shop.totalSpent : 0);
+  // minigame_coins is added HERE rather than folded into coins_awarded: that
+  // field means "what the pre-drawn, response-blind schedule paid" and stays
+  // reproducible from the participant id alone. Arcade coins depend on how the
+  // child played, so they are counted separately and only meet at the balance.
+  // Debug_Bonus_Coins (?bonus_coins=N) is added here, on the SPENDABLE
+  // balance only -- never folded into castle.coins_awarded/minigame_coins,
+  // which stay exactly the response-blind, reproducible-from-the-pid
+  // record every audit of this file relies on. A dev/QA convenience for
+  // reaching the shop/mansion with money, not something a real
+  // participant session would ever carry (0 unless the URL asks for it).
+  const coinBalance = () => (castle && shop
+    ? castle.coins_awarded + castle.minigame_coins - shop.totalSpent + (cfg.Debug_Bonus_Coins || 0)
+    : 0);
 
   const startTime = new Date().toISOString().slice(0, 19).replace("T", " ");
   const responses = [];
@@ -324,10 +472,14 @@ const jget = async (url) => {
   }
 
   // Fired at every room boundary (see the on_finish hook near atRoomEnd,
-  // below), in addition to save()'s end-of-session call -- a child who
-  // disengages partway still has every room up to that point recorded
-  // server-side, not just whatever the browser tab happened to hold. Does
-  // NOT set the `saved` latch or trigger a download: this is purely a
+  // above), in addition to save()'s end-of-session call -- the desktop
+  // build uploads per TRIAL with a local retry queue (utilities/
+  // redcap_utils.py); a browser tab has no local queue to retry against, so
+  // this is the closest equivalent: a child who disengages, or whose tab
+  // crashes, partway through still has every room up to that point
+  // recorded at upload_url, not just whatever save()'s single end-of-
+  // session POST would have captured if it never got the chance to fire.
+  // Does NOT set the `saved` latch or trigger a download: this is purely a
   // server-side checkpoint, and save() still owns "the session is over".
   // `responses` at call time already includes every trial through the room
   // that just ended, so this payload is self-contained, not a delta.
@@ -337,6 +489,7 @@ const jget = async (url) => {
     try { await postPayload(cfg.upload_url, payload, { ticket: getTicket(), block: roomIndex }); }
     catch (e) { console.error(`per-block upload failed (room ${roomIndex})`, e); }
   }
+
   // A child who stops partway still yields data: "trials completed before
   // disengagement" is one of the measures the pilot is built around.
   window.addEventListener("beforeunload", () => { if (responses.length) save(false); });
@@ -356,10 +509,13 @@ const jget = async (url) => {
   // desktop build. Callers that DO want audio call speak()/pick() together
   // from inside an on_start hook or a dynamic html() function, which jsPsych
   // evaluates when the screen is actually reached.
-  const pick = (key) => {
+  // `rng` defaults to feedbackRng (every existing caller); pauseRng passes
+  // its own stream below, so paused/nudge text draws never shift the
+  // after_response sequence every session/test already depends on.
+  const pick = (key, rng = feedbackRng) => {
     const arr = dialogue[key];
     if (!arr || !arr.length) return [null, null];
-    const idx = Math.floor(feedbackRng.random() * arr.length);
+    const idx = Math.floor(rng.random() * arr.length);
     return [arr[idx], idx];
   };
 
@@ -379,6 +535,11 @@ const jget = async (url) => {
         panels,
         fade_ms: fadeMs,
         box_rel: Number(manifest.cutscene?.dialogue_box_rel_height ?? 0.18),
+        // One recording per panel, spoken as the panel comes up. The scene
+        // is a single trial, so on_start could only ever narrate the first
+        // line -- and speak() cuts whatever was still talking, so a fast
+        // tapper gets the voice following the picture.
+        voice: { onPanel: (n) => speak(`cutscene_${which}`, panels[n].line) },
         // jsPsych core hooks, not plugin params -- music brackets the scene
         // whether it is skipped by a fast tapper or watched in full.
         on_start: () => playMusic(which),
@@ -407,15 +568,23 @@ const jget = async (url) => {
   if (cfg.Gamify) {
     pushCutscene("open", "Let's play!");
     const instructionsKey = TIER2 ? "instructions_tier2" : "instructions_tier1";
+    // Picked here (build time) so the same text speakKeys plays below
+    // matches what's on screen -- mirrors the desktop's
+    // _show_kid_instruction_screen, which combines welcome + instructions
+    // into one spoken sequence for the same reason (both would otherwise
+    // start playing at the same instant).
+    const [welcomeText, welcomeIdx] = pick("welcome");
+    const instrLines = dialogue[instructionsKey] || [];
     timeline.push({
       type: ScreenPlugin,
       html: `<img class="pip big-pip" src="${mascot}" alt="">` +
-            (dialogue[instructionsKey] || [])
-              .map((t) => `<p class="speech">${t}</p>`).join(""),
-      button: "Start",
+            (welcomeText ? `<p class="speech">${welcomeText}</p>` : "") +
+            instrLines.map((t) => `<p class="speech">${t}</p>`).join(""),
+      button: "▶️ Start",
       // Every instruction line shows at once here (unlike the cutscene
       // panels above), so this queues them instead of firing together.
-      on_start: () => speakAll(dialogue, instructionsKey),
+      on_start: () => speakKeys(
+        [["welcome", welcomeIdx]].concat(instrLines.map((_, i) => [instructionsKey, i]))),
     });
   }
 
@@ -429,6 +598,17 @@ const jget = async (url) => {
              "Which one is the most different from the other two?")
       : CONDITION_INSTRUCTIONS[cond][1];
   }
+
+  // Pause/nudge wording, drawn ONCE for the whole session (js/src/pause.js
+  // bakes them into every trial's static params, unlike the desktop's
+  // line(), which re-picks live only when the pause/rest screen actually
+  // renders) -- its own stream, not feedbackRng, so adding this feature
+  // does not shift the after_response draws every existing session/test
+  // already depends on for reproducibility.
+  const pauseRng = cfg.Gamify ? stream(pid, "pause") : null;
+  const pickOnce = (key) => pick(key, pauseRng)[0] ?? "";
+  const pausedText = pauseRng ? pickOnce("paused") : "";
+  const nudgeText = pauseRng ? pickOnce("nudge") : "";
 
   // Both tiers now carry their room on the trial, so a room is a contiguous
   // stretch of the list. Position WITHIN that stretch drives the progress bar,
@@ -481,10 +661,14 @@ const jget = async (url) => {
     // often an attention one; rewarding at the regular-trial count dropped the
     // reward screen mid-room, and could put the playground BEFORE a trial that
     // still belonged to the room the child had just been congratulated for.
-    const atRoomEnd =
-      idx === trials.length - 1 || roomOf(trials[idx + 1]) !== roomOf(t);
+    const isLastTrial = idx === trials.length - 1;
+    const atRoomEnd = isLastTrial || roomOf(trials[idx + 1]) !== roomOf(t);
 
     const common = {
+      // A line still speaking from the screen before (the instructions stack
+      // queues several) must not run over an A/AV stimulus clip. Same guard
+      // as the desktop build's _show_trial.
+      on_start: () => stopVoice(),
       concepts: t.concepts,
       is_attention: t.is_attention,
       // Index into the TRIAL list, matching the desktop build. Not jsPsych's
@@ -495,6 +679,8 @@ const jget = async (url) => {
       gamified: cfg.Gamify,
       mascot, mascot_happy: mascotHappy,
       dialogue, rng: feedbackRng,
+      paused_text: pausedText,
+      nudge_text: nudgeText,
       progress,
       // Live balance for the header (read at render time, before this
       // trial's own coins land) and a per-trial closure that pays THIS
@@ -543,7 +729,11 @@ const jget = async (url) => {
         // below which is Gamify-only -- a baseline-arm session has no room-
         // complete screen to hang this off of otherwise, and losing only
         // the plain arm's per-block saves would be an easy regression to miss.
-        if (atRoomEnd) saveBlock(roomIndex);
+        // Skipped on the SESSION's last trial: jsPsych's own on_finish fires
+        // save(true) moments later with no ordering guarantee between the
+        // two unawaited POSTs, so a last-write-wins upload_url endpoint
+        // could end up showing a completed session as still in progress.
+        if (atRoomEnd && !isLastTrial) saveBlock(roomIndex);
       },
     };
 
@@ -558,11 +748,22 @@ const jget = async (url) => {
           ...common });
 
     // Room boundary: award, then let the child arrange.
-
     if (cfg.Gamify && atRoomEnd && castle && !castle.rooms[roomIndex].completed) {
       const thisRoom = roomIndex;
+      const blocksDone = thisRoom + 1;
+      // Read by the rest screen and the mansion below, instead of jsPsych's
+      // own .last(1) data lookup -- inserting the rest screen BETWEEN the
+      // break screen and the mansion would make "the last trial" ambiguous
+      // (the break screen if rest was skipped, the rest screen if it
+      // wasn't), where this closure variable always means the same thing.
+      let breakChoice = { quiet: false, rest: false };
       timeline.push({
         type: ScreenPlugin,
+        // The sticker screen is already part of the game layer's "place",
+        // not of the trials -- the same track the mansion it leads into
+        // runs, started here so it carries across the boundary rather than
+        // beginning again when the grid opens.
+        on_start: () => playMusic("playground", { loop: true }),
         html: () => {
           const got = castle.completeRoom(thisRoom).map(sticker);
           // Room finished, then the stickers land. Two sounds because they
@@ -571,118 +772,203 @@ const jget = async (url) => {
           setTimeout(() => playSfx("sticker"), 450);
           const [levelCompleteText, levelCompleteIdx] = pick("level_complete");
           speak("level_complete", levelCompleteIdx);
+          // Mansion rooms open on block-completion progress alone -- see
+          // CastleState.unlockForProgress. Response-blind like every other
+          // award here: it only ever sees a completed-block COUNT.
+          castle.unlockForProgress(blocksDone, rooms);
+          // Guests move house at every block boundary, so the mansion is
+          // never quite the same twice and a room the child has finished
+          // decorating still has something new in it. Response-blind on the
+          // same argument as unlockForProgress above: an rng and a block
+          // COUNT, fired on a boundary, never inside one. Its own stream --
+          // drawing from the trial stream would shift which triplets come
+          // next, and from the shop stream it would depend on how much the
+          // child had bought.
+          castle.moveGuests(guestRng);
+          // Fetch the grid's tiles while this screen is up, so the mansion
+          // paints immediately rather than filling in tile by tile. Thumbs
+          // are ~1KB each; the full-size art waits until a room is opened.
+          prefetch(castle.mansion.filter((r) => r.unlocked)
+            .map((r) => mansionBackdrop(r.index)), "thumb");
+          const [mansionText, mansionIdx] = pick("mansion_prompt");
+          speak("mansion_prompt", mansionIdx);
           return `<img class="pip" src="${mascot}" alt="">` +
                  `<p class="speech">${levelCompleteText ?? "Room finished!"}</p>` +
                  `<p class="awarded">${got.map(stickerHtml).join(" ")}</p>` +
-                 `<div class="book">${bookHtml()}</div>`;
+                 `<div class="book">${bookHtml()}</div>` +
+                 `<p class="speech">${mansionText ?? "Would you like to visit the mansion, or keep going?"}</p>`;
         },
-        button: "Put them in the castle!",
-        // Quiet, not big: the shop must never compete with "go place your
-        // stickers" as the obvious next tap. Optional, and its own screen
-        // has a one-tap exit -- see ShopPlugin.
-        quiet_button: shop ? "Visit the shop" : "",
+        button: "🏰 Visit the mansion",
+        // "Keep going!" skips the whole visit. Quiet rather than big: the
+        // mansion is where the stickers just earned go, so it stays the
+        // obvious next tap -- but a child who wants to carry straight on
+        // must not have to walk through it to get back to the trials.
+        quiet_button: "➡️ Keep going!",
+        rest_button: "😴 Take a rest",
+        on_finish: (d) => {
+          breakChoice = { quiet: d.chose_quiet, rest: d.chose_rest };
+          // "Keep going!" goes straight back to the trials, skipping both
+          // screens below -- so this is the only place left that can stop the
+          // track before one starts. (Rest stops it on its own way in; the
+          // mansion stops it in finish().)
+          if (breakChoice.quiet) stopMusic();
+        },
       });
 
-      if (shop) {
-        timeline.push({
-          type: ShopPlugin,
-          catalog: shopCatalog,
-          balance: () => coinBalance(),
-          owned_furniture: () => shop.owned_furniture,
-          owned_backgrounds: () => shop.owned_backgrounds,
-          room_index: thisRoom,
-          mascot: mascotHappy,
-          currency_icon: currencyIcon,
-          rng: shopRng,
-          // Reachable only if the room-complete screen's quiet button was
-          // the one tapped -- never inserted into the mandatory line of play.
-          conditional_function: () =>
-            jsPsych.data.get().last(1).values()[0].chose_quiet === true,
-          on_finish: (d) => {
-            for (const p of d.purchases) shop.applyPurchase(p);
-            shop.addShopTime(d.shop_ms);
-          },
-        });
-      }
-
+      // Wrapped in a conditional NODE, not left as a bare trial carrying a
+      // conditional_function: that parameter is a timeline-node property, and
+      // jsPsych ignores it on a plain trial object -- silently, since an
+      // unknown key is not an error. Left bare, the rest screen ran on every
+      // path, so "Visit the mansion" went through a rest first.
       timeline.push({
-        type: PlaygroundPlugin,
-        backdrop: () => {
-          // A shop-bought override for this room, if the child equipped
-          // one, else the session-start assignment -- never overwritten,
-          // so a child who never visits the shop still sees the castle
-          // visibly fill up exactly as before. Mirrors _room_backdrop_rel.
-          const overrideId = shop?.background_overrides?.[thisRoom];
-          const bg = overrideId ? backgroundItem(overrideId) : null;
-          return bg?.img || `${cfg.asset_root}/${castle.rooms[thisRoom].backdrop}`;
-        },
-        pending: () => [
-          ...castle.unplacedForRoom(thisRoom).map((id) => ({ ...sticker(id), kind: "sticker" })),
-          // Purchased furniture is placed once, globally -- it shows up as
-          // pending in whichever room's playground the child currently has
-          // open, not in a room it was "planned" for (it wasn't).
-          ...(shop ? castle.unplacedFurniture(shop.owned_furniture)
-                .map((id) => ({ ...furnitureItem(id), kind: "furniture" })) : []),
-        ],
-        placed: () => [
-          ...castle.placedInRoom(thisRoom)
-            .map((p) => ({ ...sticker(p.sticker_id), x: p.x, y: p.y, kind: "sticker" })),
-          ...(shop ? castle.furniturePlacedInRoom(thisRoom)
-                .map((p) => ({ ...furnitureItem(p.sticker_id), x: p.x, y: p.y, kind: "furniture" })) : []),
-        ],
-        prompt: line("playground_prompt", "Put them anywhere you like!"),
-        room_index: thisRoom,
-        on_finish: (d) => {
-          for (const p of d.placements) {
+        timeline: [{
+          type: ScreenPlugin,
+          // Rest is quiet. It is the one screen in the game layer whose
+          // whole purpose is less input, so the music stops here rather
+          // than carrying over from the sticker screen -- and the child
+          // goes straight back to the trials from here, where nothing may
+          // be playing anyway.
+          on_start: () => stopMusic(),
+          // Open-ended: no timer, no countdown. A child who needs to stop
+          // should not be watching a clock, and resting must never read as
+          // failing -- see the desktop's _show_rest_screen.
+          html: () => {
+            const [restingText, restingIdx] = pick("resting");
+            speak("resting", restingIdx);
+            return `<img class="pip big-pip" src="${mascot}" alt="">` +
+                   `<p class="speech">${restingText ?? "No problem -- take as long as you like."}</p>`;
+          },
+          button: "👍 I'm ready",
+        }],
+        conditional_function: () => breakChoice.rest,
+      });
+
+      const mansionTrial = {
+        type: MansionPlugin,
+        mansion: castle.mansion,
+        spectators: arcadeSpectators,
+        theme: manifest.theme ?? {},
+        reduced_motion: Boolean(cfg.Gamify_Reduced_Motion),
+        font_family: "PipUI",
+        // The games' own rng stream, sibling of castle/backdrop/shop: a spawn
+        // position drawn from the trial stream would shift which triplets the
+        // child sees.
+        game_rng: gameRng,
+        catalog: shopCatalog,
+        // Resolved once, like shopCatalog -- an invitation-letter purchase
+        // draws from this pool live, in the shop, same as a mystery box.
+        animal_pool: manifest.animals?.pool?.map((a) => animalItem(a.id)) ?? [],
+        shop_rng: shopRng,
+        prompt: "Which room shall we visit?",
+        mascot: mascotHappy,
+        currency_icon: currencyIcon,
+        // One object, not ten function parameters -- see MansionPlugin.api.
+        api: {
+          pocket: () => castle.unplacedStickers()
+            .map((id) => ({ ...sticker(id), kind: "sticker" }))
+            .concat(shop ? castle.unplacedFurniture(shop.owned_furniture)
+              .map((id) => ({ ...furnitureItem(id), kind: "furniture" })) : []),
+          placedIn: (roomIdx) => castle.placedInRoom(roomIdx)
+            .map((p) => ({ ...sticker(p.sticker_id), x: p.x, y: p.y, kind: "sticker" }))
+            .concat(castle.furniturePlacedInRoom(roomIdx)
+              .map((p) => ({ ...furnitureItem(p.sticker_id), x: p.x, y: p.y, kind: "furniture" }))),
+          backdropFor: mansionBackdrop,
+          // The animals living in a room. Resolved through animalItem() the
+          // same way stickers and furniture are, so the room canvas gets one
+          // shape ({emoji, img, x, y}) whatever kind of thing it is drawing.
+          guestsIn: (roomIdx) => castle.guestsInRoom(roomIdx)
+            .map((g) => ({ ...animalItem(g.animal_id), x: g.x, y: g.y, kind: "animal" })),
+          // How many more rooms before a locked mansion room opens, for its
+          // tile's countdown. Derived from the same thresholds
+          // unlockForProgress uses, so the number on the tile and the rule
+          // that actually opens the room cannot disagree.
+          roomsToUnlock: (roomIdx) => {
+            const i = castle.mansion.findIndex((r) => r.index === roomIdx);
+            if (i < 0) return 0;
+            const threshold = castle.unlockThresholds()[i] ?? 0;
+            const needed = Math.ceil(threshold * rooms / 100);
+            return Math.max(0, needed - blocksDone);
+          },
+          balance: () => coinBalance(),
+          ownedFurniture: () => shop?.owned_furniture ?? [],
+          ownedBackgrounds: () => shop?.owned_backgrounds ?? [],
+          ownedAnimals: () => shop?.owned_animals ?? [],
+          backgroundRoom: (itemId) => shop?.backgroundRoom(itemId),
+          onEquip: (roomIndex, itemId) => shop?.equipBackground(roomIndex, itemId),
+          furnitureVariants,
+          spectators: arcadeSpectators,
+          onScore: (n, key) => playSfx(n > 1 ? "level_up" : gameSound(key)),
+          // The other half of the placement sound: a gesture that makes a
+          // noise when it ENDS and none when it starts reads as unresponsive
+          // for the whole time something is being carried. Same pairing the
+          // desktop has (picked_up -> "pickup", placement -> "sticker").
+          onPickUp: () => playSfx("pickup"),
+          onPlace: (p) => {
+            // Placing something ANYWHERE takes it out of the shared pocket, so
+            // a move between rooms is a lift and a drop rather than a copy.
+            castle.unplace(p.sticker_id);
             if (p.kind === "furniture") castle.placeFurniture(p.sticker_id, p.room_index, p.x, p.y);
             else castle.place(p.sticker_id, p.room_index, p.x, p.y);
-          }
-          castle.addPlaygroundTime(d.playground_ms);
+            // Same cue a sticker's own reveal uses -- _on_item_placed's
+            // `self.game.play("sticker")` (Python), on every placement, not
+            // just the first time a sticker is earned.
+            playSfx("sticker");
+          },
+          // Dragged back into the tray instead of re-placed -- the "pick it
+          // up" half of a cross-room move; onPlace above is the "put it
+          // down" half.
+          onRetrieve: (id, kind) => {
+            if (kind === "furniture") castle.unplaceFurniture(id);
+            else castle.unplace(id);
+            // Landing back in the pocket is an outcome and needs to sound
+            // like one -- "pickup" already played when it was lifted, so the
+            // gesture would otherwise end in silence and read as a drop that
+            // did not take. A lighter chime than "sticker": going back into
+            // the pocket is not a placement.
+            playSfx("select");
+          },
+          onPurchase: (p) => {
+            shop?.applyPurchase(p);
+            // Every successful purchase makes a sound, the same one the
+            // desktop plays (`if ok: self.game.play("sticker")`). shop_view
+            // only records a purchase it actually completed, so reaching
+            // here IS the success case.
+            playSfx("sticker");
+            // An invitation (or a mystery box that turned out to hold an
+            // animal) buys the ANIMAL, not a spot for one -- the guest picks
+            // its own room and its own place in it, right now, so the child
+            // can go and find it. Drawn from the shop stream, never the trial
+            // one: see CastleState.inviteGuest.
+            if (p.won_item_type === "animal" && p.won_item_id) {
+              castle.inviteGuest(p.won_item_id, shopRng);
+            }
+          },
+          onRound: (play) => {
+            const paid = castle.recordMinigame(play.game, play.room_index,
+                                               play.score, play.duration_ms);
+            if (paid) playSfx("level_up");
+            return paid;
+          },
         },
+        on_finish: (d) => {
+          castle.addPlaygroundTime(d.mansion_ms);
+          castle.addMinigameTime(d.minigame_ms);
+        },
+      };
+      // Skipped when the break screen's quiet button ("Keep going!") was
+      // tapped, or when the child chose to rest instead (the rest screen
+      // in between returns straight to the trials, not into the mansion).
+      // A conditional NODE for the same reason the rest screen above is one --
+      // conditional_function on the bare trial did nothing, so the mansion
+      // opened even after "Keep going!".
+      timeline.push({
+        timeline: [mansionTrial],
+        conditional_function: () => !breakChoice.quiet && !breakChoice.rest,
       });
 
-      // Between-rooms recap: every completed room so far, plus anything
-      // bought but not yet placed. Nothing is "past" to browse after the
-      // very first room, and the last room's recap is redundant with the
-      // "Look at everything you made!" summary right after it -- so this
-      // shows only for the rooms in between, mirroring _leave_playground's
-      // room_index > 0 check on the desktop build.
-      if (thisRoom > 0 && thisRoom < rooms - 1) {
-        timeline.push({
-          type: ScreenPlugin,
-          html: () => collectionHtml(),
-          button: "Continue",
-        });
-      }
     }
   });
 
-  function collectionHtml() {
-    if (!castle) return "";
-    const roomsHtml = castle.rooms.filter((r) => r.completed).map((r) => {
-      const items = [
-        ...castle.placedInRoom(r.index).map((p) => stickerHtml(sticker(p.sticker_id))),
-        ...(shop ? castle.furniturePlacedInRoom(r.index)
-              .map((p) => stickerHtml(furnitureItem(p.sticker_id))) : []),
-      ];
-      return `<div class="collection-room">
-          <p class="collection-room-label">Room ${r.index + 1}</p>
-          <div class="collection-room-items">${items.join(" ") || "—"}</div>
-        </div>`;
-    }).join("");
-
-    let unplacedHtml = "";
-    const unplaced = shop ? castle.unplacedFurniture(shop.owned_furniture) : [];
-    if (unplaced.length) {
-      unplacedHtml = `<p class="speech">Still to place:</p>
-        <div class="book">${unplaced.map((id) =>
-          `<span class="slot earned">${stickerHtml(furnitureItem(id))}</span>`).join("")}</div>`;
-    }
-
-    return `<p class="speech">Look what you've made so far!</p>
-      <div class="collection-rooms">${roomsHtml}</div>
-      ${unplacedHtml}`;
-  }
 
   function bookHtml() {
     if (!castle) return "";
@@ -694,12 +980,48 @@ const jget = async (url) => {
         `<span class="slot mystery">${stickerHtml(sticker(id))}</span>`).join("");
   }
 
+  /**
+   * One small, non-interactive room per mansion room the child actually
+   * decorated, laid out side by side. Port of _build_final_castle.
+   *
+   * Shows the child's OWN placements -- a finale that rearranged everything
+   * into a tidy grid would quietly discard the only autonomy the game layer
+   * offers. A locked room can never have anything in it; an unlocked-but-
+   * empty one has nothing worth showing either, so both are skipped.
+   *
+   * Static markup, not mountRoomCanvas: the finale is display-only, and
+   * pulling in that module's drag/tap gesture machinery for a screen
+   * nothing can be picked up on would be dead weight. Sizes items as a
+   * flat CSS percentage of the mini-room box rather than mountRoomCanvas's
+   * measured-radius approach -- good enough for a thumbnail-scale recap.
+   */
+  function castleRevealHtml() {
+    if (!castle) return "";
+    const rooms = (castle.mansion || []).filter((r) => r.unlocked
+      && (castle.placedInRoom(r.index).length || castle.furniturePlacedInRoom(r.index).length));
+    if (!rooms.length) return "";
+    const roomHtml = (r) => {
+      const items = castle.placedInRoom(r.index)
+        .map((p) => ({ ...sticker(p.sticker_id), x: p.x, y: p.y, cls: "" }))
+        .concat(castle.furniturePlacedInRoom(r.index)
+          .map((p) => ({ ...furnitureItem(p.sticker_id), x: p.x, y: p.y, cls: " furniture" })));
+      const itemsHtml = items.map((it) =>
+        `<span class="sticker mini${it.cls}" style="left:${it.x * 100}%;top:${it.y * 100}%;">`
+        + `${stickerHtml(it)}</span>`).join("");
+      const backdrop = mansionBackdrop(r.index);
+      const style = backdrop ? ` style="background-image:url('${assetUrl(backdrop, "thumb")}')"` : "";
+      return `<div class="mini-room"${style}>${itemsHtml}</div>`;
+    };
+    return `<div class="mini-rooms">${rooms.map(roomHtml).join("")}</div>`;
+  }
+
   if (cfg.Gamify) {
     timeline.push({
       type: ScreenPlugin,
       html: () => `<p class="speech">Look at everything you made!</p>` +
+                  castleRevealHtml() +
                   `<div class="book">${bookHtml()}</div>`,
-      button: "Show Pip!",
+      button: "🦝 Show Pip!",
     });
     pushCutscene("close", "Next");
     timeline.push({
@@ -713,7 +1035,7 @@ const jget = async (url) => {
         return `<img class="pip big-pip" src="${mascot}" alt="">` +
                `<p class="speech">${finishText ?? "All done! Thank you for playing."}</p>`;
       },
-      button: "Finished!",
+      button: "🎉 Finished!",
     });
   }
 

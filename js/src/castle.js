@@ -39,14 +39,65 @@
  *   count) so nothing is lost, only delayed to room end in that one case.
  */
 
+// 10: companion animals become GUESTS (`guests`) rather than placeable items.
+// An invitation buys an animal, not a spot for one: the animal turns up in a
+// random unlocked DECORATION room by itself, and moves house at every block
+// boundary. Matches experiments/castle_state.py's own schema 10 -- see the
+// Guest docstring there for why a guest is deliberately not a Placement.
+//
+// 9: the mansion -- nine progressively unlocked rooms sharing one sticker
+// pocket, four of them holding a mini-game (`mansion`, ARCADE_ROOMS,
+// minigame_*). Numbered to match experiments/castle_state.py, which the
+// desktop build carried through 6-8 (background overrides, sticker stacking
+// order) -- neither of which this build has yet, so those numbers pass by
+// unused rather than being renumbered and losing the correspondence.
+//
 // 5: stickers moved from an all-at-once reveal at room end to a per-trial
 // reveal within the room (see the module docstring) -- rooms gained
 // reveal_positions/revealed. 4 moved coins from a per-room allocation to a
 // per-trial one -- coin_allocation has one entry per trial, not one per
 // room, and rooms no longer carry a coins_planned field.
-export const SCHEMA_VERSION = 5;
+export const SCHEMA_VERSION = 10;
 export const MIN_PER_ROOM = 2;
 export const MAX_PER_ROOM = 4;
+
+// -- the mansion ----------------------------------------------------------
+//
+// The persistent, progressively-unlocked space a child decorates between
+// blocks, replacing the one-canvas-per-room-boundary playground. Nine rooms,
+// one shared pocket: any earned sticker can go in any unlocked room.
+export const MANSION_ROOM_COUNT = 9;
+export const UNLOCK_STEP_PCT = 90 / 8;
+
+// Which mansion rooms hold a mini-game instead of a decoration canvas, and
+// which game each one holds. Four of the nine, at indices that unlock at
+// ~22%, ~34%, ~56% and ~68% of block completion -- early enough that a short
+// or abandoned session still reaches all four, which rooms 7 and 8 (~79% and
+// ~90%) would not. Room 0 stays a decoration room: it is the only one open at
+// the very start. Kept HERE rather than in the screens so a saved session
+// records which game sat in which room; the games live in src/minigames/.
+export const ARCADE_ROOMS = {
+  2: "star_catcher",
+  3: "firefly_catch",
+  5: "bubble_pop",
+  6: "kite_flyer",
+};
+
+// Mini-game payout. Score-based, but deliberately marginal: the fixed
+// schedule pays 1-3 coins per TRIAL, so a 40-trial session pays ~80 coins and
+// MINIGAME_COIN_CAP is ~13% of that. A child can feel the arcade contributing
+// without it ever being the efficient way to earn -- which matters because it
+// is the one coin source a child can farm, and time spent farming is time not
+// spent on trials. 15 points per coin is calibrated against the 20-second
+// round: simulated play at three motor-skill profiles scores roughly 18-41,
+// so a real attempt pays 1 and a strong one pays 2.
+//
+// These four numbers are asserted against experiments/castle_state.py by
+// js/test/run.mjs: two builds paying differently for the same round would be
+// two different economies.
+export const MINIGAME_POINTS_PER_COIN = 15;
+export const MINIGAME_COINS_PER_ROUND_MAX = 2;
+export const MINIGAME_COIN_CAP = 12;
 
 // 1-3 coins per trial, weighted toward 1 -- COIN_WEIGHTS[i] is the relative
 // weight of COIN_VALUES[i], so 1 coin is 3x as likely as 3 and 1.5x as
@@ -116,6 +167,31 @@ export function allocateRevealPositions(stickerCounts, roomTrialCounts, rng) {
   return out;
 }
 
+/** The nine mansion rooms, as they look at session start: room 0 open, the
+ * rest waiting on block progress, four of them flagged as game rooms. */
+export function newMansion() {
+  return Array.from({ length: MANSION_ROOM_COUNT }, (_, i) => ({
+    index: i,
+    unlocked: i === 0,
+    kind: ARCADE_ROOMS[i] ? "arcade" : "decorate",
+  }));
+}
+
+/** The game a mansion room holds, or "" for a decoration room. */
+export function gameFor(room) {
+  return room && room.kind === "arcade" ? (ARCADE_ROOMS[room.index] || "") : "";
+}
+
+/**
+ * Where in a room a guest stands: kept off the very edges, and low in the
+ * frame -- a creature standing on the floor rather than floating in the
+ * middle of the wall. Port of castle_state._guest_spot's
+ * uniform(0.15, 0.85) x uniform(0.55, 0.80).
+ */
+function guestSpot(rng) {
+  return [0.15 + rng.random() * 0.70, 0.55 + rng.random() * 0.25];
+}
+
 export class CastleState {
   constructor({ participantId = "", rooms = [], allocation = [], poolIds = [] } = {}) {
     this.schema_version = SCHEMA_VERSION;
@@ -144,6 +220,35 @@ export class CastleState {
     // unplacedForRoom() (all sticker-typed, predating the shop) are never
     // touched by this. Reuses the placement shape (item id in sticker_id).
     this.furniture_placements = [];
+
+    // The mansion (schema 9). `rooms` above are TASK rooms -- one per block,
+    // carrying that block's stickers and condition. These are PLACES, nine of
+    // them, unlocked by progress and decorated from the shared pocket. The
+    // two are indexed independently and must not be confused: a placement's
+    // room_index addresses a mansion room.
+    this.mansion = newMansion();
+    // Finished mini-game rounds: {game, room_index, score, duration_ms, coins}.
+    this.minigame_plays = [];
+    // Time inside a game room. A SUBSET of playground_ms, which keeps running
+    // -- the arcade sits inside a mansion visit -- not a sibling of it.
+    this.minigame_ms = 0;
+    // Coins the arcade paid. Deliberately NOT folded into coins_awarded:
+    // that field means "what the pre-drawn, response-blind schedule paid" and
+    // is reproducible from the participant id alone, which is what makes it
+    // auditable. Arcade coins depend on how the child PLAYED, so they are
+    // counted separately and added in only at the balance -- see
+    // coinBalance() in main.js.
+    this.minigame_coins = 0;
+
+    // Companion animals living in the mansion (schema 10), as
+    // {animal_id, room_index, x, y}. Deliberately NOT placements: a
+    // placement is something the child put somewhere and can move or take
+    // back, while a guest arrives on its own (an invitation buys the
+    // invitation, not a chosen animal), picks its own room and spot, and
+    // moves house at every block boundary. Keeping the two in separate
+    // lists is what stops every drag/pocket/retrieve path in
+    // room_canvas.js from having to special-case "but not this one".
+    this.guests = [];
   }
 
   /**
@@ -291,8 +396,180 @@ export class CastleState {
     return r ? r.sticker_ids.filter((s) => !done.has(s)) : [];
   }
 
+  /**
+   * Every earned sticker not currently placed in any mansion room -- the
+   * shared pocket every unlocked room draws its tray from.
+   *
+   * `awarded` is the flat, room-agnostic record of every sticker ever given
+   * to the child, so this needs no room argument: unlike the pre-mansion
+   * per-room budget (unplacedForRoom, still here for the plain playground
+   * path), ANY unlocked room can hold ANY earned item. Filters by sticker
+   * VALUE, so in the rare pool-exhaustion case where the same id was awarded
+   * twice, placing one instance hides both -- an accepted approximation, not
+   * a promise the ids are unique.
+   */
+  unplacedStickers() {
+    const placed = new Set(this.placements.map((p) => p.sticker_id));
+    return this.awarded.filter((s) => !placed.has(s));
+  }
+
+  /**
+   * Take a placed sticker back off the wall, wherever it is. The "pick it
+   * up" half of a cross-room move; place() is the "put it down" half. A safe
+   * no-op if it was never placed.
+   */
+  unplace(stickerId) {
+    this.placements = this.placements.filter((p) => p.sticker_id !== stickerId);
+  }
+
   addPlaygroundTime(ms) {
     this.playground_ms += Math.max(0, Math.round(ms));
+  }
+
+  // -- the mansion --------------------------------------------------------
+
+  /** Block-completion PERCENT required to unlock each mansion room,
+   * index-paired with `mansion` (room 0's threshold is always 0). */
+  unlockThresholds() {
+    return Array.from({ length: MANSION_ROOM_COUNT }, (_, i) => i * UNLOCK_STEP_PCT);
+  }
+
+  /**
+   * Unlock every mansion room whose threshold the current block-completion
+   * fraction has reached. Idempotent, and -- like completeRoom -- structurally
+   * incapable of depending on what was chosen: it only ever sees a
+   * completed-block COUNT. Returns the indices newly opened by this call.
+   */
+  unlockForProgress(blocksCompleted, numBlocks) {
+    if (!(numBlocks > 0)) return [];
+    const pct = 100 * Math.max(0, blocksCompleted) / numBlocks;
+    const thresholds = this.unlockThresholds();
+    const newly = [];
+    this.mansion.forEach((room, i) => {
+      if (!room.unlocked && pct >= thresholds[i]) {
+        room.unlocked = true;
+        newly.push(room.index);
+      }
+    });
+    return newly;
+  }
+
+  unlockedRooms() {
+    return this.mansion.filter((r) => r.unlocked);
+  }
+
+  // -- guests (companion animals) -----------------------------------------
+
+  /**
+   * The rooms a guest may live in: unlocked DECORATION rooms.
+   *
+   * Game rooms are excluded because they have no room canvas to stand in --
+   * an arcade screen is a game, not a picture of a room -- so a guest sent
+   * to one would simply vanish until it moved again. Port of
+   * castle_state.guest_rooms.
+   */
+  guestRooms() {
+    return this.mansion.filter((r) => r.unlocked && r.kind === "decorate")
+      .map((r) => r.index);
+  }
+
+  /**
+   * An invited animal turns up in a random unlocked room. Returns the guest,
+   * or null if this animal already lives here (an invitation buys an animal
+   * that is not here yet -- see ShopState.buyInvitation) or there is nowhere
+   * to put it.
+   *
+   * `rng` MUST be the caller's purchase-time stream, never the trial stream:
+   * drawing from that would shift which triplets the child sees, the property
+   * js/test/run.mjs's determinism checks exist to protect.
+   */
+  inviteGuest(animalId, rng) {
+    if (!animalId) return null;
+    if (this.guests.some((g) => g.animal_id === animalId)) return null;
+    const rooms = this.guestRooms();
+    if (!rooms.length) return null;
+    const [x, y] = guestSpot(rng);
+    const guest = { animal_id: animalId, room_index: rng.choice(rooms), x, y };
+    this.guests.push(guest);
+    return guest;
+  }
+
+  /**
+   * Every guest moves house. Called once per completed block.
+   *
+   * A guest prefers a room it is not already in, so the move is visible; with
+   * only one room available it stays put and simply picks a new spot. Returns
+   * the guests that changed rooms, for a caller that wants to mention it.
+   *
+   * Response-blind by the same argument as unlockForProgress: it takes an rng
+   * and nothing else, and the caller fires it on a block BOUNDARY -- never
+   * inside one, and never with a choice in hand.
+   */
+  moveGuests(rng) {
+    const rooms = this.guestRooms();
+    if (!rooms.length) return [];
+    const moved = [];
+    for (const guest of this.guests) {
+      const options = rooms.filter((i) => i !== guest.room_index);
+      const pool = options.length ? options : rooms;
+      const newRoom = rng.choice(pool);
+      if (newRoom !== guest.room_index) moved.push(guest);
+      guest.room_index = newRoom;
+      [guest.x, guest.y] = guestSpot(rng);
+    }
+    return moved;
+  }
+
+  guestsInRoom(roomIndex) {
+    return this.guests.filter((g) => g.room_index === roomIndex);
+  }
+
+  /** The mansion's game rooms, in index order. */
+  arcadeRooms() {
+    return this.mansion.filter((r) => r.kind === "arcade");
+  }
+
+  // -- mini-games (arcade rooms) ------------------------------------------
+
+  /** Time inside a game room. A subset of playground_ms -- see the field. */
+  addMinigameTime(ms) {
+    this.minigame_ms += Math.max(0, Math.round(ms));
+  }
+
+  /**
+   * Coins a round scoring `score` would pay, after both caps. Split out from
+   * recordMinigame so the arithmetic can be read and tested without
+   * recording anything.
+   */
+  minigamePayout(score) {
+    const earned = Math.min(MINIGAME_COINS_PER_ROUND_MAX,
+                            Math.floor(Math.max(0, score) / MINIGAME_POINTS_PER_COIN));
+    const remaining = Math.max(0, MINIGAME_COIN_CAP - this.minigame_coins);
+    return Math.min(earned, remaining);
+  }
+
+  /**
+   * Record one finished round and pay for it. Returns the coins awarded.
+   *
+   * Response-blind by the same structural argument as awardTrialCoins: the
+   * parameters are a game key, a room index, a score and a duration, so there
+   * is no way to pass a response in -- and a score comes from catching
+   * falling stars, which is hand-eye timing, nothing to do with any
+   * odd-one-out judgment. What it is NOT is *schedule*-blind: unlike every
+   * other payout here it depends on how the child played, which is exactly
+   * why it lands in minigame_coins rather than coins_awarded.
+   */
+  recordMinigame(game, roomIndex, score, durationMs) {
+    const coins = this.minigamePayout(score);
+    this.minigame_coins += coins;
+    this.minigame_plays.push({
+      game,
+      room_index: roomIndex,
+      score: Math.max(0, Math.round(score)),
+      duration_ms: Math.max(0, Math.round(durationMs)),
+      coins,
+    });
+    return coins;
   }
 
   // -- furniture placement (shop addition) --------------------------------
@@ -310,6 +587,14 @@ export class CastleState {
 
   furniturePlacedInRoom(roomIndex) {
     return this.furniture_placements.filter((p) => p.room_index === roomIndex);
+  }
+
+  /** Take a placed furniture item back off the wall, wherever it is --
+   * furniture's own unplace(), for the same retrieve-to-pocket gesture. A
+   * safe no-op if it was never placed. */
+  unplaceFurniture(itemId) {
+    this.furniture_placements = this.furniture_placements.filter(
+      (p) => p.sticker_id !== itemId);
   }
 
   /**
@@ -336,6 +621,11 @@ export class CastleState {
       coins_awarded: this.coins_awarded,
       trials_paid: this.trials_paid,
       furniture_placements: this.furniture_placements,
+      mansion: this.mansion,
+      minigame_plays: this.minigame_plays,
+      minigame_ms: this.minigame_ms,
+      minigame_coins: this.minigame_coins,
+      guests: this.guests,
     };
   }
 }

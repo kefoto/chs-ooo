@@ -56,6 +56,14 @@ export const CONFIG = {
   // js/src/captcha.js. Get one at https://dash.cloudflare.com/?to=/:account/turnstile.
   turnstile_site_key: "",
 
+  // Dev/QA only -- added straight onto the spendable balance (never onto
+  // castle.coins_awarded, which stays the response-blind, reproducible-
+  // from-the-pid record every audit here relies on). Lets a tester open
+  // the shop/mansion with money to spend without grinding real trials for
+  // it. Set by ?bonus_coins=N, never anything a real participant session
+  // would carry.
+  Debug_Bonus_Coins: 0,
+
   // Children Helping Science, when this is running as a CHS *external* study.
   // CHS appends these two to the Study URL when a family presses "Participate
   // now" -- the hashed child id and the response id:
@@ -132,6 +140,7 @@ export function applyUrlOverrides(cfg, search = window.location.search) {
   if (q.get("duration")) cfg.Session_Duration = q.get("duration");
   if (q.get("site")) cfg["Experiment Site"] = q.get("site");
   if (q.get("upload")) cfg.upload_url = q.get("upload");
+  if (q.get("bonus_coins")) cfg.Debug_Bonus_Coins = Math.max(0, Number(q.get("bonus_coins")) || 0);
   if (q.get("plain") === "1") cfg.Gamify = false;
   if (q.get("calm") === "1") cfg.Gamify_Reduced_Motion = true;
   if (q.get("quiet") === "1") cfg.Gamify_Mute_SFX = true;

@@ -1,11 +1,14 @@
 /**
- * Background music for the opening and closing cutscenes: the browser
- * counterpart to GameLayer.play_music()/stop_music() in
- * experiments/game_layer.py.
+ * Background music for the opening/closing cutscenes and the mansion's
+ * playground/shop screens: the browser counterpart to GameLayer.play_music()/
+ * stop_music() in experiments/game_layer.py.
  *
- * One clip plays under a cutscene -- panel art or the text-only fallback
- * alike -- and stops the moment the cutscene ends. It never plays during a
- * trial, so it can never land over Tier 2 stimulus audio the way `sfx.js`
+ * A cutscene track plays once under it -- panel art or the text-only
+ * fallback alike -- and stops the moment the cutscene ends. The playground
+ * and shop tracks LOOP for as long as that screen is open (untimed) and
+ * stop the moment the child leaves for a different "place" -- see
+ * js/src/mansion.js's showRoom/showShop/showGrid. Neither ever plays during
+ * a trial, so it can never land over Tier 2 stimulus audio the way `sfx.js`
  * already guards against for the short UI chimes.
  *
  * Both ends fade rather than cut: starting under speech and panel art, a
@@ -27,6 +30,12 @@ let root = "";
 let tracks = {};              // key -> path, relative to `root`
 let fadeMs = 1200;
 let current = null;           // the one HTMLAudioElement playing, if any
+// Which manifest key `current` is playing. Lets playMusic() recognise a
+// request for the track ALREADY playing and leave it alone -- the mansion
+// calls it on every screen it shows (grid, room, arcade, result), and
+// without this the loop would restart from zero on each hop, which is the
+// one thing a continuous background track must not do.
+let currentKey = "";
 
 function clearRamp(el) {
   if (el._fadeTimer) {
@@ -62,6 +71,7 @@ function hardStop() {
     current.pause();
     current = null;
   }
+  currentKey = "";
 }
 
 /**
@@ -79,8 +89,22 @@ export function initMusic({ assetRoot, music, muted: isMuted, fadeMs: fade }) {
   hardStop();
 }
 
-/** Start a cutscene track by manifest key, fading in. Cuts anything already playing. */
-export function playMusic(key) {
+/**
+ * Start a track by manifest key, fading in. Cuts anything already playing.
+ * `loop: true` for an untimed screen (playground/shop) that should keep
+ * playing until stopMusic() is called; omit for a cutscene's one-shot clip.
+ *
+ * Asking for the LOOPING track that is already playing does nothing at all,
+ * rather than restarting it. That is what lets a caller treat "this screen
+ * has playground music" as a property of the screen and simply say so on
+ * every one of them: the mansion's grid, rooms, game rooms and result
+ * screens all call this with "playground", and the track runs unbroken
+ * across the whole visit instead of stuttering back to zero at each hop.
+ * A DIFFERENT key (the shop) still cuts and switches, and a one-shot
+ * cutscene clip still restarts, since neither is the same looping track.
+ */
+export function playMusic(key, { loop = false } = {}) {
+  if (loop && current && currentKey === key && !current.paused) return;
   hardStop();
   if (muted) return;
   const rel = tracks[key];
@@ -88,11 +112,29 @@ export function playMusic(key) {
 
   const el = new Audio(`${root}/${rel}`);
   el.volume = 0;
+  el.loop = loop;
   current = el;
+  currentKey = key;
   // A rejected play() is an autoplay block, not a bug worth surfacing to a
-  // parent: the cutscene is still perfectly usable without its music.
+  // parent: the cutscene is still perfectly usable without its music. But
+  // unlike a UI chime, this can be the very FIRST thing the session tries
+  // to play -- the opening cutscene's on_start fires before any click when
+  // a study link skips the setup form -- so there is no earlier click for
+  // audio.js's armPriming() to have unlocked the tab on yet. Retry once on
+  // the next click, the same mechanism, scoped to this exact element so a
+  // fast tapper who has already moved past this track (or stopped it)
+  // does not have it resume under whatever is playing now.
   const p = el.play();
-  if (p && p.catch) p.catch(() => {});
+  if (p && p.catch) {
+    p.catch(() => {
+      const retry = () => {
+        if (current !== el) return;
+        const p2 = el.play();
+        if (p2 && p2.catch) p2.catch(() => {});
+      };
+      document.addEventListener("click", retry, { once: true });
+    });
+  }
   rampVolume(el, TARGET_VOLUME, fadeMs);
 }
 
@@ -101,6 +143,7 @@ export function stopMusic() {
   if (!current) return;
   const el = current;
   current = null;
+  currentKey = "";
   rampVolume(el, 0, fadeMs, () => el.pause());
 }
 

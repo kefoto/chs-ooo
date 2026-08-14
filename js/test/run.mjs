@@ -15,10 +15,16 @@ import { blockConditions, latinSquareIndex, buildTrialListTier2,
          LATIN_SQUARE_ORDERS } from "../src/tier2.js";
 import { CastleState, allocate, allocateCoins, allocateRevealPositions,
          MIN_PER_ROOM, MAX_PER_ROOM, MIN_COINS_PER_TRIAL, MAX_COINS_PER_TRIAL,
-         COIN_VALUES, COIN_WEIGHTS,
+         COIN_VALUES, COIN_WEIGHTS, MANSION_ROOM_COUNT, ARCADE_ROOMS,
+         UNLOCK_STEP_PCT, MINIGAME_POINTS_PER_COIN, MINIGAME_COINS_PER_ROUND_MAX,
+         MINIGAME_COIN_CAP,
        } from "../src/castle.js";
+import { buildGame, GAMES, ROUND_MS, RAMP_END } from "../src/minigames/index.js";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { ShopState } from "../src/shop.js";
-import { buildPayload, makeResponse } from "../src/save.js";
+import { buildPayload, makeResponse, postPayload } from "../src/save.js";
 import { sessionPlan, ageBin, FIXED_TRIALS_PER_SESSION } from "../src/session.js";
 import { CONFIG, applyUrlOverrides } from "../src/config.js";
 import { setupNeeded } from "../src/setup.js";
@@ -242,13 +248,20 @@ test("a lab session is unaffected by the CHS handling", () => {
   assert.equal(p.participant_data.age, "7");
 });
 
+test("?bonus_coins= sets a dev-only spendable bonus, never below 0", () => {
+  assert.equal(applyUrlOverrides({ ...CONFIG }, "?bonus_coins=500").Debug_Bonus_Coins, 500);
+  assert.equal(applyUrlOverrides({ ...CONFIG }, "?bonus_coins=-50").Debug_Bonus_Coins, 0);
+  assert.equal(applyUrlOverrides({ ...CONFIG }, "?bonus_coins=nope").Debug_Bonus_Coins, 0);
+  assert.equal(applyUrlOverrides({ ...CONFIG }, "").Debug_Bonus_Coins, 0);
+});
+
 test("?media= repoints the stimuli at another origin", () => {
   // CHS requires stimuli to be hosted online; if they are not served from the
   // same place as the page, every root has to move together.
   const cfg = applyUrlOverrides({ ...CONFIG }, "?media=https://cdn.example.org/");
   assert.equal(cfg.asset_root, "https://cdn.example.org/assets/game");
   assert.equal(cfg.dataset_root,
-    "https://cdn.example.org/datasets/Tier1_THINGS_100");
+    "https://cdn.example.org/datasets/Tier1_THINGS_560");
   assert.equal(cfg.tier2_dataset_root,
     "https://cdn.example.org/datasets/Tier2_AV_Matched");
 });
@@ -535,6 +548,18 @@ test("replacing furniture moves it rather than duplicating", () => {
   assert.equal(st.furniture_placements[0].room_index, 1);
 });
 
+test("unplaceFurniture returns a placed item to the shared pocket", () => {
+  const st = CastleState.create(2, POOL, stream("P1", "c"), "P1");
+  st.placeFurniture("tapestry", 0, 0.2, 0.2);
+  assert.deepEqual(st.unplacedFurniture(["tapestry"]), []);
+  st.unplaceFurniture("tapestry");
+  assert.equal(st.furniture_placements.length, 0);
+  assert.deepEqual(st.unplacedFurniture(["tapestry"]), ["tapestry"]);
+  // Never placed: a safe no-op, not a throw.
+  st.unplaceFurniture("cushion");
+  assert.equal(st.furniture_placements.length, 0);
+});
+
 test("re-placing a sticker moves it rather than duplicating", () => {
   const st = CastleState.create(2, POOL, stream("P1", "c"), "P1");
   const id = st.rooms[0].sticker_ids[0];
@@ -583,14 +608,14 @@ test("the saved schema carries shop state alongside castle when present", () => 
   const castle = CastleState.create(2, POOL, stream("P1", "c"), "P1");
   castle.completeRoom(0);
   const shop = new ShopState();
-  shop.buyFurniture("tapestry", 0, castle.coins_awarded, 0);
+  shop.buyFurniture("tapestry", ["tapestry_c"], 0, castle.coins_awarded, 0, stream("P1", "shop"));
 
   const p = buildPayload({ config: { participant_id: "P1", Tier: 1,
     "Num Blocks": 2, "Num Trials": 4, Age: "6", Gamify: true },
     responses: [], castle, shop, startTime: "2026-01-01 00:00:00", completed: true });
 
   assert.deepEqual(Object.keys(p.game_state).sort(), ["castle", "shop"]);
-  assert.deepEqual(p.game_state.shop.owned_furniture, ["tapestry"]);
+  assert.deepEqual(p.game_state.shop.owned_furniture, ["tapestry_c"]);
 
   // Backward compatible: no shop passed -> game_state still has just castle.
   const pNoShop = buildPayload({ config: { participant_id: "P1", Tier: 1,
@@ -796,6 +821,39 @@ test("a partial session is flagged, not silently pooled", () => {
   assert.equal(p.participant_data.planned_regular_trials, 20);
 });
 
+test("postPayload sends the raw payload, with the block index only as a header", () => {
+  // Regression: an earlier version wrapped the body as {payload, block},
+  // breaking upload_url's contract that the body IS the same JSON a
+  // downloaded file would contain -- any external collection endpoint
+  // relies on that, not just this build's own per-block bookkeeping.
+  let seen = null;
+  const savedFetch = globalThis.fetch;
+  globalThis.fetch = async (url, init) => {
+    seen = { url, init };
+    return { ok: true, status: 200 };
+  };
+  try {
+    postPayload("http://example.test/collect", { participant_data: { participant_id: "P1" } },
+                { block: 2 });
+  } finally {
+    globalThis.fetch = savedFetch;
+  }
+  assert.equal(JSON.parse(seen.init.body).participant_data.participant_id, "P1");
+  assert.equal(seen.init.headers["X-Session-Block"], "2");
+});
+
+test("postPayload omits the block header on the final save", () => {
+  let seen = null;
+  const savedFetch = globalThis.fetch;
+  globalThis.fetch = async (url, init) => { seen = { url, init }; return { ok: true, status: 200 }; };
+  try {
+    postPayload("http://example.test/collect", { participant_data: { participant_id: "P1" } });
+  } finally {
+    globalThis.fetch = savedFetch;
+  }
+  assert.ok(!("X-Session-Block" in seen.init.headers));
+});
+
 // --- Shop / economy: mirrors tests/test_shop_state.py -------------------
 
 const FURNITURE_POOL = [
@@ -812,17 +870,41 @@ test("shop: can afford is a plain balance >= cost check", () => {
 
 test("shop: buying furniture is rejected on insufficient balance", () => {
   const shop = new ShopState();
-  assert.equal(shop.buyFurniture("tapestry", 8, 5, 0), false);
+  assert.equal(shop.buyFurniture("tapestry", ["tapestry_c"], 8, 5, 0, stream("P1", "shop")), null);
   assert.deepEqual(shop.owned_furniture, []);
   assert.deepEqual(shop.purchases, []);
 });
 
-test("shop: furniture cannot be re-bought once owned", () => {
+test("shop: a furniture purchase draws a random unowned variant of the base", () => {
   const shop = new ShopState();
-  assert.equal(shop.buyFurniture("tapestry", 8, 20, 0), true);
-  assert.equal(shop.buyFurniture("tapestry", 8, 20, 1), false,
-    "re-bought an already-owned furniture item");
-  assert.deepEqual(shop.owned_furniture, ["tapestry"]);
+  const variants = ["tapestry_c", "tapestry_f"];
+  const p = shop.buyFurniture("tapestry", variants, 8, 20, 0, stream("P1", "shop"));
+  assert.ok(variants.includes(p.won_item_id));
+  assert.equal(p.item_id, "tapestry");
+  assert.equal(p.won_item_type, "furniture");
+  assert.deepEqual(shop.owned_furniture, [p.won_item_id]);
+  assert.equal(shop.purchases.length, 1);
+});
+
+test("shop: re-buying the same base draws a DIFFERENT variant, not a rejection", () => {
+  const shop = new ShopState();
+  const variants = ["tapestry_c", "tapestry_f"];
+  const rng = stream("P1", "shop");
+  const a = shop.buyFurniture("tapestry", variants, 8, 20, 0, rng);
+  const b = shop.buyFurniture("tapestry", variants, 8, 20, 1, rng);
+  assert.notEqual(a.won_item_id, b.won_item_id);
+  assert.deepEqual(new Set(shop.owned_furniture), new Set(variants));
+  assert.equal(shop.purchases.length, 2);
+});
+
+test("shop: furniture is sold out once every variant of the base is owned", () => {
+  const shop = new ShopState();
+  const variants = ["tapestry_c"];
+  const rng = stream("P1", "shop");
+  const p1 = shop.buyFurniture("tapestry", variants, 8, 20, 0, rng);
+  assert.ok(p1);
+  const p2 = shop.buyFurniture("tapestry", variants, 8, 20, 1, rng);
+  assert.equal(p2, null, "the only variant was already owned, so this should be sold out");
   assert.equal(shop.purchases.length, 1);
 });
 
@@ -843,6 +925,46 @@ test("shop: equipping a background requires ownership and costs nothing", () => 
   assert.equal(shop.equipBackground(2, "starlit"), true);
   assert.equal(shop.background_overrides[2], "starlit");
   assert.equal(shop.totalSpent, spentBefore, "equipBackground must not spend");
+});
+
+test("shop: moving a background clears where it used to hang", () => {
+  const shop = new ShopState();
+  shop.buyBackground("starlit", 12, 20, 0);
+  shop.equipBackground(2, "starlit");
+  shop.equipBackground(5, "starlit");
+  assert.equal(shop.background_overrides[5], "starlit");
+  assert.ok(!(2 in shop.background_overrides),
+    "the old room still claims a background that moved");
+  assert.equal(shop.backgroundRoom("starlit"), 5);
+});
+
+test("shop: moving a background onto an occupied room SWAPS them", () => {
+  const shop = new ShopState();
+  shop.buyBackground("starlit", 12, 20, 0);
+  shop.buyBackground("aurora", 12, 20, 0);
+  shop.equipBackground(2, "starlit");
+  shop.equipBackground(5, "aurora");
+  shop.equipBackground(5, "starlit");   // starlit displaces aurora out of room 5
+  assert.equal(shop.background_overrides[5], "starlit");
+  assert.equal(shop.background_overrides[2], "aurora",
+    "the displaced background did not swap back into the room starlit left");
+});
+
+test("shop: re-equipping a background to its own room is a no-op", () => {
+  const shop = new ShopState();
+  shop.buyBackground("starlit", 12, 20, 0);
+  shop.equipBackground(2, "starlit");
+  assert.equal(shop.equipBackground(2, "starlit"), true);
+  assert.deepEqual(shop.background_overrides, { 2: "starlit" });
+});
+
+test("shop: moving a background onto an empty room clears the old one, no swap", () => {
+  const shop = new ShopState();
+  shop.buyBackground("starlit", 12, 20, 0);
+  shop.equipBackground(2, "starlit");
+  shop.equipBackground(5, "starlit");
+  assert.deepEqual(shop.background_overrides, { 5: "starlit" },
+    "room 2 should have reverted to unassigned, not kept a stale entry");
 });
 
 test("shop: mystery box draws from the supplied pool and rng", () => {
@@ -884,9 +1006,70 @@ test("shop: applyPurchase replays an already-decided purchase without redrawing"
   assert.equal(shop.totalSpent, 15);
 });
 
+test("shop: applyPurchase replays a direct furniture purchase by its drawn variant", () => {
+  // A direct furniture buy is also a live draw now (see buyFurniture), so
+  // applyPurchase must replay it the same way it replays a mystery box's --
+  // by won_item_id, never item_id (the base).
+  const shop = new ShopState();
+  const purchase = { item_type: "furniture", item_id: "tapestry", cost: 24,
+                     room_index: 0, won_item_id: "tapestry_c", won_item_type: "furniture" };
+  shop.applyPurchase(purchase);
+  assert.deepEqual(shop.owned_furniture, ["tapestry_c"]);
+  assert.equal(shop.purchases.length, 1);
+});
+
+test("shop: mystery box also handles an animal pool entry", () => {
+  // Regression: buyMysteryBox and applyPurchase both only branched on
+  // furniture/background; an animal-typed win (e.g. {ref:"mossling",
+  // type:"animal"}) was silently dropped -- never added to owned_animals.
+  const pool = [{ ref: "mossling", type: "animal" }];
+  const shop = new ShopState();
+  const p = shop.buyMysteryBox("mystery_box", 15, 20, 0, stream("P1", "shop"), pool);
+  assert.ok(p);
+  assert.equal(p.won_item_id, "mossling");
+  assert.equal(p.won_item_type, "animal");
+  assert.deepEqual(shop.owned_animals, ["mossling"]);
+
+  const replay = new ShopState();
+  replay.applyPurchase(p);
+  assert.deepEqual(replay.owned_animals, ["mossling"]);
+});
+
+test("shop: buying an invitation draws one not-yet-invited animal", () => {
+  const pool = ["glimmerpup", "puffling"];
+  const shop = new ShopState();
+  const p = shop.buyInvitation("buy_invitation", 20, 30, 0, stream("P1", "shop"), pool);
+  assert.ok(p);
+  assert.equal(p.item_type, "invitation");
+  assert.equal(p.won_item_type, "animal");
+  assert.ok(pool.includes(p.won_item_id));
+  assert.deepEqual(shop.owned_animals, [p.won_item_id]);
+});
+
+test("shop: invitation rejects insufficient balance", () => {
+  const shop = new ShopState();
+  const p = shop.buyInvitation("buy_invitation", 20, 5, 0, stream("P1", "shop"), ["glimmerpup"]);
+  assert.equal(p, null);
+  assert.deepEqual(shop.owned_animals, []);
+});
+
+test("shop: invitation is a no-op once every animal is already owned", () => {
+  const shop = new ShopState({ ownedAnimals: ["glimmerpup"] });
+  const p = shop.buyInvitation("buy_invitation", 20, 30, 0, stream("P1", "shop"), ["glimmerpup"]);
+  assert.equal(p, null, "drew from a fully-owned pool instead of refusing");
+  assert.deepEqual(shop.owned_animals, ["glimmerpup"]);
+});
+
+test("shop: invitation is reproducible from its rng stream", () => {
+  const pool = ["glimmerpup", "puffling", "driftling"];
+  const a = new ShopState().buyInvitation("buy_invitation", 20, 30, 0, stream("P9", "shop"), pool);
+  const b = new ShopState().buyInvitation("buy_invitation", 20, 30, 0, stream("P9", "shop"), pool);
+  assert.equal(a.won_item_id, b.won_item_id);
+});
+
 test("shop: total spent sums every purchase", () => {
   const shop = new ShopState();
-  shop.buyFurniture("tapestry", 8, 100, 0);
+  shop.buyFurniture("tapestry", ["tapestry_c"], 8, 100, 0, stream("P1", "shop"));
   shop.buyBackground("starlit", 12, 100, 0);
   shop.buyMysteryBox("mystery_box", 15, 100, 1, stream("P1", "shop"), FURNITURE_POOL);
   assert.equal(shop.totalSpent, 8 + 12 + 15);
@@ -899,19 +1082,408 @@ test("shop: toJSON matches the field names the Python analysis reads", () => {
   // the same snake_case field names as shop_state.py's to_dict(), since
   // that's the file both builds' saved data actually has to agree on.
   const shop = new ShopState();
-  shop.buyFurniture("tapestry", 8, 100, 0);
+  // Only one variant offered, so the draw is deterministic regardless of rng.
+  shop.buyFurniture("tapestry", ["tapestry_c"], 8, 100, 0, stream("P1", "shop"));
   shop.buyBackground("starlit", 12, 100, 0);
   shop.equipBackground(2, "starlit");
   shop.buyMysteryBox("mystery_box", 15, 100, 1, stream("P1", "shop"), FURNITURE_POOL);
 
   const json = JSON.parse(JSON.stringify(shop.toJSON()));
   assert.deepEqual(Object.keys(json).sort(), ["background_overrides",
-    "owned_backgrounds", "owned_furniture", "purchases", "schema_version", "shop_ms"]);
-  assert.deepEqual(json.owned_furniture, ["tapestry"]);
+    "owned_animals", "owned_backgrounds", "owned_furniture", "purchases", "schema_version", "shop_ms"]);
+  // "birdbath" is the mystery box's deterministic draw from FURNITURE_POOL
+  // under its own stream("P1", "shop") instance -- not a second manual
+  // purchase, and unaffected by the furniture purchase's own draw above
+  // (a separate stream("P1", "shop") instance, same seed, independent cursor).
+  assert.deepEqual(json.owned_furniture, ["tapestry_c", "birdbath"]);
   assert.deepEqual(json.owned_backgrounds, ["starlit"]);
   assert.deepEqual(json.background_overrides, { 2: "starlit" });
   assert.equal(json.purchases.length, 3);
   assert.equal(json.purchases.reduce((a, p) => a + p.cost, 0), shop.totalSpent);
+});
+
+
+// ---------------------------------------------------------------------------
+// The mansion, the arcade, and the numbers both builds have to agree on.
+// ---------------------------------------------------------------------------
+
+const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
+const readPy = (rel) => fs.readFileSync(path.join(REPO, rel), "utf8");
+
+/** One `NAME = <number>` from a Python module. */
+const pyConst = (src, name) => {
+  const m = src.match(new RegExp(`^${name}\\s*=\\s*([0-9_.]+)`, "m"));
+  assert.ok(m, `${name} not found in the Python source`);
+  return Number(m[1].replace(/_/g, ""));
+};
+
+/** One `NAME = (a, b)` / `[a, b]` tuple of numbers. */
+const pyTuple = (src, name) => {
+  const m = src.match(new RegExp(`^\\s*${name}\\s*=\\s*[([]([^)\\]]*)[)\\]]`, "m"));
+  assert.ok(m, `${name} not found in the Python source`);
+  return m[1].split(",").map((v) => Number(v.trim())).filter((v) => !Number.isNaN(v));
+};
+
+test("mansion: the two builds agree on the room layout and the payout", () => {
+  // A difference here is not a bug that throws -- it is two studies. The
+  // desktop file is the authority; this asserts the port still matches it.
+  const py = readPy("experiments/castle_state.py");
+  assert.equal(MANSION_ROOM_COUNT, pyConst(py, "MANSION_ROOM_COUNT"));
+  assert.equal(MINIGAME_POINTS_PER_COIN, pyConst(py, "MINIGAME_POINTS_PER_COIN"));
+  assert.equal(MINIGAME_COINS_PER_ROUND_MAX, pyConst(py, "MINIGAME_COINS_PER_ROUND_MAX"));
+  assert.equal(MINIGAME_COIN_CAP, pyConst(py, "MINIGAME_COIN_CAP"));
+  // UNLOCK_STEP_PCT is written as an expression (90.0 / 8.0), so compare the
+  // value rather than parsing arithmetic.
+  assert.ok(Math.abs(UNLOCK_STEP_PCT - 90 / 8) < 1e-9);
+
+  // Which room holds which game, straight out of the Python dict.
+  const block = py.slice(py.indexOf("ARCADE_ROOMS = {"));
+  const pyRooms = {};
+  for (const [, i, key] of block.slice(0, block.indexOf("}"))
+      .matchAll(/(\d+)\s*:\s*"([a-z_]+)"/g)) {
+    pyRooms[Number(i)] = key;
+  }
+  assert.deepEqual(ARCADE_ROOMS, pyRooms);
+  // ...and every one of them is a game this build actually has.
+  for (const key of Object.values(ARCADE_ROOMS)) {
+    assert.ok(GAMES[key], `no browser port of ${key}`);
+  }
+});
+
+test("mini-games: the two builds agree on the round and the tuning", () => {
+  const py = readPy("experiments/minigames.py");
+  assert.equal(ROUND_MS, pyConst(py, "ROUND_MS"));
+  assert.equal(RAMP_END, pyConst(py, "RAMP_END"));
+
+  // The numbers that decide how hard each game is. Same difficulty curve is
+  // what lets a score -- and the coins it pays -- mean the same thing in both
+  // builds; drifting apart here would be invisible in the data.
+  const cls = (name) => py.slice(py.indexOf(`class ${name}(`));
+  const constOf = (name, field) => {
+    const src = cls(name);
+    const m = src.match(new RegExp(`^\\s+${field}\\s*=\\s*([0-9_.]+)`, "m"));
+    assert.ok(m, `${name}.${field} not found`);
+    return Number(m[1].replace(/_/g, ""));
+  };
+  const tupleOf = (name, field) => pyTuple(cls(name), field);
+
+  assert.equal(GAMES.firefly_catch.CATCH_THRESHOLD, constOf("FireflyCatch", "CATCH_THRESHOLD"));
+  assert.equal(GAMES.firefly_catch.PEAK_THRESHOLD, constOf("FireflyCatch", "PEAK_THRESHOLD"));
+  assert.equal(GAMES.firefly_catch.PEAK_POINTS, constOf("FireflyCatch", "PEAK_POINTS"));
+  assert.equal(GAMES.firefly_catch.LIFESPAN_MS, constOf("FireflyCatch", "LIFESPAN_MS"));
+  assert.equal(GAMES.firefly_catch.FADE_MS, constOf("FireflyCatch", "FADE_MS"));
+  assert.deepEqual(GAMES.firefly_catch.PULSE_MS, tupleOf("FireflyCatch", "PULSE_MS"));
+  assert.equal(GAMES.kite_flyer.RIBBON_BONUS, constOf("KiteFlyer", "RIBBON_BONUS"));
+  assert.equal(GAMES.kite_flyer.CATCH_REL, constOf("KiteFlyer", "CATCH_REL"));
+  assert.equal(GAMES.kite_flyer.FOLLOW_PER_S, constOf("KiteFlyer", "FOLLOW_PER_S"));
+  assert.deepEqual(GAMES.kite_flyer.RIBBON_LENGTH, tupleOf("KiteFlyer", "RIBBON_LENGTH"));
+  assert.equal(GAMES.star_catcher.CATCH_BAND_REL, constOf("StarCatcher", "CATCH_BAND_REL"));
+  assert.equal(GAMES.star_catcher.BASKET_REL_W, constOf("StarCatcher", "BASKET_REL_W"));
+  assert.deepEqual(GAMES.star_catcher.FALL_REL_PER_S, tupleOf("StarCatcher", "FALL_REL_PER_S"));
+  assert.deepEqual(GAMES.bubble_pop.BUBBLE_REL, tupleOf("BubblePop", "BUBBLE_REL"));
+  assert.equal(GAMES.bubble_pop.MAX_ACTIVE, constOf("BubblePop", "MAX_ACTIVE"));
+});
+
+test("mansion: rooms open on block progress and nothing else", () => {
+  const st = new CastleState({ participantId: "P1" });
+  assert.equal(st.mansion.length, MANSION_ROOM_COUNT);
+  // Room 0 is the only one open at the start -- there has to be somewhere to
+  // decorate from the very first break.
+  assert.deepEqual(st.unlockedRooms().map((r) => r.index), [0]);
+
+  const opened = [];
+  for (let b = 1; b <= 4; b++) opened.push(st.unlockForProgress(b, 4));
+  assert.deepEqual(opened, [[1, 2], [3, 4], [5, 6], [7, 8]]);
+  // Idempotent: asking again opens nothing new.
+  assert.deepEqual(st.unlockForProgress(4, 4), []);
+  assert.equal(st.unlockedRooms().length, MANSION_ROOM_COUNT);
+
+  // Structurally incapable of seeing a response -- a block COUNT and a total.
+  const params = CastleState.prototype.unlockForProgress.toString()
+    .match(/unlockForProgress\(([^)]*)\)/)[1];
+  assert.deepEqual(params.split(",").map((p) => p.trim()),
+                   ["blocksCompleted", "numBlocks"]);
+});
+
+test("mansion: the pocket is shared across rooms", () => {
+  const st = new CastleState({ participantId: "P1" });
+  st.awarded.push("star", "fairy", "boat");
+  assert.deepEqual(st.unplacedStickers(), ["star", "fairy", "boat"]);
+
+  // Any earned sticker can go in any room, and placing it anywhere takes it
+  // out of the pocket.
+  st.place("fairy", 4, 0.5, 0.5);
+  assert.deepEqual(st.unplacedStickers(), ["star", "boat"]);
+  assert.deepEqual(st.placedInRoom(4).map((p) => p.sticker_id), ["fairy"]);
+
+  // Moving it to another room is a lift and a drop, not a copy.
+  st.unplace("fairy");
+  st.place("fairy", 7, 0.2, 0.3);
+  assert.deepEqual(st.placedInRoom(4), []);
+  assert.deepEqual(st.placedInRoom(7).map((p) => p.sticker_id), ["fairy"]);
+  assert.deepEqual(st.unplacedStickers(), ["star", "boat"]);
+});
+
+test("arcade: a round pays, capped, and never touches coins_awarded", () => {
+  const st = new CastleState({ participantId: "P1" });
+  st.coin_allocation = [1, 1, 1];
+
+  // 15 points a coin, two a round at most.
+  assert.deepEqual([0, 14, 15, 29, 30, 90].map((s) => st.minigamePayout(s)),
+                   [0, 0, 1, 1, 2, 2]);
+
+  let paid = 0;
+  for (let i = 0; i < 10; i++) paid += st.recordMinigame("star_catcher", 2, 45, 20000);
+  assert.equal(paid, MINIGAME_COIN_CAP, "the session cap did not hold");
+  assert.equal(st.minigame_coins, MINIGAME_COIN_CAP);
+  assert.equal(st.recordMinigame("bubble_pop", 5, 90, 20000), 0, "paid past the cap");
+  // The pre-drawn schedule is untouched by any of it: coins_awarded stays
+  // reproducible from the participant id alone.
+  assert.equal(st.coins_awarded, 0);
+  assert.equal(st.minigame_plays.length, 11);
+  assert.deepEqual(Object.keys(st.minigame_plays[0]).sort(),
+                   ["coins", "duration_ms", "game", "room_index", "score"]);
+
+  // Response-blind by signature, like awardTrialCoins and completeRoom.
+  const params = CastleState.prototype.recordMinigame.toString()
+    .match(/recordMinigame\(([^)]*)\)/)[1];
+  assert.deepEqual(params.split(",").map((p) => p.trim()),
+                   ["game", "roomIndex", "score", "durationMs"]);
+});
+
+test("mansion: the saved state carries the whole visit", () => {
+  const st = new CastleState({ participantId: "P1" });
+  st.awarded.push("star");
+  st.place("star", 1, 0.4, 0.4);
+  st.recordMinigame("kite_flyer", 6, 31, 20000);
+  st.addMinigameTime(20000);
+  st.addPlaygroundTime(45000);
+
+  const json = JSON.parse(JSON.stringify(st.toJSON()));
+  assert.equal(json.schema_version, 10);
+  assert.equal(json.mansion.length, MANSION_ROOM_COUNT);
+  assert.deepEqual(json.mansion[2], { index: 2, unlocked: false, kind: "arcade" });
+  assert.equal(json.minigame_plays.length, 1);
+  assert.equal(json.minigame_coins, 2);
+  assert.equal(json.minigame_ms, 20000);
+  // minigame_ms is a SUBSET of playground_ms (the mansion clock keeps running
+  // inside a game room), so it must never exceed it.
+  assert.ok(json.minigame_ms <= json.playground_ms);
+});
+
+test("sounds: every clip the manifest names exists on disk", () => {
+  // A manifest entry pointing at a file that is not there fails the way a
+  // missing sound always fails -- silently. `pickup` named a pickup.wav that
+  // was never recorded, and `sticker` listed two variants that were never
+  // recorded either, so lifting an item made no sound on either build and
+  // placing one was silent whenever the random draw picked a missing variant.
+  const manifest = JSON.parse(
+    fs.readFileSync(path.join(REPO, "assets/game/manifest.json"), "utf8"));
+  const missing = [];
+  for (const [key, value] of Object.entries(manifest.sounds ?? {})) {
+    if (key.startsWith("_")) continue;         // doc keys, not clips
+    for (const rel of Array.isArray(value) ? value : [value]) {
+      if (!fs.existsSync(path.join(REPO, "assets/game", rel))) {
+        missing.push(`${key} -> ${rel}`);
+      }
+    }
+  }
+  assert.deepEqual(missing, [], `manifest.sounds names files that do not exist`);
+});
+
+test("guests: an invited animal lands in an unlocked DECORATION room", () => {
+  const st = new CastleState({ participantId: "P1" });
+  st.unlockForProgress(9, 9);            // open the whole mansion
+  const decorate = new Set(st.guestRooms());
+  // Every arcade room is excluded: a game room has no canvas to stand in, so
+  // a guest sent to one would simply vanish until it moved again.
+  for (const idx of Object.keys(ARCADE_ROOMS)) {
+    assert.ok(!decorate.has(Number(idx)));
+  }
+  const guest = st.inviteGuest("cat", makeRng(7));
+  assert.ok(guest);
+  assert.ok(decorate.has(guest.room_index));
+  // Off the edges and low in the frame -- standing on the floor, not
+  // floating on the wall. Mirrors castle_state._guest_spot's ranges.
+  assert.ok(guest.x >= 0.15 && guest.x <= 0.85);
+  assert.ok(guest.y >= 0.55 && guest.y <= 0.80);
+  assert.deepEqual(st.guestsInRoom(guest.room_index).map((g) => g.animal_id), ["cat"]);
+  // An invitation buys an animal that is NOT here yet.
+  assert.equal(st.inviteGuest("cat", makeRng(8)), null);
+});
+
+test("guests: nowhere to stand means no guest, not a crash", () => {
+  const st = new CastleState({ participantId: "P1" });
+  // Room 0 only -- and it is a decoration room, so this is really a check
+  // that an unopened mansion cannot take a guest at all.
+  const shut = new CastleState({ participantId: "P2" });
+  shut.mansion.forEach((r) => { r.unlocked = false; });
+  assert.equal(shut.guestRooms().length, 0);
+  assert.equal(shut.inviteGuest("cat", makeRng(1)), null);
+  assert.deepEqual(shut.moveGuests(makeRng(1)), []);
+  assert.equal(st.inviteGuest("", makeRng(1)), null);
+});
+
+test("guests: every guest moves house on a block boundary", () => {
+  const st = new CastleState({ participantId: "P1" });
+  st.unlockForProgress(9, 9);
+  st.inviteGuest("cat", makeRng(3));
+  st.inviteGuest("owl", makeRng(4));
+  const before = st.guests.map((g) => g.room_index);
+  st.moveGuests(makeRng(11));
+  // With more than one decoration room open, a guest prefers a room it is
+  // not already in -- so every one of them actually moves.
+  st.guests.forEach((g, i) => assert.notEqual(g.room_index, before[i]));
+  // Reproducible from the stream alone, like every other schedule here.
+  const other = new CastleState({ participantId: "P1" });
+  other.unlockForProgress(9, 9);
+  other.inviteGuest("cat", makeRng(3));
+  other.inviteGuest("owl", makeRng(4));
+  other.moveGuests(makeRng(11));
+  assert.deepEqual(other.guests, st.guests);
+});
+
+test("guests: a single open room keeps the guest but re-spots it", () => {
+  const st = new CastleState({ participantId: "P1" });
+  // Room 0 alone is open at the start of a session.
+  assert.deepEqual(st.guestRooms(), [0]);
+  const guest = st.inviteGuest("cat", makeRng(5));
+  assert.equal(guest.room_index, 0);
+  const spot = [guest.x, guest.y];
+  const moved = st.moveGuests(makeRng(6));
+  assert.deepEqual(moved, []);             // nowhere else to go
+  assert.equal(st.guests[0].room_index, 0);
+  assert.notDeepEqual([st.guests[0].x, st.guests[0].y], spot);
+});
+
+test("guests: they are saved, and are not placements", () => {
+  const st = new CastleState({ participantId: "P1" });
+  st.unlockForProgress(9, 9);
+  st.awarded.push("star");
+  st.place("star", 1, 0.4, 0.4);
+  st.inviteGuest("cat", makeRng(3));
+  const json = JSON.parse(JSON.stringify(st.toJSON()));
+  assert.equal(json.guests.length, 1);
+  assert.deepEqual(Object.keys(json.guests[0]).sort(),
+                   ["animal_id", "room_index", "x", "y"]);
+  // The child's own placement list is untouched by an arriving guest -- the
+  // whole reason the two live in separate lists.
+  assert.equal(json.placements.length, 1);
+  assert.equal(json.placements[0].sticker_id, "star");
+});
+
+test("mini-games: every game scores, ends at ROUND_MS, and calms down", () => {
+  // Driven through tick() rather than the frame loop, the same way
+  // tests/test_minigames.py drives the desktop ones -- no waiting on 20
+  // seconds of wall clock, and no canvas needed.
+  const play = (key, reducedMotion) => {
+    const finished = [];
+    const g = buildGame(key, { theme: {}, reducedMotion,
+                               onFinish: (...a) => finished.push(a) });
+    g.start();
+    for (let f = 0; f * 16 < ROUND_MS + 32; f++) {
+      // A perfect player: chase whatever is on screen.
+      if (key === "star_catcher" && g._stars.length) {
+        g._basketX = g._stars.reduce((a, b) => (a.y > b.y ? a : b)).x;
+      }
+      if (key === "kite_flyer" && g._sparkles.length) {
+        g._aimX = g._sparkles[0].x;
+        g._aimY = g._sparkles[0].y;
+      }
+      g.tick(16);
+      if (key === "bubble_pop") {
+        for (const b of [...g._bubbles]) g.onPointer({ x: b.x, y: b.y }, true);
+      }
+      if (key === "firefly_catch") {
+        for (const fly of [...g._flies]) g.onPointer({ x: fly.x, y: fly.y }, true);
+      }
+    }
+    return { score: g.score, finished, running: g.running };
+  };
+
+  for (const key of Object.keys(GAMES)) {
+    const r = play(key, false);
+    assert.ok(r.score > 0, `${key} scored nothing for a perfect player`);
+    assert.equal(r.finished.length, 1, `${key} finished ${r.finished.length} times`);
+    assert.deepEqual(r.finished[0], [key, r.score, ROUND_MS]);
+    assert.equal(r.running, false, `${key} left its loop running`);
+
+    // Reduced stimulation slows the world and halves the spawn rate, so the
+    // same player meets fewer things. Less to catch, never nothing to catch.
+    const calm = play(key, true);
+    assert.ok(calm.score > 0, `${key} is unplayable under reduced motion`);
+    assert.ok(calm.score < r.score,
+              `${key} spawned as much under reduced motion (${calm.score} vs ${r.score})`);
+  }
+});
+
+test("mini-games: doing it well pays more, doing it badly costs nothing", () => {
+  // The firefly's peak band, which is the only skill that game has to offer.
+  const f = buildGame("firefly_catch", { theme: {} });
+  const points = [];
+  f.onScore = (n) => points.push(n);
+  f.start();
+  const tapAt = (age) => {
+    f._flies = [f.newFly({ x: 0.5, y: 0.5, pulse_ms: 1000, age_ms: age })];
+    f.onPointer({ x: 0.5, y: 0.5 }, true);
+    return f._flies.length;             // 0 = caught
+  };
+  assert.equal(tapAt(500), 0, "a peak tap did not catch");
+  assert.equal(tapAt(350), 0, "a bright tap did not catch");
+  // A mistimed tap catches nothing AND takes nothing: the firefly stays, its
+  // pulse untouched, and only darts away.
+  assert.equal(tapAt(80), 1, "a dim tap removed the firefly");
+  assert.ok(f._flies[0].dart_ms > 0, "a mistimed tap did nothing visible");
+  assert.deepEqual(points, [2, 1]);
+
+  // The kite's ribbon: sweeping a whole one pays its bonus, and one already
+  // broken by an escape pays the ordinary point rather than a penalty.
+  const k = buildGame("kite_flyer", { theme: {} });
+  const kPoints = [];
+  k.onScore = (n) => kPoints.push(n);
+  k.start();
+  // Park the spawner: a ribbon spawned during this tick would take the next
+  // id, which is the one being injected here, and quietly overwrite its count.
+  k._nextSpawnMs = 1e6;
+  k._nextRibbon = 40;
+  k._sparkles = [{ x: 0.5, y: 0.5, v: 0, wob_t: 0, ribbon: 41 },
+                 { x: 0.52, y: 0.5, v: 0, wob_t: 0, ribbon: 41 }];
+  k._ribbons.set(41, 2);
+  k._kiteX = 0.5; k._kiteY = 0.5; k._aimX = 0.5; k._aimY = 0.5;
+  k.tick(16);
+  assert.deepEqual(kPoints, [1, 1 + GAMES.kite_flyer.RIBBON_BONUS]);
+});
+
+test("assets: every image the manifest names has a web-sized copy", () => {
+  const indexPath = path.join(REPO, "assets/game/web/assets.json");
+  if (!fs.existsSync(indexPath)) {
+    // The derivatives are optional by design -- assets.js falls back to the
+    // PNG -- so their absence is not a failure, only a missed optimisation.
+    console.log("        (no assets/game/web yet; run utilities/build_web_assets.py)");
+    return;
+  }
+  const index = JSON.parse(fs.readFileSync(indexPath, "utf8"));
+  const manifest = JSON.parse(fs.readFileSync(path.join(REPO, "assets/game/manifest.json"), "utf8"));
+
+  const named = new Set();
+  for (const section of ["stickers", "furniture", "backgrounds", "animals"]) {
+    for (const item of manifest[section]?.pool ?? []) if (item.image) named.add(item.image);
+  }
+  for (const rel of manifest.rooms?.progression ?? []) named.add(rel);
+  for (const [pose, rel] of Object.entries(manifest.mascot_variants?.neutral ?? {})) {
+    if (pose !== "name") named.add(rel);
+  }
+
+  const missing = [...named].filter((rel) =>
+    fs.existsSync(path.join(REPO, "assets/game", rel)) && !index.entries[rel]);
+  assert.deepEqual(missing, [], "images with no web copy -- re-run build_web_assets.py");
+
+  // Every room backdrop needs a THUMB, because the mansion grid draws nine at
+  // once and full-size art there is the whole problem this solves.
+  for (const rel of manifest.rooms?.progression ?? []) {
+    const entry = index.entries[rel];
+    if (entry) assert.ok(entry.files.thumb, `${rel} has no mansion thumbnail`);
+  }
 });
 
 console.log(`\n${pass} passed`);

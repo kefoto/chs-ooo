@@ -29,6 +29,7 @@
 
 import { SELECT_COLOUR, afterResponseText } from "./plugins.js";
 import { playSfx } from "./sfx.js";
+import { mountPause, armNudgeTimer, showNudge } from "./pause.js";
 
 // Defaults match the desktop build. Exposed as plugin parameters (and as
 // ?lead= / ?gap=) because pacing is a real design knob -- the clips run 1-2s
@@ -100,6 +101,10 @@ export class AudioTripletPlugin {
       feedback_ms: { type: "INT", default: 800 },
       lead_in_ms: { type: "INT", default: LEAD_IN_MS },
       per_sound_ms: { type: "INT", default: PER_SOUND_MS },
+      // Pause/nudge -- see js/src/pause.js.
+      paused_text: { type: "STRING", default: "" },
+      nudge_text: { type: "STRING", default: "" },
+      nudge_after_ms: { type: "INT", default: 20000 },
     },
     data: {
       task_trial_index: { type: "INT" },
@@ -159,7 +164,7 @@ export class AudioTripletPlugin {
           </div>` : ""}
       </div>`;
 
-    const t0 = performance.now();
+    let t0 = performance.now();
     let answered = false;
     let blocked = false;
     let playbackMs = null;    // when the auto-play sequence finished
@@ -179,6 +184,31 @@ export class AudioTripletPlugin {
     const stopAll = () => {
       for (const p of players) { p.pause(); try { p.currentTime = 0; } catch { /* not seekable yet */ } }
     };
+
+    // Computed once so "should this trial ever nudge at all" can't drift
+    // between the initial arm and the resume-from-pause re-arm below.
+    const nudgeEnabled = gm && Boolean(trial.nudge_text);
+    const nudge = armNudgeTimer({
+      afterMs: trial.nudge_after_ms,
+      onNudge: () => { if (!answered) showNudge(display, trial.nudge_text); },
+      // Never talk over a stimulus clip -- tries again shortly instead.
+      isStimulusActive: stimulusAudioActive,
+    });
+    mountPause(display, {
+      gamified: gm && Boolean(trial.paused_text),
+      mascot: trial.mascot,
+      pausedText: trial.paused_text,
+      onOpen: () => {
+        nudge.clear();
+        // Stops the auto-play sequence outright rather than resuming it on
+        // "Carry on" -- see the module docstring's simplification note.
+        // Every card's own replay button stays reachable either way.
+        this.jsPsych.pluginAPI.clearAllTimeouts();
+        stopAll();
+      },
+      onResume: () => { t0 = performance.now(); if (nudgeEnabled) nudge.rearm(); },
+    });
+    if (nudgeEnabled) nudge.rearm();
 
     const play = (i) => {
       // Only one stimulus at a time. Overlapping clips are not the stimulus
@@ -215,6 +245,7 @@ export class AudioTripletPlugin {
     const finish = (i) => {
       if (answered) return;
       answered = true;
+      nudge.clear();
       const rt = performance.now() - t0;
       // Silence the stimulus BEFORE any feedback, so the two never overlap.
       this.jsPsych.pluginAPI.clearAllTimeouts();

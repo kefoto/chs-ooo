@@ -137,11 +137,15 @@ globalThis.fetch = async (url, init) => {
   if (init?.method === "POST") {
     // Per-block checkpoints (X-Session-Block header set -- see
     // js/src/save.js's postPayload) fire mid-session, one per completed
-    // room; only the FINAL save (no such header) is "the" payload the
-    // driving loop below should stop on. Capturing every POST here would
-    // make it stop clicking after the first room, same bug an actual
-    // upload_url endpoint would see if it treated a checkpoint as the
-    // session being over.
+    // room; only the FINAL save -- from save(), never saveBlock() -- is
+    // "the" payload the driving loop below should stop on. Capturing every
+    // POST here would make it stop clicking after the first room -- exactly
+    // the bug a real upload_url endpoint would hit if it treated a
+    // checkpoint as the session being over. The block header is the actual
+    // mechanism save.js/main.js use to tell the two apart (completion_status
+    // alone can't: a disengaged session's FINAL save also carries
+    // completion_status 0, same as every checkpoint), so this must stay in
+    // sync with postPayload()'s header if a third POST type is ever added.
     if (!("X-Session-Block" in (init.headers ?? {}))) savedJson = init.body;
     return { ok: true, status: 200, json: async () => ({}) };
   }
@@ -177,6 +181,26 @@ await import("../src/main.js");
 // Drive it: click whatever the current screen offers, until a payload appears.
 const target = dom.window.document.getElementById("jspsych-target");
 const click = (el) => el.dispatchEvent(new dom.window.MouseEvent("click", { bubbles: true }));
+// Tap-to-place: a pointerdown+pointerup pair with no movement between picks
+// up the front of the tray and drops it where it landed (room_canvas.js's
+// docstring: "Press-and-release without moving is the same code path" as a
+// drag). Used now that the "Pip can do it" auto-arrange button is gone --
+// this is the only way left to place a pending item at all.
+// ":not(.empty)" -- the drawer always renders a minimum number of dashed
+// placeholder slots now (room_canvas.js's MIN_SLOTS), which also match
+// ".tray-item" and would otherwise make this loop about an always-full
+// drawer that never actually empties. Queried from the OWNER DOCUMENT, not
+// `room` itself -- the drawer is a sibling of the room below it now (see
+// .room-wrap), not a child overlaying its bottom edge, so it is no longer
+// inside `room`'s own subtree.
+const placePending = (room) => {
+  let n = 0;
+  while (room.ownerDocument.querySelector(".tray-item:not(.empty)") && n++ < 50) {
+    const opts = { clientX: 10, clientY: 10, bubbles: true };
+    room.dispatchEvent(new dom.window.MouseEvent("pointerdown", opts));
+    room.dispatchEvent(new dom.window.MouseEvent("pointerup", opts));
+  }
+};
 let guard = 0;
 let setupSeen = false;
 let setupPreview = "";
@@ -187,6 +211,32 @@ let panelClicks = 0;   // cutscene panels are click-advanced, not button-advance
 // playground and sticker book only exist on some screens.
 let stickerImgs = 0;
 let stickerTextOnly = 0;
+// The mansion: what the driver did in there, asserted against the payload
+// below. It walks one decoration room and one game room per visit, then
+// leaves -- enough to prove every screen is reachable and that what happens
+// in them is recorded.
+let mansionVisits = 0;
+let roomsEntered = 0;
+// Whether the retrieve-to-pocket gesture (drag a placed item back down into
+// the tray) was exercised, and whether it actually moved something back --
+// see the "Pip can do it"-successor gesture in room_canvas.js's overTray().
+let retrieveAttempted = false;
+let retrieveWorked = false;
+let arcadeRounds = 0;
+let shopVisits = 0;
+let shopPurchases = 0;
+let bgPlacements = 0;
+// Set if any shop cell's label/art literally reads "undefined" -- the exact
+// bug a base-id/variant-id catalog mismatch produces (see js/src/main.js's
+// furnitureItem). Checked live, not just in the saved payload, since a
+// rendering bug can exist without corrupting what gets recorded. Labels
+// render regardless of whether the item is affordable, so this is checked
+// every visit even on a short session where nothing can be bought yet.
+let shopUndefinedSeen = false;
+// Whether an enabled (affordable, not-owned) buy button was ever seen -- a
+// short test session may reach the shop before it can afford anything, in
+// which case "nothing was bought" is correct, not a bug.
+let shopAnyAffordable = false;
 // Every driven case pins rooms/trials in its query, so this only has to cover
 // a short session. A form-driven 550-trial run is not attempted -- jsdom did
 // not finish one in eight minutes, and the loop just times out, which reads
@@ -194,7 +244,7 @@ let stickerTextOnly = 0;
 while (!savedJson && guard++ < 8000) {
   await new Promise((r) => setTimeout(r, 3));
   stickerImgs += target.querySelectorAll("img.sticker-art").length;
-  for (const el of target.querySelectorAll(".sticker, .tray-item, .slot")) {
+  for (const el of target.querySelectorAll(".sticker, .tray-item:not(.empty), .slot")) {
     if (!el.querySelector("img.sticker-art") && el.textContent.trim()) stickerTextOnly++;
   }
   const startBtn = target.querySelector("#s-start");
@@ -216,10 +266,125 @@ while (!savedJson && guard++ < 8000) {
     click(startBtn);
     continue;
   }
+  // -- the shop's background room-picker -------------------------------------
+  // Reuses .mansion-grid for its tile layout, so it must be checked BEFORE
+  // the real mansion grid below or a room CHOICE here reads as re-entering
+  // the mansion.
+  const picker = target.querySelector(".room-picker");
+  if (picker) {
+    bgPlacements++;
+    click(picker.querySelector(".mansion-tile[data-room]") ?? picker.querySelector("#not-now"));
+    continue;
+  }
+  // -- the mansion ----------------------------------------------------------
+  // Its screens are a little state machine rather than a line of buttons, so
+  // the generic "click whatever is offered" pass below cannot walk it.
+  const grid = target.querySelector(".mansion-grid");
+  if (grid) {
+    mansionVisits++;
+    const decorate = grid.querySelector(".mansion-tile[data-room]:not(.arcade)");
+    const arcade = grid.querySelector(".mansion-tile.arcade[data-room]");
+    if (roomsEntered === 0 && decorate) { roomsEntered++; click(decorate); }
+    else if (arcadeRounds === 0 && arcade) { click(arcade); }
+    else if (shopVisits === 0) { shopVisits++; click(target.querySelector("#shop")); }
+    else click(target.querySelector("#leave"));
+    continue;
+  }
+  // -- the shop, once entered ------------------------------------------------
+  // A purchase announces itself with item_popup.js's popup OVER the
+  // catalogue (see shop_view.js) rather than navigating to a "You got:"
+  // reveal screen, so `.screen.shop` outside of a room-picker (handled
+  // above) is always the catalogue. Buys everything affordable, one click
+  // at a time so the DOM re-render between purchases (price/ownership
+  // changing what's left enabled) is exercised for real, not just the
+  // screen being reached.
+  const shopScreen = target.querySelector(".screen.shop");
+  if (shopScreen) {
+    for (const el of shopScreen.querySelectorAll(".shop-row-label, .shop-row-art, .speech")) {
+      if (el.textContent.includes("undefined")) shopUndefinedSeen = true;
+    }
+    const buyBtn = shopScreen.querySelector(".shop-buy:not([disabled])");
+    if (buyBtn) { shopAnyAffordable = true; shopPurchases++; click(buyBtn); }
+    else click(shopScreen.querySelector("#done"));
+    continue;
+  }
+  const gameCanvas = target.querySelector("#game");
+  if (gameCanvas) {
+    // A whole round, driven through the game's own clock rather than 20
+    // seconds of wall time -- and PLAYED, chasing whatever is on screen, so
+    // the score and the coins it pays are exercised end to end rather than a
+    // zero going through the motions.
+    arcadeRounds++;
+    const game = gameCanvas.__game;
+    if (!game) continue;
+    while (game.remainingMs > 0) {
+      if (game._stars?.length) {
+        game._basketX = game._stars.reduce((a, b) => (a.y > b.y ? a : b)).x;
+      }
+      if (game._sparkles?.length) {
+        game._aimX = game._sparkles[0].x;
+        game._aimY = game._sparkles[0].y;
+      }
+      game.tick(16);
+      for (const b of [...(game._bubbles ?? [])]) game.onPointer({ x: b.x, y: b.y }, true);
+      for (const f of [...(game._flies ?? [])]) game.onPointer({ x: f.x, y: f.y }, true);
+    }
+    continue;
+  }
+  if (target.querySelector("#again")) {          // the end-of-round panel
+    click(target.querySelector("#back"));
+    continue;
+  }
+  const backToMansion = target.querySelector("#back");
+  if (backToMansion && target.querySelector(".room")) {
+    const room = target.querySelector(".room");
+    const tray = room.ownerDocument.querySelector(".tray");
+    // jsdom reports a zero-size rect for every element (no layout engine),
+    // which clamp()/radius() turn into NaN x/y for anything placed under
+    // it -- fine for placePending's tap-to-place (position is never
+    // checked), but the retrieve gesture below needs REAL x/y to compute
+    // where the sticker it picks up actually is, and to hit-test against
+    // the drawer's own rect (overTray() -- the drawer is a sibling BELOW
+    // the room now, not an overlay inside it, see .room-wrap). Synthetic
+    // rects stand in for both, room stacked directly above the drawer,
+    // for exactly this room visit; the room_canvas.js math this feeds only
+    // ever uses these as ratios/bounds, never real layout, so any
+    // consistent non-zero sizes work.
+    const origRoomRect = room.getBoundingClientRect.bind(room);
+    const origTrayRect = tray.getBoundingClientRect.bind(tray);
+    room.getBoundingClientRect = () => (
+      { left: 0, top: 0, width: 400, height: 400, right: 400, bottom: 400 });
+    tray.getBoundingClientRect = () => (
+      { left: 0, top: 400, width: 400, height: 60, right: 400, bottom: 460 });
+    placePending(room);  // place the pocket, by tap
+    // Exercise the retrieve gesture once: pick a placed item back up and
+    // drag it down into the tray, then place the pocket again (placePending
+    // is idempotent once empty) so a short test session that only ever
+    // earned one sticker still leaves the room decorated, same as the "a
+    // room was decorated but nothing was placed" check below expects.
+    if (!retrieveAttempted && room.querySelector(".sticker")) {
+      retrieveAttempted = true;
+      const before = room.ownerDocument.querySelectorAll(".tray-item:not(.empty)").length;
+      const placedEl = room.querySelector(".sticker");
+      const sx = (parseFloat(placedEl.style.left) || 0) / 100 * 400;
+      const sy = (parseFloat(placedEl.style.top) || 0) / 100 * 400;
+      room.dispatchEvent(new dom.window.MouseEvent(
+        "pointerdown", { clientX: sx, clientY: sy, bubbles: true }));
+      room.dispatchEvent(new dom.window.MouseEvent(
+        "pointerup", { clientX: 200, clientY: 430, bubbles: true }));   // inside the mocked drawer rect
+      retrieveWorked = room.ownerDocument.querySelectorAll(".tray-item:not(.empty)").length > before;
+      placePending(room);   // put it back so the room stays decorated
+    }
+    room.getBoundingClientRect = origRoomRect;
+    tray.getBoundingClientRect = origTrayRect;
+    click(backToMansion);
+    continue;
+  }
+
   const scene = target.querySelector("#scene");
   const card = target.querySelector(".audio-card");
   const stim = target.querySelector(".stimulus");
-  const auto = target.querySelector("#auto");
+  const room = target.querySelector(".room");
   const done = target.querySelector("#done");
   const go = target.querySelector("#go");
   // The cutscene advances on the scene itself, not a button. It also ignores
@@ -237,7 +402,10 @@ while (!savedJson && guard++ < 8000) {
     click(pick ?? card);
   }
   else if (stim) click(stim);
-  else if (auto) { click(auto); const d = target.querySelector("#done"); if (d) click(d); }
+  // The standalone (pre-mansion) PlaygroundPlugin flow -- not reached by
+  // the live game (the mansion's own .room case above handles it), kept
+  // for whenever that plugin is used on its own again.
+  else if (room && done) { placePending(room); click(done); }
   else if (done) click(done);
   else if (go) click(go);
 }
@@ -341,10 +509,77 @@ check(stickerTextOnly === 0,
       `${stickerTextOnly} sticker slots rendered as text rather than an image`);
 
 console.log("sticker <img> samples :", stickerImgs, "| text-only slots:", stickerTextOnly);
+// The mansion, end to end: every screen reachable, and everything done in
+// them recorded in the file the analysis reads.
+if (!SETUP && payload?.game_state?.castle) {
+  const castleState = payload.game_state.castle;
+  check(mansionVisits > 0, "the mansion was never reached");
+  check(Array.isArray(castleState.mansion) && castleState.mansion.length === 9,
+        `the saved castle has no mansion: ${castleState.mansion?.length}`);
+  check(castleState.mansion?.[0]?.unlocked === true,
+        "mansion room 0 was not open at the start");
+  check(castleState.mansion?.filter((r) => r.kind === "arcade").length === 4,
+        "the mansion did not carry four game rooms");
+  if (arcadeRounds > 0) {
+    check((castleState.minigame_plays ?? []).length > 0,
+          "a round was played but no minigame_plays were recorded");
+    check(castleState.minigame_ms > 0, "a round was played but minigame_ms is 0");
+    // Arcade coins are capped and kept OUT of the response-blind schedule.
+    check(castleState.minigame_coins <= 12,
+          `arcade coins past the session cap: ${castleState.minigame_coins}`);
+    check(castleState.minigame_plays.some((p) => p.score > 0),
+          "a played round scored nothing");
+    const play = castleState.minigame_plays[0];
+    check(play.coins <= 2, `one round paid ${play.coins}, over the per-round ceiling`);
+    check(play.duration_ms === 20000, `a round lasted ${play.duration_ms}ms`);
+  }
+  if (roomsEntered > 0) {
+    check((castleState.placements ?? []).length > 0,
+          "a room was decorated but nothing was placed");
+  }
+  if (retrieveAttempted) {
+    check(retrieveWorked, "dragging a placed item into the tray did not retrieve it");
+  }
+  if (shopVisits > 0) {
+    check(!shopUndefinedSeen, "a shop item rendered literally as \"undefined\"");
+    if (shopAnyAffordable) {
+      check(shopPurchases > 0, "an affordable item was shown but nothing was bought");
+      const shopState = payload.game_state?.shop;
+      check(shopState?.purchases?.length > 0,
+            "the shop was visited and bought from, but no purchase was recorded");
+      // At least one owned_* array must have grown, or a purchase was
+      // recorded with nothing to show for it -- the exact failure mode a
+      // base-id/variant-id lookup mismatch produces (recorded, but silently
+      // never resolves to real art/label anywhere it's read back).
+      check((shopState?.owned_furniture?.length ?? 0) + (shopState?.owned_backgrounds?.length ?? 0)
+            + (shopState?.owned_animals?.length ?? 0) > 0,
+            "purchases were recorded but nothing ended up owned");
+    }
+    if (bgPlacements > 0) {
+      check(Object.keys(shopState?.background_overrides ?? {}).length > 0,
+            "the background room-picker was used but nothing was equipped");
+    }
+  }
+}
+
+console.log("mansion               :", `${mansionVisits} screens, `
+  + `${roomsEntered} rooms entered, ${arcadeRounds} rounds, `
+  + `${shopVisits} shop visits, ${shopPurchases} purchases, ${bgPlacements} bg placements`);
+console.log("retrieve gesture      :",
+  retrieveAttempted ? (retrieveWorked ? "worked" : "FAILED") : "not exercised (nothing was ever placed)");
+console.log("minigame plays        :", payload?.game_state?.castle?.minigame_plays?.length ?? 0,
+  "| arcade coins:", payload?.game_state?.castle?.minigame_coins ?? 0);
 console.log("rooms completed       :", payload?.game_state?.castle?.rooms
   .filter((r) => r.completed).length, "/", payload?.game_state?.castle?.rooms.length);
+// jsdom ships no 2D canvas backend unless the (heavy, native) `canvas`
+// package is installed, and says so on every getContext(). That is a property
+// of this harness's environment, not of the build -- the games check for a
+// null context and play on unseen, which is what lets a round be driven here
+// at all. Dropped so it cannot mask a real error.
+const realErrors = errors.filter((e) => !/HTMLCanvasElement.*getContext/.test(e));
+
 console.log("console warnings      :", warnings.length ? warnings : "none");
-console.log("errors                :", errors.length ? errors : "none");
+console.log("errors                :", realErrors.length ? realErrors : "none");
 console.log("assertions            :", fail.length ? fail : "all passed");
 
-process.exitCode = (errors.length || fail.length) ? 1 : 0;
+process.exitCode = (realErrors.length || fail.length) ? 1 : 0;

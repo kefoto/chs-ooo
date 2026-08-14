@@ -151,13 +151,16 @@ export function downloadPayload(payload) {
  * POST to a collection endpoint, if the config names one.
  *
  * The body is always the raw payload, byte-for-byte what a downloaded file
- * would contain -- upload_url's contract predates api/submit.js and can
- * point at any external endpoint (js/README.md: "the same JSON the desktop
- * build writes"), so this must not change shape just because the built-in
- * backend has its own opinions. Metadata api/submit.js DOES need --
- * `block`, marking a per-block checkpoint rather than the final save, and
- * `ticket`, the session-admission ticket from js/src/captcha.js -- travel as
- * headers instead, which any endpoint that doesn't care is free to ignore.
+ * would contain -- upload_url's contract predates api/submit.js and can point
+ * at any external endpoint (js/README.md: "the same JSON the desktop build
+ * writes"), so this must not change shape just because the built-in backend
+ * has its own opinions. The two things api/submit.js DOES need travel as
+ * headers instead, which any endpoint that doesn't care is free to ignore:
+ *
+ *   `block`  a room index, marking a per-block checkpoint rather than the
+ *            final save;
+ *   `ticket` the session-admission ticket from js/src/captcha.js, which
+ *            api/submit.js verifies before it will store anything.
  */
 export async function postPayload(url, payload, { ticket, block } = {}) {
   const headers = { "Content-Type": "application/json" };
