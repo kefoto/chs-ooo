@@ -3451,142 +3451,182 @@
   "voice/break_prompt_0.wav": {
    "files": {
     "audio": {
-     "bytes": 26169,
+     "bytes": 24358,
      "path": "audio/voice/break_prompt_0.m4a"
     }
    },
-   "sha1": "a68ef8874bff5a6a611a19ebf53113d1a94d609c",
-   "src_bytes": 265868
+   "sha1": "56b0e9bbc4a6134e25b30b071a26f49ce6b50cbb",
+   "src_bytes": 223234
   },
   "voice/break_prompt_1.wav": {
    "files": {
     "audio": {
-     "bytes": 37542,
+     "bytes": 33050,
      "path": "audio/voice/break_prompt_1.m4a"
     }
    },
-   "sha1": "3a76c7038a8ef2d624e75dbb5771b63b159c728a",
-   "src_bytes": 401286
+   "sha1": "2a35193f3bf399ba3dfc1ca3f178d35f672dfba5",
+   "src_bytes": 333574
   },
   "voice/cutscene_close_0.wav": {
    "files": {
     "audio": {
-     "bytes": 31717,
+     "bytes": 31864,
      "path": "audio/voice/cutscene_close_0.m4a"
     }
    },
-   "sha1": "8093764ccad70ef6c0378432101811f4c5be359e",
-   "src_bytes": 328560
+   "sha1": "a91d8fdb2b1b40ef8806a89e80f2c099921aee9d",
+   "src_bytes": 323544
   },
   "voice/cutscene_close_1.wav": {
    "files": {
     "audio": {
-     "bytes": 34790,
+     "bytes": 27780,
      "path": "audio/voice/cutscene_close_1.m4a"
     }
    },
-   "sha1": "43572316d6c60c623ebd2bc08acb208c9ccd6930",
-   "src_bytes": 356146
+   "sha1": "066be4c0df0685954d2b5d3fd8365b64fc504fca",
+   "src_bytes": 263358
   },
   "voice/cutscene_open_1.wav": {
    "files": {
     "audio": {
-     "bytes": 28420,
+     "bytes": 24426,
      "path": "audio/voice/cutscene_open_1.m4a"
     }
    },
-   "sha1": "5f7b8665bdea51efe98a277c9f8f0b5c401fb4e9",
-   "src_bytes": 288434
+   "sha1": "2e5c94a147a92a05b4a2eb7ef0d8da9ec2212c59",
+   "src_bytes": 223234
   },
   "voice/cutscene_open_2.wav": {
    "files": {
     "audio": {
-     "bytes": 47488,
+     "bytes": 40156,
      "path": "audio/voice/cutscene_open_2.m4a"
     }
    },
-   "sha1": "5be27d3505907301ec57e1d0e37979e92dbc4a18",
-   "src_bytes": 516642
+   "sha1": "98969946fb5f00202755f4e15f956b39c14225e1",
+   "src_bytes": 418838
+  },
+  "voice/finish_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 28531,
+     "path": "audio/voice/finish_0.m4a"
+    }
+   },
+   "sha1": "3a7e50ebb5471235236022056bc003a82755b0a4",
+   "src_bytes": 275896
   },
   "voice/finish_1.wav": {
    "files": {
     "audio": {
-     "bytes": 32905,
+     "bytes": 27643,
      "path": "audio/voice/finish_1.m4a"
     }
    },
-   "sha1": "9a1d3c3a18e6d32bf634c84f504f276b0a0b4dfe",
-   "src_bytes": 338592
+   "sha1": "93648cbc8b97751b0d3e2f86c587af5b3392af42",
+   "src_bytes": 263358
   },
   "voice/instructions_tier1_0.wav": {
    "files": {
     "audio": {
-     "bytes": 105537,
+     "bytes": 91640,
      "path": "audio/voice/instructions_tier1_0.m4a"
     }
    },
-   "sha1": "ebf3f91f9bfdfb864600897c4cf4bd95bd9ad06e",
-   "src_bytes": 1163642
+   "sha1": "437c0a7fcc2c3f67088fa2f2aaa92b5a46b78ab8",
+   "src_bytes": 1010668
   },
   "voice/level_complete_0.wav": {
    "files": {
     "audio": {
-     "bytes": 32947,
+     "bytes": 31032,
      "path": "audio/voice/level_complete_0.m4a"
     }
    },
-   "sha1": "c945a08be09f723032d5fc4eed2e234f969ba73b",
-   "src_bytes": 361162
+   "sha1": "477946a368570c689c72809629e51f037ab48cd8",
+   "src_bytes": 305990
   },
   "voice/level_complete_1.wav": {
    "files": {
     "audio": {
-     "bytes": 32528,
+     "bytes": 28243,
      "path": "audio/voice/level_complete_1.m4a"
     }
    },
-   "sha1": "e1bb0ff1ca7c718b42727dc33a898287aa338b71",
-   "src_bytes": 338592
+   "sha1": "915941593f7e194c74a125a4b35b52d1863ec3fe",
+   "src_bytes": 270880
   },
   "voice/level_complete_2.wav": {
    "files": {
     "audio": {
-     "bytes": 30743,
+     "bytes": 32033,
      "path": "audio/voice/level_complete_2.m4a"
     }
    },
-   "sha1": "17b78c06b3811feab7c3b8383a208846c4b23b83",
-   "src_bytes": 328560
+   "sha1": "c3386a541153ac5acb4f637192c9d79dade5b047",
+   "src_bytes": 321036
   },
   "voice/mansion_prompt_0.wav": {
    "files": {
     "audio": {
-     "bytes": 32248,
+     "bytes": 27448,
      "path": "audio/voice/mansion_prompt_0.m4a"
     }
    },
-   "sha1": "ea8517b9318910848649a6e0b9886ca18c442d5a",
-   "src_bytes": 333576
+   "sha1": "94940e257e8da720b5ab4bdfad6030f8bb1a5ef2",
+   "src_bytes": 265866
   },
   "voice/mansion_prompt_1.wav": {
    "files": {
     "audio": {
-     "bytes": 51079,
+     "bytes": 33974,
      "path": "audio/voice/mansion_prompt_1.m4a"
     }
    },
-   "sha1": "f7aeccb572dc3dafb8b205531393cadb6fa0cb5b",
-   "src_bytes": 561782
+   "sha1": "e7de481c4003de6456ef464619c661c5779e92e4",
+   "src_bytes": 338590
+  },
+  "voice/paused_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 38081,
+     "path": "audio/voice/paused_0.m4a"
+    }
+   },
+   "sha1": "0702a6da485d0db7fa710f170b5691104b1c82e7",
+   "src_bytes": 396268
+  },
+  "voice/paused_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 28334,
+     "path": "audio/voice/paused_1.m4a"
+    }
+   },
+   "sha1": "4345a873f9a591bbced731aed05b9650e37e472b",
+   "src_bytes": 265866
   },
   "voice/resting_0.wav": {
    "files": {
     "audio": {
-     "bytes": 39554,
+     "bytes": 30054,
      "path": "audio/voice/resting_0.m4a"
     }
    },
-   "sha1": "3c8f02d0f0344c985fddebddf9ac856d87c8b9db",
-   "src_bytes": 423856
+   "sha1": "e3e85bfeff716160b26449ba9f07d8e73cd83d1e",
+   "src_bytes": 298466
+  },
+  "voice/resting_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 30417,
+     "path": "audio/voice/resting_1.m4a"
+    }
+   },
+   "sha1": "6d38bbeae11c9fa4ff90096b9634920c17cb2dc6",
+   "src_bytes": 303482
   }
  },
  "specs": {
