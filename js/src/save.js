@@ -79,6 +79,14 @@ export function buildPayload({ config, responses, castle, shop, startTime, compl
     // chs_child afterwards. Null for lab and facility sessions.
     chs_child: config.chs_child ?? null,
     chs_response: config.chs_response ?? null,
+    // MELD consent/assent -- which form(s) consent.js's showConsentGate
+    // determined applied to this age, and whether the required "I confirm
+    // it's been completed" acknowledgement was given. The join back to an
+    // actual REDCap consent record is participant_id, piped onto each link's
+    // URL as ?pid= (see js/README.md's REDCap setup checklist).
+    consent_forms_shown: config.consent_forms_shown ?? [],
+    consent_acknowledged: Boolean(config.consent_acknowledged),
+    consent_acknowledged_at: config.consent_acknowledged_at ?? null,
   };
 
   const payload = { participant_data, responses };

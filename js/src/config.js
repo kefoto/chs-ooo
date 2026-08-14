@@ -34,6 +34,12 @@ export const CONFIG = {
   VR_Exposure: "",
   Screen_Time: "",
 
+  // MELD consent/assent, set by consent.js's showConsentGate before a
+  // session may proceed. See js/src/consent.js for the age bands.
+  consent_forms_shown: [],
+  consent_acknowledged: false,
+  consent_acknowledged_at: null,
+
   Gamify: true,
   Gamify_Mascot: "neutral",
   Gamify_Reduced_Motion: false,

@@ -28,6 +28,7 @@ import { buildPayload, makeResponse, postPayload, forSubmission } from "../src/s
 import { sessionPlan, ageBin, FIXED_TRIALS_PER_SESSION } from "../src/session.js";
 import { CONFIG, applyUrlOverrides } from "../src/config.js";
 import { setupNeeded } from "../src/setup.js";
+import { meldFormsForAge, consentLinkUrl, MELD_LINKS } from "../src/consent.js";
 import { initSfx, playSfx } from "../src/sfx.js";
 import { initMusic, playMusic, stopMusic } from "../src/music.js";
 
@@ -235,6 +236,37 @@ test("a CHS link identifies the child and never shows the setup form", () => {
   assert.equal(p.participant_data.chs_child, "SG7JLN");
   assert.equal(p.participant_data.chs_response,
     "d5c8f502-6588-46c8-84fa-a9657a44fe47");
+});
+
+test("MELD consent bands cut at 0-6/7-11/12-17/18+, not the trial-pacing bins", () => {
+  // These bands are deliberately NOT session.js's AGE_BINS, which cut at
+  // 10/11 -- MELD's forms cut at 11/12, so reusing ageBin() here would put a
+  // 7-10 year old in the wrong assent form's band boundary by one year on
+  // the 11 side.
+  assert.deepEqual(meldFormsForAge(0), [MELD_LINKS.parental, MELD_LINKS.age_0_6]);
+  assert.deepEqual(meldFormsForAge(6), [MELD_LINKS.parental, MELD_LINKS.age_0_6]);
+  assert.deepEqual(meldFormsForAge(7), [MELD_LINKS.parental, MELD_LINKS.age_7_11]);
+  assert.deepEqual(meldFormsForAge(11), [MELD_LINKS.parental, MELD_LINKS.age_7_11]);
+  assert.deepEqual(meldFormsForAge(12), [MELD_LINKS.parental, MELD_LINKS.age_12_17]);
+  assert.deepEqual(meldFormsForAge(17), [MELD_LINKS.parental, MELD_LINKS.age_12_17]);
+  assert.deepEqual(meldFormsForAge(18), [MELD_LINKS.adult]);
+  assert.deepEqual(meldFormsForAge(40), [MELD_LINKS.adult]);
+  // An unusable age must not silently resolve to a form -- unlike ageBin(),
+  // which defaults to "adults" and would skip a minor's parental/assent form.
+  assert.equal(meldFormsForAge(""), null);
+  assert.equal(meldFormsForAge("abc"), null);
+  assert.equal(meldFormsForAge(-1), null);
+});
+
+test("the participant id is piped onto a MELD link, not swallowed by an existing query string", () => {
+  assert.equal(consentLinkUrl("https://redcap.link/MELDAdult", "P07"),
+    "https://redcap.link/MELDAdult?pid=P07");
+  assert.equal(consentLinkUrl("https://redcap.link/MELDAdult?x=1", "P07"),
+    "https://redcap.link/MELDAdult?x=1&pid=P07");
+  // Untrusted input (a participant id can be anything the URL/setup form
+  // handed it) must not be able to inject extra query parameters.
+  assert.equal(consentLinkUrl("https://redcap.link/MELDAdult", "P0&evil=1"),
+    "https://redcap.link/MELDAdult?pid=P0%26evil%3D1");
 });
 
 test("a lab session is unaffected by the CHS handling", () => {

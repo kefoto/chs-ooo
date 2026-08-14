@@ -185,6 +185,58 @@ by `participant_data.age`, so that join has to happen before
 > If repeat sessions should cover new triplets, seed from `chs_response`
 > instead (one line in `applyUrlOverrides`).
 
+## MELD consent/assent
+
+Every session — lab, facility, and CHS alike — is gated on the MELD
+(Multisensory Environments in Longitudinal Development) consent/assent forms
+before it can start. `js/src/consent.js`'s `showConsentGate` picks the form(s)
+by age:
+
+| Age | Form(s) |
+|---|---|
+| 18+ | Adult Consent Form |
+| 12–17 | Parental Consent Form + 12-17 Consent Form |
+| 7–11 | Parental Consent Form + 7-11 Assent Form |
+| 0–6 | Parental Consent Form + 0-6 Assent Form |
+
+These bands are **not** `session.js`'s `AGE_BINS` — those cut at 10/11 for
+trial-pacing reasons, MELD's forms cut at 11/12 (7-11 vs 12-17), so
+`consent.js` has its own band function. A checkbox acknowledging the form(s)
+were completed is required before Continue enables; the gate records
+`consent_forms_shown`, `consent_acknowledged` and `consent_acknowledged_at`
+into `participant_data`, matching the fields `experiments/setup_experiment.py`
+writes into `session_config.json` (`MELD_Consent_Forms_Shown`,
+`MELD_Consent_Acknowledged`, `MELD_Consent_Acknowledged_At`) on the desktop
+build.
+
+**CHS sessions ask a minimal age question first.** CHS never puts age in the
+URL (see above), so the gate asks a single "what is your/your child's age?"
+question before showing the link(s) — it does not bring back the full
+experimenter setup form, which stays hidden for `child=` sessions. That answer
+also becomes `cfg.Age` for the rest of the session, which fixes a previously
+silent gap: CHS sessions used to build with an empty `Age` and fall through to
+the adult trial-count plan; they now get the age-appropriate one from
+`sessionPlan()` immediately, not only after the offline demographic join.
+
+**Syncing a session to its REDCap consent record.** Each link is opened as
+`<url>?pid=<participant_id>` — the same `participant_id` that seeds the
+session and keys `participant_data`/the `sessions` table — so a REDCap
+consent record can be joined back to a session afterwards. **This requires a
+one-time REDCap-side setup**, done by whoever administers the MELD REDCap
+project, for **each of the 5 instruments**:
+
+1. Add a field (hidden/read-only is fine) to receive the piped value —
+   e.g. `external_participant_id`.
+2. Enable that field's URL auto-fill / parameter piping in Survey Settings, so
+   a query parameter whose name matches the field's variable name is captured
+   into the response. Without this step the `pid=` sits inert in the browser
+   address bar and is never recorded on the REDCap side.
+3. (Not implemented here.) Live completion-status sync back into this app —
+   e.g. blocking Continue until REDCap itself confirms the record is
+   complete — would need REDCap API credentials plus either polling or a Data
+   Entry Trigger webhook. The current gate is a self-reported acknowledgement,
+   not a verified one.
+
 ## Tier 2: the V / A / AV conditions
 
 Tier 2 measures **supradditivity** — whether seeing-and-hearing an item

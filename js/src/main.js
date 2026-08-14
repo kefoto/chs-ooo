@@ -27,6 +27,7 @@ import { buildPayload, makeResponse, downloadPayload, postPayload } from "./save
 import { admitSession, getTicket } from "./captcha.js";
 import { sessionPlan } from "./session.js";
 import { setupNeeded, showSetup } from "./setup.js";
+import { showConsentGate } from "./consent.js";
 import { initAssets, assetUrl, assetSavings, prefetch, idlePrefetch } from "./assets.js";
 
 let cfg = applyUrlOverrides({ ...CONFIG });
@@ -51,6 +52,13 @@ const jget = async (url) => {
   // session. A URL carrying ?pid= is one someone has already set up -- a
   // facility link, or the test harness -- so it starts straight away.
   if (setupNeeded()) cfg = await showSetup(cfg, target);
+
+  // MELD consent/assent, gated on age -- for every session, including CHS
+  // ones, which carry no age at all until this runs. See consent.js: it asks
+  // a minimal age-only question first when cfg.Age is still blank, so this
+  // also fills in the age sessionPlan() reads just below, instead of that
+  // path silently defaulting to the adult bin.
+  cfg = await showConsentGate(cfg, target);
 
   // Length comes from the age-bin table unless the URL pinned it, so opening
   // the page bare gives the same session the desktop build would. `Num
