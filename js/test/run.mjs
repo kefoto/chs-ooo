@@ -1451,6 +1451,28 @@ test("audio: every music/voice file has a web-sized copy", () => {
     "run: python utilities/build_web_audio.py");
 });
 
+test("stickers: which picture is drawn fresh each session, but replayable", () => {
+  // Tying the identity to the participant id meant a child who played twice
+  // collected the same set again, and an experimenter testing under one id
+  // never saw anything else. The SHAPE of the schedule -- the part the
+  // response-blindness audit rests on -- must not move with it.
+  const runs = Array.from({ length: 4 }, () =>
+    CastleState.create(5, POOL, makeRng(42), "P1", [], 15, [3, 3, 3, 3, 3]));
+  const drawn = new Set(runs.map((st) => st.rooms.flatMap((r) => r.sticker_ids).join(",")));
+  assert.ok(drawn.size > 1, "same participant id replayed identical stickers");
+  assert.equal(new Set(runs.map((st) => st.allocation.join(","))).size, 1,
+    "the room shape moved with the sticker draw; it must stay pid-derived");
+
+  const { sticker_seed: seed } = runs[0];
+  assert.ok(Number.isFinite(seed));
+  assert.equal(JSON.parse(JSON.stringify(runs[0].toJSON())).sticker_seed, seed,
+    "the seed must be saved, or the session stops being reconstructable");
+  const replay = CastleState.create(5, POOL, makeRng(42), "P1", [], 15,
+                                    [3, 3, 3, 3, 3], seed);
+  assert.deepEqual(replay.rooms.map((r) => r.sticker_ids),
+                   runs[0].rooms.map((r) => r.sticker_ids));
+});
+
 test("guests: an invited animal lands in an unlocked DECORATION room", () => {
   const st = new CastleState({ participantId: "P1" });
   st.unlockForProgress(9, 9);            // open the whole mansion

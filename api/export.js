@@ -20,6 +20,7 @@
  * has no persistent disk to write them to.
  */
 import { sql } from "@vercel/postgres";
+import { ensureSchema } from "./_lib/schema.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -44,6 +45,11 @@ export default async function handler(req, res) {
   const all = req.query.all === "1";
 
   try {
+    // Create the table if this database has never had a session written to
+    // it. Without this, verifying a freshly connected database returns a
+    // Postgres error about a missing relation, which looks like a broken
+    // connection rather than an empty one.
+    await ensureSchema();
     let rows;
     if (all) {
       ({ rows } = pid

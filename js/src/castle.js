@@ -12,9 +12,18 @@
  *   completeRoom() therefore takes a room INDEX and nothing else. Do not add
  *   a parameter that can see a response.
  *
+ *   WHICH picture a sticker shows is the one part drawn from a per-session
+ *   seed rather than from the participant id -- so a child who plays twice
+ *   does not collect the same set again. It is still drawn at session start,
+ *   before any response exists, so the guarantee above is untouched; the seed
+ *   is saved (`sticker_seed`) and the drawn ids are saved per room, so the
+ *   session stays reconstructable from its file. Everything the audit rests
+ *   on -- HOW MANY stickers each room awards, the coin schedule, which trial
+ *   reveals what -- stays keyed to the id.
+ *
  *   Coins (shop/economy addition) follow the exact same rule. create() draws
- *   the coin schedule from the SAME rng, right after the sticker order is
- *   fixed, so the whole reward schedule is one continuous draw off one seed.
+ *   the coin schedule from the SAME rng as the allocation, so the SHAPE of
+ *   the reward schedule is one continuous draw off one seed.
  *   Spending those coins is a separate, player-choice-driven concern that
  *   lives in shop.js instead, so this module's response-blindness stays easy
  *   to audit in isolation.
@@ -57,6 +66,8 @@
 // reveal_positions/revealed. 4 moved coins from a per-room allocation to a
 // per-trial one -- coin_allocation has one entry per trial, not one per
 // room, and rooms no longer carry a coins_planned field.
+import { makeRng } from "./rng.js";
+
 export const SCHEMA_VERSION = 10;
 export const MIN_PER_ROOM = 2;
 export const MAX_PER_ROOM = 4;
@@ -249,6 +260,11 @@ export class CastleState {
     // lists is what stops every drag/pocket/retrieve path in
     // room_canvas.js from having to special-case "but not this one".
     this.guests = [];
+
+    // Which sticker pictures this session drew -- see create(). Saved so a
+    // session stays reconstructable now that the draw is not derivable from
+    // the participant id.
+    this.sticker_seed = null;
   }
 
   /**
@@ -260,7 +276,7 @@ export class CastleState {
    * position inside each room.
    */
   static create(nRooms, pool, rng, participantId = "", conditions = [],
-                nTrials = 0, roomTrialCounts = []) {
+                nTrials = 0, roomTrialCounts = [], stickerSeed = null) {
     const alloc = allocate(nRooms, rng);
     // Drawn right after the sticker allocation, from the SAME rng: the coin
     // schedule is part of the one continuous session-start draw, not a
@@ -282,12 +298,30 @@ export class CastleState {
       revealed: 0,
     }));
 
-    // Fix the sticker ORDER up front too, so the whole reward schedule is a
-    // property of the participant id and reproducible from the saved file.
+    // WHICH stickers, drawn from a per-session seed rather than from the
+    // participant id.
+    //
+    // Everything above -- how many stickers each room holds, the coin
+    // schedule, where in a room a reveal lands -- stays keyed to the id,
+    // because that is the part the response-blindness audit rests on: the
+    // SHAPE of the reward schedule has to be fixed before the session starts
+    // and reproducible from the id alone. Which picture is on the sticker is
+    // not part of that argument. Tying it to the id too meant a child who
+    // played twice, or an experimenter testing under one id, collected the
+    // same stickers every single time.
+    //
+    // The seed is recorded on the state and saved, so a session is still
+    // reconstructable from its file -- reproducibility moves from "re-derive
+    // it from the id" to "read what was drawn", which the file already
+    // carried anyway in rooms[].sticker_ids.
     const ids = pool.map((s) => s.id).filter(Boolean);
-    const order = rng.shuffle([...ids]);
+    const seed = Number.isFinite(stickerSeed)
+      ? (stickerSeed >>> 0)
+      : (Math.floor(Math.random() * 0xffffffff) >>> 0);
+    const idRng = makeRng(seed);
+    const order = idRng.shuffle([...ids]);
     const need = alloc.reduce((a, b) => a + b, 0);
-    while (order.length < need) order.push(...rng.shuffle([...ids]));
+    while (order.length < need) order.push(...idRng.shuffle([...ids]));
 
     let cursor = 0;
     for (const r of rooms) {
@@ -296,6 +330,7 @@ export class CastleState {
     }
 
     const st = new CastleState({ participantId, rooms, allocation: alloc, poolIds: ids });
+    st.sticker_seed = seed;
     st.coin_allocation = coinAlloc;
     return st;
   }
@@ -626,6 +661,7 @@ export class CastleState {
       minigame_ms: this.minigame_ms,
       minigame_coins: this.minigame_coins,
       guests: this.guests,
+      sticker_seed: this.sticker_seed,
     };
   }
 }

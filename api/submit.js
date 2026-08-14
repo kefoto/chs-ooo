@@ -24,33 +24,12 @@
  */
 import { sql } from "@vercel/postgres";
 import { verifyTicket } from "./_lib/ticket.js";
+import { ensureSchema } from "./_lib/schema.js";
 
 // Generous for 550 trials of small JSON rows, and still small enough that a
 // forged/oversized body from a client that got past the ticket check cannot
 // turn this into a storage-cost attack.
 const MAX_BODY_BYTES = 5 * 1024 * 1024;
-
-let schemaReady = null;
-
-/** CREATE TABLE IF NOT EXISTS, once per cold start -- no separate migration
- * step needed beyond setting POSTGRES_URL (Vercel sets it automatically once
- * a Postgres database is linked to the project). */
-function ensureSchema() {
-  if (!schemaReady) {
-    schemaReady = sql`
-      CREATE TABLE IF NOT EXISTS sessions (
-        id SERIAL PRIMARY KEY,
-        participant_id TEXT NOT NULL,
-        tag TEXT NOT NULL,
-        payload JSONB NOT NULL,
-        created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-      );
-      CREATE INDEX IF NOT EXISTS sessions_participant_idx
-        ON sessions (participant_id, created_at DESC);
-    `.catch((e) => { schemaReady = null; throw e; }); // retry on next call, don't wedge forever
-  }
-  return schemaReady;
-}
 
 function tagFor(payload, block) {
   if (Number.isFinite(block)) return `block-${block}`;
@@ -60,6 +39,19 @@ function tagFor(payload, block) {
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({ ok: false, error: "POST only" });
+    return;
+  }
+
+  // A missing SESSION_TICKET_SECRET makes verifyTicket THROW rather than
+  // return false, and an uncaught throw here surfaces as
+  // FUNCTION_INVOCATION_FAILED -- a bare 500 that reads like a database
+  // problem when it is a one-line configuration one. Report it the same way
+  // verify-start.js and export.js report their own missing secrets, so an
+  // unconfigured deploy says which piece is missing instead of just falling
+  // over.
+  if (!process.env.SESSION_TICKET_SECRET) {
+    console.error("SESSION_TICKET_SECRET is not set");
+    res.status(500).json({ ok: false, error: "server not configured" });
     return;
   }
 
