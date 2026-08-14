@@ -244,6 +244,16 @@ The same JSON schema the desktop build writes, so
 }
 ```
 
+> **Downloaded and submitted are not the same document.** The file carries all
+> three keys. What goes to `upload_url` is `participant_data` + `responses`
+> only — the measurement and the demographics. `game_state` is the reward
+> wrapper (stickers, placements, purchases, mini-game scores); no analysis
+> reads it, and the desktop build's REDCap upload never sent it either, so it
+> stays on the experimenter's disk rather than accumulating in a collection
+> endpoint. `js/src/save.js`'s `forSubmission()` is the one place that decides.
+> Tier 2's block order survives the drop — every response row carries its own
+> `condition` and `block_number`.
+
 Verified end to end: a payload built by `src/save.js` was parsed by
 `analysis.vice_utils.responses_to_vice_format` and produced the expected
 triplets, with attention trials correctly excluded.

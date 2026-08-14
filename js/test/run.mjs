@@ -24,7 +24,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { ShopState } from "../src/shop.js";
-import { buildPayload, makeResponse, postPayload } from "../src/save.js";
+import { buildPayload, makeResponse, postPayload, forSubmission } from "../src/save.js";
 import { sessionPlan, ageBin, FIXED_TRIALS_PER_SESSION } from "../src/session.js";
 import { CONFIG, applyUrlOverrides } from "../src/config.js";
 import { setupNeeded } from "../src/setup.js";
@@ -935,11 +935,39 @@ test("a partial session is flagged, not silently pooled", () => {
   assert.equal(p.participant_data.planned_regular_trials, 20);
 });
 
-test("postPayload sends the raw payload, with the block index only as a header", () => {
+test("what is submitted is the measurement, not the game around it", () => {
+  // The downloaded file keeps the whole session. What goes to a collection
+  // endpoint is the triplets and the demographics: nothing downstream reads
+  // game_state, and it is the bulk of the bytes on a 50-room session.
+  const castle = new CastleState({ participantId: "P1", numBlocks: 2 });
+  castle.awarded.push("star");
+  castle.place("star", 0, 0.5, 0.5);
+  const payload = buildPayload({ config: { participant_id: "P1", Tier: 1 },
+    responses: [makeResponse({ trialIndex: 0, concepts: ["a", "b", "c"],
+      selected: "a", position: 0, rtMs: 900, condition: "AV", blockNumber: 1 })],
+    castle, startTime: "2026-01-01 00:00:00", completed: true });
+
+  assert.ok(payload.game_state, "the saved file still carries it");
+  const sent = forSubmission(payload);
+  assert.deepEqual(Object.keys(sent).sort(), ["participant_data", "responses"]);
+  assert.equal(sent.participant_data.participant_id, "P1");
+  assert.equal(sent.responses.length, 1);
+
+  // Tier 2's block order survives the drop: it is on every response row, and
+  // game_state.castle.rooms was only ever a second copy of it.
+  assert.equal(sent.responses[0].condition, "AV");
+  assert.equal(sent.responses[0].block_number, 1);
+
+  // A key added to buildPayload later has to be opted IN to the upload.
+  const extra = forSubmission({ ...payload, secret_notes: "x" });
+  assert.ok(!("secret_notes" in extra));
+});
+
+test("postPayload sends the submitted payload, with the block index only as a header", () => {
   // Regression: an earlier version wrapped the body as {payload, block},
-  // breaking upload_url's contract that the body IS the same JSON a
-  // downloaded file would contain -- any external collection endpoint
-  // relies on that, not just this build's own per-block bookkeeping.
+  // breaking upload_url's contract that the body is one flat session object
+  // -- any external collection endpoint relies on that, not just this
+  // build's own per-block bookkeeping.
   let seen = null;
   const savedFetch = globalThis.fetch;
   globalThis.fetch = async (url, init) => {
@@ -947,13 +975,18 @@ test("postPayload sends the raw payload, with the block index only as a header",
     return { ok: true, status: 200 };
   };
   try {
-    postPayload("http://example.test/collect", { participant_data: { participant_id: "P1" } },
+    postPayload("http://example.test/collect",
+                { participant_data: { participant_id: "P1" }, responses: [],
+                  game_state: { castle: { placements: ["nope"] } } },
                 { block: 2 });
   } finally {
     globalThis.fetch = savedFetch;
   }
-  assert.equal(JSON.parse(seen.init.body).participant_data.participant_id, "P1");
+  const body = JSON.parse(seen.init.body);
+  assert.equal(body.participant_data.participant_id, "P1");
   assert.equal(seen.init.headers["X-Session-Block"], "2");
+  // Every upload_url gets the same rule, not just this deploy's /api/submit.
+  assert.ok(!("game_state" in body), "the game state never leaves the browser");
 });
 
 test("postPayload omits the block header on the final save", () => {

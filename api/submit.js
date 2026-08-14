@@ -110,6 +110,21 @@ export default async function handler(req, res) {
 
   const tag = tagFor(payload, block);
 
+  // Only the measurement is stored: the triplets and the demographics. The
+  // game layer's own state -- stickers, placements, purchases, mini-game
+  // scores -- stays in the file the experimenter downloads and is not kept
+  // here, where nothing reads it (see js/src/save.js's forSubmission, which
+  // already drops it client-side).
+  //
+  // Done again on this side because the client is not the authority on what
+  // this table holds: a tab left open across a deploy, or a cached module,
+  // still posts the old shape, and "we stopped sending it" is not the same
+  // guarantee as "it is not stored".
+  const stored = {
+    participant_data: payload.participant_data,
+    responses: payload.responses ?? [],
+  };
+
   try {
     await ensureSchema();
 
@@ -132,7 +147,7 @@ export default async function handler(req, res) {
 
     const { rows } = await sql`
       INSERT INTO sessions (participant_id, tag, payload)
-      VALUES (${pid}, ${tag}, ${JSON.stringify(payload)}::jsonb)
+      VALUES (${pid}, ${tag}, ${JSON.stringify(stored)}::jsonb)
       RETURNING id;
     `;
     res.status(200).json({ ok: true, id: rows[0].id });

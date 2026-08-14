@@ -148,25 +148,57 @@ export function downloadPayload(payload) {
 }
 
 /**
+ * What is SUBMITTED, as opposed to what is saved.
+ *
+ * The measurement is `responses` (the triplets) and `participant_data` (the
+ * demographics the setup form and CHS collect). `game_state` is a record of
+ * the reward wrapper around them -- which stickers were earned, where they
+ * were placed, what the shop sold, how the mini-games went -- and nothing
+ * downstream reads it: analysis/vice_utils.py takes responses and
+ * participant_data, and so does the desktop build's REDCap upload
+ * (utilities/redcap_utils.py's upload_to_redcap). So it stays in the file the
+ * experimenter downloads and does not go to a collection endpoint, where it
+ * would be the bulk of the bytes on a 50-room session and a standing store of
+ * data no analysis asks for.
+ *
+ * Tier 2's block order is NOT lost with it. Every response row carries its
+ * own `condition` and `block_number`, so the order actually run is still
+ * recoverable from `responses` alone -- `game_state.castle.rooms[*].condition`
+ * was a second copy of it, never the only one.
+ *
+ * Destructuring, not `delete`: a key added to buildPayload later is left out
+ * of the upload until someone decides it belongs there, which is the safer
+ * direction for a payload carrying a child's demographics.
+ */
+export function forSubmission(payload) {
+  const { participant_data, responses } = payload;
+  return { participant_data, responses };
+}
+
+/**
  * POST to a collection endpoint, if the config names one.
  *
  * `block` (a room index) marks a per-block checkpoint rather than the final
- * save -- travels as a header, not in the body, so the body stays the raw
- * payload unchanged for every caller of upload_url (an external collection
- * endpoint has no reason to know or care about this build's internal
- * checkpoint/final distinction).
+ * save -- travels as a header, not in the body, so the body stays the
+ * submitted payload unchanged for every caller of upload_url (an external
+ * collection endpoint has no reason to know or care about this build's
+ * internal checkpoint/final distinction).
+ *
+ * The body is forSubmission(payload), not the payload: one rule for every
+ * upload_url, so a third call site cannot be added that quietly ships the
+ * game state to somebody's endpoint.
  */
 export async function postPayload(url, payload, { ticket, block } = {}) {
   const headers = { "Content-Type": "application/json" };
   // The session-admission ticket from js/src/captcha.js -- api/submit.js
-  // verifies it before it will store anything. A header, not a body
-  // field, so the payload stays byte-for-byte what a download would be.
+  // verifies it before it will store anything. A header, not a body field, so
+  // the body stays exactly the JSON any collection endpoint is promised.
   if (ticket) headers.Authorization = `Bearer ${ticket}`;
   if (Number.isFinite(block)) headers["X-Session-Block"] = String(block);
   const res = await fetch(url, {
     method: "POST",
     headers,
-    body: JSON.stringify(payload),
+    body: JSON.stringify(forSubmission(payload)),
   });
   if (!res.ok) throw new Error(`upload failed: ${res.status}`);
   return res;
