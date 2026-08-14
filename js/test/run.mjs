@@ -1110,6 +1110,24 @@ test("shop: toJSON matches the field names the Python analysis reads", () => {
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const readPy = (rel) => fs.readFileSync(path.join(REPO, rel), "utf8");
 
+/** True where the desktop sources are checked out beside this build.
+ *
+ * The public deploy repo (kefoto/chs-ooo) is js/ + assets/ + datasets/ + api/
+ * and no Python at all, by design -- the lab build and the analysis pipeline
+ * live in the private repo. The two parity tests below read
+ * experiments/*.py to compare constants across the builds, which is exactly
+ * the check that CANNOT run there. Skipping is right; throwing ENOENT and
+ * failing the suite, as they used to, only trains people to ignore a red
+ * suite on the deploy repo. */
+const HAS_DESKTOP_SOURCES = fs.existsSync(path.join(REPO, "experiments"));
+const testWithPython = (name, fn) => {
+  if (!HAS_DESKTOP_SOURCES) {
+    console.log(`  SKIP  ${name} (no experiments/ here -- deploy repo)`);
+    return;
+  }
+  test(name, fn);
+};
+
 /** One `NAME = <number>` from a Python module. */
 const pyConst = (src, name) => {
   const m = src.match(new RegExp(`^${name}\\s*=\\s*([0-9_.]+)`, "m"));
@@ -1124,7 +1142,7 @@ const pyTuple = (src, name) => {
   return m[1].split(",").map((v) => Number(v.trim())).filter((v) => !Number.isNaN(v));
 };
 
-test("mansion: the two builds agree on the room layout and the payout", () => {
+testWithPython("mansion: the two builds agree on the room layout and the payout", () => {
   // A difference here is not a bug that throws -- it is two studies. The
   // desktop file is the authority; this asserts the port still matches it.
   const py = readPy("experiments/castle_state.py");
@@ -1150,7 +1168,7 @@ test("mansion: the two builds agree on the room layout and the payout", () => {
   }
 });
 
-test("mini-games: the two builds agree on the round and the tuning", () => {
+testWithPython("mini-games: the two builds agree on the round and the tuning", () => {
   const py = readPy("experiments/minigames.py");
   assert.equal(ROUND_MS, pyConst(py, "ROUND_MS"));
   assert.equal(RAMP_END, pyConst(py, "RAMP_END"));
@@ -1289,6 +1307,43 @@ test("sounds: every clip the manifest names exists on disk", () => {
     }
   }
   assert.deepEqual(missing, [], `manifest.sounds names files that do not exist`);
+});
+
+test("audio: every music/voice file has a web-sized copy", () => {
+  // The counterpart of the image check below. The source audio is authored
+  // for the desktop (24-bit 48kHz PCM, because its QSoundEffect fallback
+  // decodes nothing else) and one music track is ~23MB of it -- shipping
+  // that to a family's tablet is what utilities/build_web_audio.py exists to
+  // avoid. A missing derivative is not fatal at runtime (assets.js falls
+  // back to the WAV), which is exactly why it needs a test: it would ship.
+  const index = JSON.parse(
+    fs.readFileSync(path.join(REPO, "assets/game/web/assets.json"), "utf8"));
+  const manifest = JSON.parse(
+    fs.readFileSync(path.join(REPO, "assets/game/manifest.json"), "utf8"));
+
+  const wanted = [];
+  for (const [key, value] of Object.entries(manifest.music ?? {})) {
+    if (key.startsWith("_")) continue;
+    for (const rel of Array.isArray(value) ? value : [value]) {
+      // `music` also carries scalars like fade_ms -- only actual paths under
+      // the music/ tree are things to encode. Same filter build_web_audio.py
+      // applies through kind_of().
+      if (typeof rel === "string" && rel.startsWith("music/")) wanted.push(rel);
+    }
+  }
+  const voiceDir = path.join(REPO, "assets/game/voice");
+  if (fs.existsSync(voiceDir)) {
+    for (const name of fs.readdirSync(voiceDir)) {
+      if (name.endsWith(".wav")) wanted.push(`voice/${name}`);
+    }
+  }
+
+  const missing = wanted.filter((rel) => {
+    const file = index.entries?.[rel]?.files?.audio;
+    return !file || !fs.existsSync(path.join(REPO, "assets/game/web", file.path));
+  });
+  assert.deepEqual(missing, [],
+    "run: python utilities/build_web_audio.py");
 });
 
 test("guests: an invited animal lands in an unlocked DECORATION room", () => {

@@ -1,4 +1,5 @@
 {
+ "_audio_doc": "Audio entries carry a single 'audio' file (AAC/.m4a), written by utilities/build_web_audio.py. js/src/assets.js resolves them the same way it resolves images, and falls back to the source WAV when one is missing.",
  "_doc": "Web-sized copies of assets/game/, written by utilities/build_web_assets.py. js/src/assets.js reads this to pick a size; a path missing here falls back to the PNG, so the browser build runs from a plain checkout either way. Do not edit by hand -- re-run the script.",
  "entries": {
   "animals/driftling.png": {
@@ -3131,6 +3132,36 @@
    "src_bytes": 412642,
    "w": 1024
   },
+  "music/10PM-PM-Music.wav": {
+   "files": {
+    "audio": {
+     "bytes": 1280697,
+     "path": "audio/music/10PM-PM-Music.m4a"
+    }
+   },
+   "sha1": "833c4daca5cdf36e4077a35b40b15ee41a96aa41",
+   "src_bytes": 22932012
+  },
+  "music/Dentists-Office-PM-Music.wav": {
+   "files": {
+    "audio": {
+     "bytes": 1907761,
+     "path": "audio/music/Dentists-Office-PM-Music.m4a"
+    }
+   },
+   "sha1": "1e63c1fa3064d81faa336565898b79c8f598dce5",
+   "src_bytes": 35722530
+  },
+  "music/The-25th-Hour-Schlatt-Crossing-PM-Music.wav": {
+   "files": {
+    "audio": {
+     "bytes": 1322651,
+     "path": "audio/music/The-25th-Hour-Schlatt-Crossing-PM-Music.m4a"
+    }
+   },
+   "sha1": "be89434777b0c676365d6922b66885defb512bd4",
+   "src_bytes": 23926914
+  },
   "room/arcade/bubble_pop.png": {
    "files": {
     "thumb": {
@@ -3416,6 +3447,146 @@
    "sha1": "7e75b2c9c092c7c1cbbebd756b901680775206b8",
    "src_bytes": 114005,
    "w": 1376
+  },
+  "voice/break_prompt_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 26169,
+     "path": "audio/voice/break_prompt_0.m4a"
+    }
+   },
+   "sha1": "a68ef8874bff5a6a611a19ebf53113d1a94d609c",
+   "src_bytes": 265868
+  },
+  "voice/break_prompt_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 37542,
+     "path": "audio/voice/break_prompt_1.m4a"
+    }
+   },
+   "sha1": "3a76c7038a8ef2d624e75dbb5771b63b159c728a",
+   "src_bytes": 401286
+  },
+  "voice/cutscene_close_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 31717,
+     "path": "audio/voice/cutscene_close_0.m4a"
+    }
+   },
+   "sha1": "8093764ccad70ef6c0378432101811f4c5be359e",
+   "src_bytes": 328560
+  },
+  "voice/cutscene_close_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 34790,
+     "path": "audio/voice/cutscene_close_1.m4a"
+    }
+   },
+   "sha1": "43572316d6c60c623ebd2bc08acb208c9ccd6930",
+   "src_bytes": 356146
+  },
+  "voice/cutscene_open_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 28420,
+     "path": "audio/voice/cutscene_open_1.m4a"
+    }
+   },
+   "sha1": "5f7b8665bdea51efe98a277c9f8f0b5c401fb4e9",
+   "src_bytes": 288434
+  },
+  "voice/cutscene_open_2.wav": {
+   "files": {
+    "audio": {
+     "bytes": 47488,
+     "path": "audio/voice/cutscene_open_2.m4a"
+    }
+   },
+   "sha1": "5be27d3505907301ec57e1d0e37979e92dbc4a18",
+   "src_bytes": 516642
+  },
+  "voice/finish_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 32905,
+     "path": "audio/voice/finish_1.m4a"
+    }
+   },
+   "sha1": "9a1d3c3a18e6d32bf634c84f504f276b0a0b4dfe",
+   "src_bytes": 338592
+  },
+  "voice/instructions_tier1_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 105537,
+     "path": "audio/voice/instructions_tier1_0.m4a"
+    }
+   },
+   "sha1": "ebf3f91f9bfdfb864600897c4cf4bd95bd9ad06e",
+   "src_bytes": 1163642
+  },
+  "voice/level_complete_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 32947,
+     "path": "audio/voice/level_complete_0.m4a"
+    }
+   },
+   "sha1": "c945a08be09f723032d5fc4eed2e234f969ba73b",
+   "src_bytes": 361162
+  },
+  "voice/level_complete_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 32528,
+     "path": "audio/voice/level_complete_1.m4a"
+    }
+   },
+   "sha1": "e1bb0ff1ca7c718b42727dc33a898287aa338b71",
+   "src_bytes": 338592
+  },
+  "voice/level_complete_2.wav": {
+   "files": {
+    "audio": {
+     "bytes": 30743,
+     "path": "audio/voice/level_complete_2.m4a"
+    }
+   },
+   "sha1": "17b78c06b3811feab7c3b8383a208846c4b23b83",
+   "src_bytes": 328560
+  },
+  "voice/mansion_prompt_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 32248,
+     "path": "audio/voice/mansion_prompt_0.m4a"
+    }
+   },
+   "sha1": "ea8517b9318910848649a6e0b9886ca18c442d5a",
+   "src_bytes": 333576
+  },
+  "voice/mansion_prompt_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 51079,
+     "path": "audio/voice/mansion_prompt_1.m4a"
+    }
+   },
+   "sha1": "f7aeccb572dc3dafb8b205531393cadb6fa0cb5b",
+   "src_bytes": 561782
+  },
+  "voice/resting_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 39554,
+     "path": "audio/voice/resting_0.m4a"
+    }
+   },
+   "sha1": "3c8f02d0f0344c985fddebddf9ac856d87c8b9db",
+   "src_bytes": 423856
   }
  },
  "specs": {

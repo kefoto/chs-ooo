@@ -22,6 +22,8 @@
  * applies -- cutscene music is not a separate toggle a parent has to find.
  */
 
+import { audioUrl } from "./assets.js";
+
 const TARGET_VOLUME = 0.35;          // background, not a chime -- stays under speech
 const STEP_MS = 40;                  // ~25 volume updates/sec, smooth without busywork
 
@@ -110,7 +112,7 @@ export function playMusic(key, { loop = false } = {}) {
   const rel = tracks[key];
   if (!rel) return;
 
-  const el = new Audio(`${root}/${rel}`);
+  const el = new Audio(audioUrl(rel));
   el.volume = 0;
   el.loop = loop;
   current = el;

@@ -40,9 +40,27 @@ the Tier 2 design, and the CHS integration.
 ```
 js/          the jsPsych 8 build — timeline, plugins, game layer
 assets/      mascot art, backdrops, stickers, cutscene panels, dialogue
-datasets/    the stimuli: Tier1_THINGS_100/, Tier2_AV_Matched/
+datasets/    the stimuli: Tier1_THINGS_560/, Tier2_AV_Matched/
+api/         the Vercel serverless functions (Turnstile gate, storage, export)
 .nojekyll    serve the tree as-is, without Jekyll
 ```
+
+### What this copy deliberately does NOT carry
+
+Two things are absent here on purpose, and a sync from the private repo will
+try to put both back. Check them by hand every time:
+
+- **`assets/game/font/`** — the lab build's Fontworks display faces cannot be
+  redistributed. This copy ships Nunito (SIL OFL) from `js/vendor/font/`
+  instead, and `js/css/game.css`'s `@font-face` must keep pointing there.
+- **`assets/game/music/*.wav` and `assets/game/voice/*.wav`** — 110 MB of
+  24-bit PCM authored for the desktop build (whose QSoundEffect fallback
+  decodes nothing else). This copy serves only the AAC derivatives under
+  `assets/game/web/audio/`, which `js/src/assets.js` resolves to; the same
+  audio at 5 MB. `assets/game/voice/voice_manifest.json` stays, because
+  `js/src/voice.js` reads it to learn which lines have a recording.
+  Regenerate the derivatives in the private repo with
+  `python utilities/build_web_audio.py`.
 
 ## Credits and licensing
 

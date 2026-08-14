@@ -25,6 +25,8 @@
  *     other, exactly like the desktop build's cutscene/instructions screens.
  */
 
+import { audioUrl } from "./assets.js";
+
 let root = "";
 let known = new Set();          // "<key>_<index>" slugs with a recording
 const cache = new Map();        // path -> HTMLAudioElement
@@ -50,7 +52,10 @@ export async function initVoice({ assetRoot }) {
 }
 
 function voicePath(key, index) {
-  return `${root}/voice/${key}_${index}.wav`;
+  // Through assets.js so a narration line plays its AAC copy where one
+  // exists -- the bank is one WAV per line and adds up. Falls back to
+  // the WAV, so a checkout with no derivatives is unaffected.
+  return audioUrl(`voice/${key}_${index}.wav`);
 }
 
 function elementFor(path) {

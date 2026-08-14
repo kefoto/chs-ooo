@@ -79,6 +79,25 @@ export function assetUrl(rel, size = "x1", fallbackRoot = null) {
   return `${fallbackRoot || root}/${rel}`;
 }
 
+/**
+ * The URL to PLAY `rel` from: the AAC copy where there is one, else the
+ * source WAV.
+ *
+ * Same index and the same degrade-don't-depend rule as assetUrl, for the same
+ * reason at a larger scale -- the music is 24-bit 48kHz PCM authored for the
+ * desktop's QSoundEffect fallback (which decodes nothing else), and one track
+ * is ~23MB of it. utilities/build_web_audio.py writes the derivatives.
+ *
+ * Resolved per play rather than once at init: initMusic/initVoice run before
+ * initAssets has read the index, so a URL captured at init time would always
+ * be the WAV.
+ */
+export function audioUrl(rel) {
+  if (!rel) return "";
+  const file = entryFor(rel)?.files?.audio;
+  return file ? `${root}/web/${file.path}` : `${root}/${rel}`;
+}
+
 /** `srcset` for an <img>, so a retina screen picks the 2x itself. Empty when
  * there are no derivatives, which leaves a plain src doing the work. */
 export function srcsetFor(rel) {
