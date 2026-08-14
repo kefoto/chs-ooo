@@ -88,17 +88,9 @@
     "progress_track": "#EDE5D8",
     "_font_doc": "Bundled UI font. Rodin Bokutoh is the rounded/soft cut, which suits a children's game better than the straight-sided NewRodin; both are listed so either can be selected by changing `family`. Set `family` to null or remove the block to fall back to the system font. NOTE for maintainers: these files are loaded by READING THE BYTES, because QFontDatabase.addApplicationFont(path) returns -1 for them on macOS even though the files are valid OpenType. See _load_fonts in experiments/game_layer.py.",
     "font": {
-      "files": [
-        "font/nintendoP_Humming-E_002pr.otf",
-        "font/FOT-RodinBokutoh Pro EB.otf",
-        "font/FOT-NewRodin Pro EB.otf"
-      ],
-      "family": "nintendoP_Humming-E_002pr",
-      "_alternatives": [
-        "nintendoP_Humming-E_002pr",
-        "FOT-RodinBokutoh Pro",
-        "FOT-NewRodin Pro"
-      ]
+      "files": [],
+      "family": null,
+      "_note": "licensed font not redistributed; see js/css/game.css"
     },
     "font_scale": 1.35,
     "min_touch_px": 96,

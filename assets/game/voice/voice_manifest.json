@@ -1,6 +1,6 @@
 {
   "voice_id": "",
-  "voice_name": "Andrew Beta - Funny Cartoon Voice Talent",
+  "voice_name": "Nayva",
   "model": "",
   "lines": {
     "cutscene_open_1": {
@@ -9,7 +9,7 @@
       "file": "voice/cutscene_open_1.wav",
       "chars": 42,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "cutscene_open_2": {
       "text_sha1": "0e553e2ed5399903da3a796cd962f3f5fa91230f",
@@ -17,7 +17,7 @@
       "file": "voice/cutscene_open_2.wav",
       "chars": 75,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "cutscene_close_0": {
       "text_sha1": "5c78ae319a3d40317b51685905e2190b71ba98aa",
@@ -25,7 +25,7 @@
       "file": "voice/cutscene_close_0.wav",
       "chars": 56,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "cutscene_close_1": {
       "text_sha1": "59285a1de08c483e9b53f03a7f2e12a180072778",
@@ -33,7 +33,7 @@
       "file": "voice/cutscene_close_1.wav",
       "chars": 51,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "instructions_tier1_0": {
       "text_sha1": "c547715397d5aa445ff2f7d97dd1449399f8d848",
@@ -41,7 +41,7 @@
       "file": "voice/instructions_tier1_0.wav",
       "chars": 42,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "level_complete_0": {
       "text_sha1": "0fc85aa9ba4d39322149c5c9834b252493bd0c31",
@@ -49,7 +49,7 @@
       "file": "voice/level_complete_0.wav",
       "chars": 59,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "level_complete_1": {
       "text_sha1": "3f445db386c0a20c94e06ee6d8f288445e50ea7d",
@@ -57,7 +57,7 @@
       "file": "voice/level_complete_1.wav",
       "chars": 50,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "level_complete_2": {
       "text_sha1": "f8bb621e2655b31e8da7a4561489ec5d2d7c17e1",
@@ -65,7 +65,7 @@
       "file": "voice/level_complete_2.wav",
       "chars": 53,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "break_prompt_0": {
       "text_sha1": "9b395fff2aff3d175f9e0c866341b8447b1fc129",
@@ -73,7 +73,7 @@
       "file": "voice/break_prompt_0.wav",
       "chars": 45,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "break_prompt_1": {
       "text_sha1": "8a80463e021a95bf27ef9dca901df46b762a3c73",
@@ -81,7 +81,7 @@
       "file": "voice/break_prompt_1.wav",
       "chars": 59,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "mansion_prompt_0": {
       "text_sha1": "0b3125a50a9c948d6f0c167300a2b42f4c0ccdc8",
@@ -89,7 +89,7 @@
       "file": "voice/mansion_prompt_0.wav",
       "chars": 51,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "mansion_prompt_1": {
       "text_sha1": "430ab7a803887e4945671591bc9d1bb2dc496d86",
@@ -97,7 +97,7 @@
       "file": "voice/mansion_prompt_1.wav",
       "chars": 70,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "resting_0": {
       "text_sha1": "43024006cfcad11b3f20e2c0639e38068bb327dc",
@@ -105,7 +105,39 @@
       "file": "voice/resting_0.wav",
       "chars": 62,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
+    },
+    "resting_1": {
+      "text_sha1": "72703f866d05d79f83bbb7aecdca140a13810f3c",
+      "text": "Let's rest. Please tap whenever you're ready to play again.",
+      "file": "voice/resting_1.wav",
+      "chars": 59,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-14T15:26:42"
+    },
+    "paused_0": {
+      "text_sha1": "68c4a48d782c94c12d99bd6492795632889708f0",
+      "text": "We're paused, nothing's lost. Please tap whenever you'd like to carry on.",
+      "file": "voice/paused_0.wav",
+      "chars": 73,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-14T15:26:42"
+    },
+    "paused_1": {
+      "text_sha1": "6f547ce8dfe07aa617043595c3d2cf49b8f3ecf6",
+      "text": "Taking a break is just fine! Your stickers are safe.",
+      "file": "voice/paused_1.wav",
+      "chars": 52,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-14T15:26:42"
+    },
+    "finish_0": {
+      "text_sha1": "1fe48f8313301612a280fd179038e4126f5eb970",
+      "text": "All done! Thank you so much for playing with me.",
+      "file": "voice/finish_0.wav",
+      "chars": 48,
+      "source": "manual_web_ui",
+      "relabelled_at": "2026-08-14T15:26:42"
     },
     "finish_1": {
       "text_sha1": "db64279bc59f2a428928f956a8745cc80c869502",
@@ -113,7 +145,7 @@
       "file": "voice/finish_1.wav",
       "chars": 57,
       "source": "manual_web_ui",
-      "relabelled_at": "2026-08-13T18:39:58"
+      "relabelled_at": "2026-08-14T15:26:42"
     }
   }
 }
