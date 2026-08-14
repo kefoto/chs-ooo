@@ -1,2 +1,12 @@
 node_modules/
 .DS_Store
+
+# Anything carrying credentials. `vercel env pull` writes .env.local, which
+# holds the Postgres connection string and every secret this project uses --
+# in a PUBLIC repository, one `git add -A` after that is a credential leak.
+# The Vercel CLI usually adds this itself; it is here so the protection does
+# not depend on which tool ran last.
+.env
+.env.*
+!.env.example
+.vercel/
