@@ -83,8 +83,11 @@ export function showSetup(cfg, root, search = window.location.search) {
 
           <label>Task
             <select id="s-tier">
-              <option value="1"${cfg.Tier === 2 ? "" : " selected"}>Tier 1: Visual (THINGS 100)</option>
-              <option value="2"${cfg.Tier === 2 ? " selected" : ""}>Tier 2: Multisensory (Matched 100)</option>
+              <option value="1" selected>Tier 1: Visual (THINGS 560)</option>
+              <!-- Disabled for now, not removed: the option (and its
+                   session-plan/analysis code) stays in place for when
+                   Tier 2 is ready, it just cannot be picked yet. -->
+              <option value="2" disabled>Tier 2: Multisensory (coming soon)</option>
             </select></label>
           <label>Session length
             <select id="s-duration">
@@ -126,14 +129,6 @@ export function showSetup(cfg, root, search = window.location.search) {
 
           <label>Daily screen time
             <select id="s-screen">${options(SCREEN_TIME, cfg.Screen_Time)}</select></label>
-          <label class="setup-checks">
-            <span class="setup-check">
-              <input id="s-gamify" type="checkbox" checked>
-              Gamified presentation</span>
-            <span class="setup-check">
-              <input id="s-calm" type="checkbox">
-              Reduced motion</span>
-          </label>
         </div>
 
         <div class="setup-preview" id="s-preview"></div>
@@ -214,10 +209,10 @@ export function showSetup(cfg, root, search = window.location.search) {
         Setting: el("#s-setting").value,
         VR_Exposure: el("#s-vr").value,
         Screen_Time: el("#s-screen").value,
-        // Written explicitly, not left to the config default, so the saved
-        // file states which arm the session actually ran as.
-        Gamify: el("#s-gamify").checked,
-        Gamify_Reduced_Motion: el("#s-calm").checked,
+        // Gamify/Gamify_Reduced_Motion are no longer offered on this form --
+        // the arm is fixed for now (CONFIG's defaults: gamified, not
+        // reduced-motion), not an experimenter's per-session choice. Left
+        // out of this object entirely so `...cfg` above is what decides.
       });
     });
   });

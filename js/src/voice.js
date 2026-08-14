@@ -25,6 +25,8 @@
  *     other, exactly like the desktop build's cutscene/instructions screens.
  */
 
+import { audioUrl } from "./assets.js";
+
 let root = "";
 let known = new Set();          // "<key>_<index>" slugs with a recording
 const cache = new Map();        // path -> HTMLAudioElement
@@ -50,7 +52,10 @@ export async function initVoice({ assetRoot }) {
 }
 
 function voicePath(key, index) {
-  return `${root}/voice/${key}_${index}.wav`;
+  // Through assets.js so a narration line plays its AAC copy where one
+  // exists -- the bank is one WAV per line and adds up. Falls back to
+  // the WAV, so a checkout with no derivatives is unaffected.
+  return audioUrl(`voice/${key}_${index}.wav`);
 }
 
 function elementFor(path) {
@@ -63,9 +68,28 @@ function elementFor(path) {
   return el;
 }
 
+/**
+ * Silence narration, including a queue that is mid-chain.
+ *
+ * Clearing `onended` before pausing is what actually ends a queue: leaving it
+ * connected would let a later event start the next line under a screen that
+ * has moved on. Counterpart to GameLayer.stop_voice().
+ */
+export function stopVoice() {
+  for (const el of cache.values()) {
+    el.onended = null;
+    el.onerror = null;
+    el.pause();
+    try { el.currentTime = 0; } catch { /* not seekable until loaded */ }
+  }
+}
+
 /** Play the recorded line for dialogue[key][index]. Silent no-op if none exists. */
 export function speak(key, index) {
   if (index == null || !known.has(`${key}_${index}`)) return;
+  // One narrated line at a time -- a child tapping through the cutscene
+  // panels must not leave the previous line running under the new one.
+  stopVoice();
   const el = elementFor(voicePath(key, index));
   el.onended = null;
   el.onerror = null;
@@ -88,6 +112,7 @@ export function speakAll(dialogue, key) {
  * bank still speaks the lines it has instead of stalling on a gap.
  */
 export function speakKeys(spec) {
+  stopVoice();
   playQueue(spec.filter(([key, index]) => index != null && known.has(`${key}_${index}`)));
 }
 

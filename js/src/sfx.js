@@ -49,11 +49,24 @@ export function playSfx(key) {
   if (!rel) return;                       // key not in the manifest
   if (stimulusActive()) return;           // never over a stimulus clip
 
-  let el = cache.get(key);
+  // A manifest value may be a single path OR a list of them, in which case one
+  // is picked per call for variety -- the contract manifest.sounds._variety_doc
+  // states and GameLayer.play() implements on the desktop. This port did not,
+  // so an array reached `new Audio()` as a string and every play of such a key
+  // requested one comma-joined URL that cannot exist: `sticker` is a list, and
+  // that made placements and purchases silent. Cached per RESOLVED FILE rather
+  // than per key, exactly as the desktop does, or the first variant drawn
+  // would be the only one ever heard.
+  const path = Array.isArray(rel)
+    ? rel[Math.floor(Math.random() * rel.length)]
+    : rel;
+  if (!path) return;
+
+  let el = cache.get(path);
   if (!el) {
-    el = new Audio(`${root}/${rel}`);
+    el = new Audio(`${root}/${path}`);
     el.volume = 0.5;                      // matches QSoundEffect setVolume(0.5)
-    cache.set(key, el);
+    cache.set(path, el);
   }
   // Restart rather than ignore: stickers are awarded in quick succession and
   // a second one must be audible, not swallowed because the first is running.

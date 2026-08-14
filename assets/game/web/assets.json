@@ -1,0 +1,3637 @@
+{
+ "_audio_doc": "Audio entries carry a single 'audio' file (AAC/.m4a), written by utilities/build_web_audio.py. js/src/assets.js resolves them the same way it resolves images, and falls back to the source WAV when one is missing.",
+ "_doc": "Web-sized copies of assets/game/, written by utilities/build_web_assets.py. js/src/assets.js reads this to pick a size; a path missing here falls back to the PNG, so the browser build runs from a plain checkout either way. Do not edit by hand -- re-run the script.",
+ "entries": {
+  "animals/driftling.png": {
+   "files": {
+    "x1": {
+     "bytes": 6060,
+     "h": 220,
+     "path": "animals/driftling.webp",
+     "w": 220
+    },
+    "x2": {
+     "bytes": 13854,
+     "h": 440,
+     "path": "animals/driftling@2x.webp",
+     "w": 440
+    }
+   },
+   "h": 512,
+   "sha1": "9d228ad7519ed5911cc5b9ace13c5db3dd4532bc",
+   "src_bytes": 94130,
+   "w": 512
+  },
+  "animals/glimmerpup.png": {
+   "files": {
+    "x1": {
+     "bytes": 6158,
+     "h": 220,
+     "path": "animals/glimmerpup.webp",
+     "w": 220
+    },
+    "x2": {
+     "bytes": 14626,
+     "h": 440,
+     "path": "animals/glimmerpup@2x.webp",
+     "w": 440
+    }
+   },
+   "h": 512,
+   "sha1": "a664c832f4b4fb987b40b55fb912bb13a4c458b4",
+   "src_bytes": 81858,
+   "w": 512
+  },
+  "animals/mossling.png": {
+   "files": {
+    "x1": {
+     "bytes": 6272,
+     "h": 220,
+     "path": "animals/mossling.webp",
+     "w": 220
+    },
+    "x2": {
+     "bytes": 14910,
+     "h": 440,
+     "path": "animals/mossling@2x.webp",
+     "w": 440
+    }
+   },
+   "h": 512,
+   "sha1": "330fb79acf8e1993897b6e916636f71d893d7410",
+   "src_bytes": 91122,
+   "w": 512
+  },
+  "animals/puffling.png": {
+   "files": {
+    "x1": {
+     "bytes": 7678,
+     "h": 220,
+     "path": "animals/puffling.webp",
+     "w": 220
+    },
+    "x2": {
+     "bytes": 17956,
+     "h": 440,
+     "path": "animals/puffling@2x.webp",
+     "w": 440
+    }
+   },
+   "h": 512,
+   "sha1": "18a7bd56ef2f8d14e82fa9cc9ada73adce9c44bb",
+   "src_bytes": 120323,
+   "w": 512
+  },
+  "animals/sparkwing.png": {
+   "files": {
+    "x1": {
+     "bytes": 6514,
+     "h": 220,
+     "path": "animals/sparkwing.webp",
+     "w": 220
+    },
+    "x2": {
+     "bytes": 15010,
+     "h": 440,
+     "path": "animals/sparkwing@2x.webp",
+     "w": 440
+    }
+   },
+   "h": 512,
+   "sha1": "74f3ebf88ea19c6696ce3f8e525e6db8110a244a",
+   "src_bytes": 80653,
+   "w": 512
+  },
+  "backgrounds/aurora.png": {
+   "files": {
+    "thumb": {
+     "bytes": 1158,
+     "h": 134,
+     "path": "thumbs/backgrounds/aurora.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 6038,
+     "h": 502,
+     "path": "backgrounds/aurora.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 10766,
+     "h": 768,
+     "path": "backgrounds/aurora@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "31160245576078d260f03c5efe5ef937c5cf76a3",
+   "src_bytes": 1098376,
+   "w": 1376
+  },
+  "backgrounds/emberglow.png": {
+   "files": {
+    "thumb": {
+     "bytes": 1990,
+     "h": 134,
+     "path": "thumbs/backgrounds/emberglow.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 9436,
+     "h": 502,
+     "path": "backgrounds/emberglow.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 16544,
+     "h": 768,
+     "path": "backgrounds/emberglow@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "0c33e3181dae0f777735278c916e955f6f2538d0",
+   "src_bytes": 979852,
+   "w": 1376
+  },
+  "backgrounds/frostlight.png": {
+   "files": {
+    "thumb": {
+     "bytes": 1110,
+     "h": 134,
+     "path": "thumbs/backgrounds/frostlight.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 6188,
+     "h": 502,
+     "path": "backgrounds/frostlight.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 12556,
+     "h": 768,
+     "path": "backgrounds/frostlight@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "a50d0cf0c039aca6a88b77be21bc89e69b5e337b",
+   "src_bytes": 884134,
+   "w": 1376
+  },
+  "backgrounds/moonlit.png": {
+   "files": {
+    "thumb": {
+     "bytes": 1370,
+     "h": 134,
+     "path": "thumbs/backgrounds/moonlit.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 6540,
+     "h": 502,
+     "path": "backgrounds/moonlit.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 11268,
+     "h": 768,
+     "path": "backgrounds/moonlit@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "ab407012ff8918538b678f7fd00391c299d26acd",
+   "src_bytes": 1075039,
+   "w": 1376
+  },
+  "backgrounds/twilight.png": {
+   "files": {
+    "thumb": {
+     "bytes": 1930,
+     "h": 134,
+     "path": "thumbs/backgrounds/twilight.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 8980,
+     "h": 502,
+     "path": "backgrounds/twilight.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 16440,
+     "h": 768,
+     "path": "backgrounds/twilight@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "5aa00255fe81823b099b1fe69aa0c70ba422e968",
+   "src_bytes": 1111912,
+   "w": 1376
+  },
+  "cutscene/1.png": {
+   "files": {
+    "x1": {
+     "bytes": 19478,
+     "h": 619,
+     "path": "cutscene/1.webp",
+     "w": 1100
+    },
+    "x2": {
+     "bytes": 45924,
+     "h": 1238,
+     "path": "cutscene/1@2x.webp",
+     "w": 2200
+    }
+   },
+   "h": 1536,
+   "sha1": "27c38d65778a7fd037420e33a7cd7fbd714a19f2",
+   "src_bytes": 4104973,
+   "w": 2730
+  },
+  "cutscene/2.png": {
+   "files": {
+    "x1": {
+     "bytes": 15174,
+     "h": 619,
+     "path": "cutscene/2.webp",
+     "w": 1100
+    },
+    "x2": {
+     "bytes": 33938,
+     "h": 1238,
+     "path": "cutscene/2@2x.webp",
+     "w": 2200
+    }
+   },
+   "h": 1536,
+   "sha1": "fd771116dfaba5ddaf73418d59dab6cdabb720f1",
+   "src_bytes": 4054233,
+   "w": 2730
+  },
+  "cutscene/3.png": {
+   "files": {
+    "x1": {
+     "bytes": 35572,
+     "h": 614,
+     "path": "cutscene/3.webp",
+     "w": 1100
+    },
+    "x2": {
+     "bytes": 80964,
+     "h": 1228,
+     "path": "cutscene/3@2x.webp",
+     "w": 2200
+    }
+   },
+   "h": 1536,
+   "sha1": "444c2248b411fcf146aa328aa0a0145217d645f7",
+   "src_bytes": 710559,
+   "w": 2752
+  },
+  "emoji/alien.png": {
+   "files": {
+    "x1": {
+     "bytes": 2840,
+     "h": 128,
+     "path": "emoji/alien.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 1560,
+     "h": 256,
+     "path": "emoji/alien@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "100e124bad0b60aded249048542f7b9833e62174",
+   "src_bytes": 1765,
+   "w": 256
+  },
+  "emoji/amulet.png": {
+   "files": {
+    "x1": {
+     "bytes": 4358,
+     "h": 128,
+     "path": "emoji/amulet.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6954,
+     "h": 256,
+     "path": "emoji/amulet@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "63a8cff8662d89cccee8b21dd62d6c90493d92ac",
+   "src_bytes": 13419,
+   "w": 256
+  },
+  "emoji/angel.png": {
+   "files": {
+    "x1": {
+     "bytes": 5844,
+     "h": 128,
+     "path": "emoji/angel.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6752,
+     "h": 256,
+     "path": "emoji/angel@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "1cd691e6321b090646a5a10fa2fdbd15b8012743",
+   "src_bytes": 13614,
+   "w": 256
+  },
+  "emoji/bat.png": {
+   "files": {
+    "x1": {
+     "bytes": 4886,
+     "h": 128,
+     "path": "emoji/bat.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5382,
+     "h": 256,
+     "path": "emoji/bat@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "787a28c5091fc6f4f734954c043d4301796a94a9",
+   "src_bytes": 15952,
+   "w": 256
+  },
+  "emoji/beaver.png": {
+   "files": {
+    "x1": {
+     "bytes": 4926,
+     "h": 128,
+     "path": "emoji/beaver.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6056,
+     "h": 256,
+     "path": "emoji/beaver@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "6acd85740deaa09af5520ba24416d121b4b0c392",
+   "src_bytes": 13059,
+   "w": 256
+  },
+  "emoji/blossom.png": {
+   "files": {
+    "x1": {
+     "bytes": 4782,
+     "h": 128,
+     "path": "emoji/blossom.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4720,
+     "h": 256,
+     "path": "emoji/blossom@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "2d8d9f3030470cb63872a5afb6ffad3d21ad4332",
+   "src_bytes": 10595,
+   "w": 256
+  },
+  "emoji/blowfish.png": {
+   "files": {
+    "x1": {
+     "bytes": 4178,
+     "h": 128,
+     "path": "emoji/blowfish.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4994,
+     "h": 256,
+     "path": "emoji/blowfish@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "f84105341e55d4e6f3c74c00b4b4e3db878522e5",
+   "src_bytes": 10445,
+   "w": 256
+  },
+  "emoji/boom.png": {
+   "files": {
+    "x1": {
+     "bytes": 5480,
+     "h": 128,
+     "path": "emoji/boom.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 7640,
+     "h": 256,
+     "path": "emoji/boom@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "2ee4cc79399f81596bb30195a07cbf9a066c583a",
+   "src_bytes": 14365,
+   "w": 256
+  },
+  "emoji/breeze_charm.png": {
+   "files": {
+    "x1": {
+     "bytes": 3500,
+     "h": 128,
+     "path": "emoji/breeze_charm.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 3780,
+     "h": 256,
+     "path": "emoji/breeze_charm@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "de76aa3e89229ef37a80c4712c4d9ff08c7028ca",
+   "src_bytes": 7904,
+   "w": 256
+  },
+  "emoji/bright.png": {
+   "files": {
+    "x1": {
+     "bytes": 5866,
+     "h": 128,
+     "path": "emoji/bright.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6638,
+     "h": 256,
+     "path": "emoji/bright@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "bfb1e70c432bfd888c3453eae0cd70bf46b77caa",
+   "src_bytes": 9485,
+   "w": 256
+  },
+  "emoji/bubble_a.png": {
+   "files": {
+    "x1": {
+     "bytes": 6032,
+     "h": 128,
+     "path": "emoji/bubble_a.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8320,
+     "h": 256,
+     "path": "emoji/bubble_a@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "12d681847b3fc2022307bb1edf823a063495de6d",
+   "src_bytes": 19095,
+   "w": 256
+  },
+  "emoji/bullseye.png": {
+   "files": {
+    "x1": {
+     "bytes": 5562,
+     "h": 128,
+     "path": "emoji/bullseye.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 9048,
+     "h": 256,
+     "path": "emoji/bullseye@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "33595ab29f95fa9e16ddf8997498c3da4ad987dc",
+   "src_bytes": 19553,
+   "w": 256
+  },
+  "emoji/cactus.png": {
+   "files": {
+    "x1": {
+     "bytes": 4140,
+     "h": 128,
+     "path": "emoji/cactus.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4140,
+     "h": 256,
+     "path": "emoji/cactus@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "7e110d2c6b5f6ee1dfa965b384dbeb813fb30bb1",
+   "src_bytes": 9234,
+   "w": 256
+  },
+  "emoji/carousel.png": {
+   "files": {
+    "x1": {
+     "bytes": 6696,
+     "h": 128,
+     "path": "emoji/carousel.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 7608,
+     "h": 256,
+     "path": "emoji/carousel@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "0e50d8e2f1c8561c249cc87c0303409ec2cafa44",
+   "src_bytes": 15782,
+   "w": 256
+  },
+  "emoji/cherries.png": {
+   "files": {
+    "x1": {
+     "bytes": 5068,
+     "h": 128,
+     "path": "emoji/cherries.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5846,
+     "h": 256,
+     "path": "emoji/cherries@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "2b3a1cbbab1f6445f99fba61861fcedc04376617",
+   "src_bytes": 10592,
+   "w": 256
+  },
+  "emoji/clover.png": {
+   "files": {
+    "x1": {
+     "bytes": 5432,
+     "h": 128,
+     "path": "emoji/clover.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5818,
+     "h": 256,
+     "path": "emoji/clover@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "efce79eb3c8e1caac5e259b722c0ba3c845ba575",
+   "src_bytes": 10496,
+   "w": 256
+  },
+  "emoji/confetti.png": {
+   "files": {
+    "x1": {
+     "bytes": 8616,
+     "h": 128,
+     "path": "emoji/confetti.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 10204,
+     "h": 256,
+     "path": "emoji/confetti@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "ad4f054d908253cc356661f80d00e90197427e38",
+   "src_bytes": 17379,
+   "w": 256
+  },
+  "emoji/crab.png": {
+   "files": {
+    "x1": {
+     "bytes": 8168,
+     "h": 128,
+     "path": "emoji/crab.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 10392,
+     "h": 256,
+     "path": "emoji/crab@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "f331edb3c7e1f47996198234c1d698b2674cb0da",
+   "src_bytes": 21748,
+   "w": 256
+  },
+  "emoji/crescent_left.png": {
+   "files": {
+    "x1": {
+     "bytes": 3772,
+     "h": 128,
+     "path": "emoji/crescent_left.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4972,
+     "h": 256,
+     "path": "emoji/crescent_left@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "133d47cd40cbc9f77879f7737918842d93d0123a",
+   "src_bytes": 9136,
+   "w": 256
+  },
+  "emoji/crescent_right.png": {
+   "files": {
+    "x1": {
+     "bytes": 3796,
+     "h": 128,
+     "path": "emoji/crescent_right.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4932,
+     "h": 256,
+     "path": "emoji/crescent_right@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "55ac7b9b256e9ef9a531e127afc082761f340a11",
+   "src_bytes": 9272,
+   "w": 256
+  },
+  "emoji/cyclone_x.png": {
+   "files": {
+    "x1": {
+     "bytes": 2722,
+     "h": 128,
+     "path": "emoji/cyclone_x.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4762,
+     "h": 256,
+     "path": "emoji/cyclone_x@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "30b97255077505040637c2b6b3666b03111aa2e2",
+   "src_bytes": 14240,
+   "w": 256
+  },
+  "emoji/dash.png": {
+   "files": {
+    "x1": {
+     "bytes": 4720,
+     "h": 128,
+     "path": "emoji/dash.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4308,
+     "h": 256,
+     "path": "emoji/dash@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "f8c9790abed3539267bf2de06a9067ef9aedbe91",
+   "src_bytes": 7977,
+   "w": 256
+  },
+  "emoji/dice.png": {
+   "files": {
+    "x1": {
+     "bytes": 4838,
+     "h": 128,
+     "path": "emoji/dice.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6972,
+     "h": 256,
+     "path": "emoji/dice@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "3f0ace67896a8ee9d8035022e8e2d421ce12eabd",
+   "src_bytes": 12037,
+   "w": 256
+  },
+  "emoji/dizzy_deco.png": {
+   "files": {
+    "x1": {
+     "bytes": 4204,
+     "h": 128,
+     "path": "emoji/dizzy_deco.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4406,
+     "h": 256,
+     "path": "emoji/dizzy_deco@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "1bdae29c35b983d584f1b688d9c7a3b23df686e9",
+   "src_bytes": 11566,
+   "w": 256
+  },
+  "emoji/dodo.png": {
+   "files": {
+    "x1": {
+     "bytes": 5028,
+     "h": 128,
+     "path": "emoji/dodo.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6068,
+     "h": 256,
+     "path": "emoji/dodo@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "579befb4312d7fe611ca155a66431434cef09ecd",
+   "src_bytes": 15578,
+   "w": 256
+  },
+  "emoji/dolphin.png": {
+   "files": {
+    "x1": {
+     "bytes": 5052,
+     "h": 128,
+     "path": "emoji/dolphin.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5454,
+     "h": 256,
+     "path": "emoji/dolphin@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "ea9e37e7496ddd7aa0640935d02b3eb29e59bbfc",
+   "src_bytes": 9721,
+   "w": 256
+  },
+  "emoji/donut.png": {
+   "files": {
+    "x1": {
+     "bytes": 5304,
+     "h": 128,
+     "path": "emoji/donut.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6842,
+     "h": 256,
+     "path": "emoji/donut@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "e58d16e6690bb1ca2b9d65b87a3bb04c1cf73fca",
+   "src_bytes": 13490,
+   "w": 256
+  },
+  "emoji/dragon.png": {
+   "files": {
+    "x1": {
+     "bytes": 7102,
+     "h": 128,
+     "path": "emoji/dragon.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8296,
+     "h": 256,
+     "path": "emoji/dragon@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "bb165f6099c8db9b2cf352784dff715029c77a28",
+   "src_bytes": 18289,
+   "w": 256
+  },
+  "emoji/droplet.png": {
+   "files": {
+    "x1": {
+     "bytes": 3098,
+     "h": 128,
+     "path": "emoji/droplet.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 3172,
+     "h": 256,
+     "path": "emoji/droplet@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "ff8077a433f3d7c417ef140c907cc82e63788ddd",
+   "src_bytes": 5739,
+   "w": 256
+  },
+  "emoji/elf.png": {
+   "files": {
+    "x1": {
+     "bytes": 4258,
+     "h": 128,
+     "path": "emoji/elf.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5770,
+     "h": 256,
+     "path": "emoji/elf@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "415f388a6cf2269491f66b1cca713da1c16175b1",
+   "src_bytes": 11598,
+   "w": 256
+  },
+  "emoji/fairy.png": {
+   "files": {
+    "x1": {
+     "bytes": 4558,
+     "h": 128,
+     "path": "emoji/fairy.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6406,
+     "h": 256,
+     "path": "emoji/fairy@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "1e51e7a2b9196703501c06a1024e034502d86bb2",
+   "src_bytes": 13476,
+   "w": 256
+  },
+  "emoji/firework.png": {
+   "files": {
+    "x1": {
+     "bytes": 4054,
+     "h": 128,
+     "path": "emoji/firework.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8178,
+     "h": 256,
+     "path": "emoji/firework@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "6d2e3982ee1f755cbb8057ce9bf8fcb8f2ed66dd",
+   "src_bytes": 14981,
+   "w": 256
+  },
+  "emoji/flamingo.png": {
+   "files": {
+    "x1": {
+     "bytes": 5912,
+     "h": 128,
+     "path": "emoji/flamingo.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6886,
+     "h": 256,
+     "path": "emoji/flamingo@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "aae4fb1e05f922ee9c3280fe2a5c892bad710784",
+   "src_bytes": 12056,
+   "w": 256
+  },
+  "emoji/full_moon_face.png": {
+   "files": {
+    "x1": {
+     "bytes": 3694,
+     "h": 128,
+     "path": "emoji/full_moon_face.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6054,
+     "h": 256,
+     "path": "emoji/full_moon_face@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "54ec3d330178809f0cedb641a21c2b636f570b38",
+   "src_bytes": 12469,
+   "w": 256
+  },
+  "emoji/gem.png": {
+   "files": {
+    "x1": {
+     "bytes": 3380,
+     "h": 128,
+     "path": "emoji/gem.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4206,
+     "h": 256,
+     "path": "emoji/gem@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "98c3dc60c2e0bbd4acefffedcbde10dd2ed7bbb5",
+   "src_bytes": 5231,
+   "w": 256
+  },
+  "emoji/genie.png": {
+   "files": {
+    "x1": {
+     "bytes": 5334,
+     "h": 128,
+     "path": "emoji/genie.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 7734,
+     "h": 256,
+     "path": "emoji/genie@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "b392696aef805f571ea24dad72f6017cce66e7ed",
+   "src_bytes": 17910,
+   "w": 256
+  },
+  "emoji/ghost.png": {
+   "files": {
+    "x1": {
+     "bytes": 4358,
+     "h": 128,
+     "path": "emoji/ghost.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4510,
+     "h": 256,
+     "path": "emoji/ghost@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "95447b3b3418c4378bf98823e696352a124b665b",
+   "src_bytes": 11341,
+   "w": 256
+  },
+  "emoji/giraffe.png": {
+   "files": {
+    "x1": {
+     "bytes": 5944,
+     "h": 128,
+     "path": "emoji/giraffe.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 7684,
+     "h": 256,
+     "path": "emoji/giraffe@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "f7cbc025c3d7967258f54edba16261f6b5457520",
+   "src_bytes": 13840,
+   "w": 256
+  },
+  "emoji/goblin.png": {
+   "files": {
+    "x1": {
+     "bytes": 4154,
+     "h": 128,
+     "path": "emoji/goblin.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6286,
+     "h": 256,
+     "path": "emoji/goblin@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "2680f605843e899e3c6bd85d6c76a7a987806764",
+   "src_bytes": 13460,
+   "w": 256
+  },
+  "emoji/hamsa.png": {
+   "files": {
+    "x1": {
+     "bytes": 4348,
+     "h": 128,
+     "path": "emoji/hamsa.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6102,
+     "h": 256,
+     "path": "emoji/hamsa@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "ec86c997941aa0091e558c73cac350c0ff56b804",
+   "src_bytes": 12814,
+   "w": 256
+  },
+  "emoji/island.png": {
+   "files": {
+    "x1": {
+     "bytes": 7080,
+     "h": 128,
+     "path": "emoji/island.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8012,
+     "h": 256,
+     "path": "emoji/island@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "ee444e7ef0f9a77ead467bd643088c9e83a1f65f",
+   "src_bytes": 16031,
+   "w": 256
+  },
+  "emoji/kangaroo.png": {
+   "files": {
+    "x1": {
+     "bytes": 4818,
+     "h": 128,
+     "path": "emoji/kangaroo.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5178,
+     "h": 256,
+     "path": "emoji/kangaroo@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "0377538c399d2d4c77eeb55d210cd596a75b1015",
+   "src_bytes": 10274,
+   "w": 256
+  },
+  "emoji/koala.png": {
+   "files": {
+    "x1": {
+     "bytes": 3624,
+     "h": 128,
+     "path": "emoji/koala.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 3630,
+     "h": 256,
+     "path": "emoji/koala@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "98117ccf6710dd1b9df32a3461ccefb810b06881",
+   "src_bytes": 9828,
+   "w": 256
+  },
+  "emoji/lion.png": {
+   "files": {
+    "x1": {
+     "bytes": 5396,
+     "h": 128,
+     "path": "emoji/lion.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8346,
+     "h": 256,
+     "path": "emoji/lion@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "d3dc451d450076f40e37ceb9cf75624152bb962f",
+   "src_bytes": 17420,
+   "w": 256
+  },
+  "emoji/llama.png": {
+   "files": {
+    "x1": {
+     "bytes": 4554,
+     "h": 128,
+     "path": "emoji/llama.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4614,
+     "h": 256,
+     "path": "emoji/llama@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "0eb976c5080e9d43537b62670c51e0330cdbdd6c",
+   "src_bytes": 8390,
+   "w": 256
+  },
+  "emoji/lollipop.png": {
+   "files": {
+    "x1": {
+     "bytes": 5322,
+     "h": 128,
+     "path": "emoji/lollipop.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8842,
+     "h": 256,
+     "path": "emoji/lollipop@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "27b3efafb662452fa27c2959a322cbed51361ad2",
+   "src_bytes": 18201,
+   "w": 256
+  },
+  "emoji/magnet.png": {
+   "files": {
+    "x1": {
+     "bytes": 5376,
+     "h": 128,
+     "path": "emoji/magnet.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6592,
+     "h": 256,
+     "path": "emoji/magnet@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "c3db2992432dfc8dd081847dfd909f383654a2c3",
+   "src_bytes": 11165,
+   "w": 256
+  },
+  "emoji/mammoth.png": {
+   "files": {
+    "x1": {
+     "bytes": 6270,
+     "h": 128,
+     "path": "emoji/mammoth.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8560,
+     "h": 256,
+     "path": "emoji/mammoth@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "5a940aa561ca64e0496820e58fe38ee17a59e663",
+   "src_bytes": 21268,
+   "w": 256
+  },
+  "emoji/mermaid.png": {
+   "files": {
+    "x1": {
+     "bytes": 6828,
+     "h": 128,
+     "path": "emoji/mermaid.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8508,
+     "h": 256,
+     "path": "emoji/mermaid@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "bb6de866f04af06eb9b1a8ef639c3ddc48786d37",
+   "src_bytes": 16512,
+   "w": 256
+  },
+  "emoji/microbe.png": {
+   "files": {
+    "x1": {
+     "bytes": 7692,
+     "h": 128,
+     "path": "emoji/microbe.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 9594,
+     "h": 256,
+     "path": "emoji/microbe@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "3dfe1918d1c547da911153c6b8c24775aeff3db3",
+   "src_bytes": 22613,
+   "w": 256
+  },
+  "emoji/moon.png": {
+   "files": {
+    "x1": {
+     "bytes": 3408,
+     "h": 128,
+     "path": "emoji/moon.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 3996,
+     "h": 256,
+     "path": "emoji/moon@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "4f446584aa8770708d5026565345b42900e895ce",
+   "src_bytes": 6906,
+   "w": 256
+  },
+  "emoji/moon_fest.png": {
+   "files": {
+    "x1": {
+     "bytes": 3624,
+     "h": 128,
+     "path": "emoji/moon_fest.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 7082,
+     "h": 256,
+     "path": "emoji/moon_fest@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "5159274d68a1b5f7a494c79038029d09007fc63f",
+   "src_bytes": 15351,
+   "w": 256
+  },
+  "emoji/moose.png": {
+   "files": {
+    "x1": {
+     "bytes": 5004,
+     "h": 128,
+     "path": "emoji/moose.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6144,
+     "h": 256,
+     "path": "emoji/moose@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "bbd865e04af9e65ebe0d6067077a91714ff2349e",
+   "src_bytes": 11286,
+   "w": 256
+  },
+  "emoji/music_note.png": {
+   "files": {
+    "x1": {
+     "bytes": 3378,
+     "h": 128,
+     "path": "emoji/music_note.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 3382,
+     "h": 256,
+     "path": "emoji/music_note@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "3260ed47b51a9862536c787be0df9a4374ddc3cf",
+   "src_bytes": 5191,
+   "w": 256
+  },
+  "emoji/nesting.png": {
+   "files": {
+    "x1": {
+     "bytes": 5070,
+     "h": 128,
+     "path": "emoji/nesting.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 7768,
+     "h": 256,
+     "path": "emoji/nesting@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "c8bbba25bbbd048c6a521ada147ddf438ee55058",
+   "src_bytes": 18033,
+   "w": 256
+  },
+  "emoji/ninja.png": {
+   "files": {
+    "x1": {
+     "bytes": 4522,
+     "h": 128,
+     "path": "emoji/ninja.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5696,
+     "h": 256,
+     "path": "emoji/ninja@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "bdfef7df7fc45afcf68855eea14f0dc130be3e54",
+   "src_bytes": 14430,
+   "w": 256
+  },
+  "emoji/ogre.png": {
+   "files": {
+    "x1": {
+     "bytes": 6956,
+     "h": 128,
+     "path": "emoji/ogre.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 10268,
+     "h": 256,
+     "path": "emoji/ogre@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "04e43e92dc95e15c75d0504ff86c095a2e3a8d27",
+   "src_bytes": 24483,
+   "w": 256
+  },
+  "emoji/otter.png": {
+   "files": {
+    "x1": {
+     "bytes": 4810,
+     "h": 128,
+     "path": "emoji/otter.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5948,
+     "h": 256,
+     "path": "emoji/otter@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "8a2aa1f927dee2bcbedb35ec3f4d5088490bdfe6",
+   "src_bytes": 16297,
+   "w": 256
+  },
+  "emoji/owl.png": {
+   "files": {
+    "x1": {
+     "bytes": 5054,
+     "h": 128,
+     "path": "emoji/owl.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 7288,
+     "h": 256,
+     "path": "emoji/owl@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "3e0b02fe6f26f0aedb7b615da183e8c0e1ac117e",
+   "src_bytes": 15740,
+   "w": 256
+  },
+  "emoji/panda.png": {
+   "files": {
+    "x1": {
+     "bytes": 4500,
+     "h": 128,
+     "path": "emoji/panda.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5980,
+     "h": 256,
+     "path": "emoji/panda@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "01d63968a73a444311da8e8f48b151cca8374bd6",
+   "src_bytes": 16024,
+   "w": 256
+  },
+  "emoji/parrot.png": {
+   "files": {
+    "x1": {
+     "bytes": 4524,
+     "h": 128,
+     "path": "emoji/parrot.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5096,
+     "h": 256,
+     "path": "emoji/parrot@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "0d2d8eeddf848ed791cadd03af11a58a89132171",
+   "src_bytes": 12565,
+   "w": 256
+  },
+  "emoji/party.png": {
+   "files": {
+    "x1": {
+     "bytes": 9384,
+     "h": 128,
+     "path": "emoji/party.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 10670,
+     "h": 256,
+     "path": "emoji/party@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "17dd083909cc810a1af2477934371fea8477b822",
+   "src_bytes": 20441,
+   "w": 256
+  },
+  "emoji/penguin.png": {
+   "files": {
+    "x1": {
+     "bytes": 4748,
+     "h": 128,
+     "path": "emoji/penguin.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5812,
+     "h": 256,
+     "path": "emoji/penguin@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "c5e93675a6d7d3e3e2796f39e6a826dff4c2bd22",
+   "src_bytes": 12414,
+   "w": 256
+  },
+  "emoji/pinata.png": {
+   "files": {
+    "x1": {
+     "bytes": 7848,
+     "h": 128,
+     "path": "emoji/pinata.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 10512,
+     "h": 256,
+     "path": "emoji/pinata@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "6aec33bf46cdf96b1944fe5a2f9eb529e6ac2c1e",
+   "src_bytes": 25634,
+   "w": 256
+  },
+  "emoji/pineapple.png": {
+   "files": {
+    "x1": {
+     "bytes": 4700,
+     "h": 128,
+     "path": "emoji/pineapple.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5870,
+     "h": 256,
+     "path": "emoji/pineapple@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "e9f448358af88beeeab4182dc70558c615deefdf",
+   "src_bytes": 12687,
+   "w": 256
+  },
+  "emoji/planet.png": {
+   "files": {
+    "x1": {
+     "bytes": 4610,
+     "h": 128,
+     "path": "emoji/planet.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6686,
+     "h": 256,
+     "path": "emoji/planet@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "7737cc79fff5241a67d6bbcc556b309c0a00d740",
+   "src_bytes": 13209,
+   "w": 256
+  },
+  "emoji/popcorn.png": {
+   "files": {
+    "x1": {
+     "bytes": 4552,
+     "h": 128,
+     "path": "emoji/popcorn.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5528,
+     "h": 256,
+     "path": "emoji/popcorn@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "181bb2b868bbaf3506019a7ed897b7d11ad6faa6",
+   "src_bytes": 9499,
+   "w": 256
+  },
+  "emoji/puzzle.png": {
+   "files": {
+    "x1": {
+     "bytes": 4686,
+     "h": 128,
+     "path": "emoji/puzzle.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4864,
+     "h": 256,
+     "path": "emoji/puzzle@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "96232d165df2178239fdffbd9fa45b731a7644ef",
+   "src_bytes": 9154,
+   "w": 256
+  },
+  "emoji/rainbow.png": {
+   "files": {
+    "x1": {
+     "bytes": 4230,
+     "h": 128,
+     "path": "emoji/rainbow.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6644,
+     "h": 256,
+     "path": "emoji/rainbow@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "ba82aae0bf8e8fbcef9a8d4bd2bde64e3fa1ad3c",
+   "src_bytes": 13714,
+   "w": 256
+  },
+  "emoji/rhino.png": {
+   "files": {
+    "x1": {
+     "bytes": 4252,
+     "h": 128,
+     "path": "emoji/rhino.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4540,
+     "h": 256,
+     "path": "emoji/rhino@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "451cd8be5a2705a6af39ba277ddf9ca9c978df5e",
+   "src_bytes": 11854,
+   "w": 256
+  },
+  "emoji/ribbon.png": {
+   "files": {
+    "x1": {
+     "bytes": 4886,
+     "h": 128,
+     "path": "emoji/ribbon.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5542,
+     "h": 256,
+     "path": "emoji/ribbon@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "f9fc75b44b03be49464e471e5a562a83f64fe1d8",
+   "src_bytes": 10604,
+   "w": 256
+  },
+  "emoji/rosette.png": {
+   "files": {
+    "x1": {
+     "bytes": 6486,
+     "h": 128,
+     "path": "emoji/rosette.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8824,
+     "h": 256,
+     "path": "emoji/rosette@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "a5fae8f324b9c845625db43f2ba6cf224860c679",
+   "src_bytes": 17852,
+   "w": 256
+  },
+  "emoji/royal.png": {
+   "files": {
+    "x1": {
+     "bytes": 4460,
+     "h": 128,
+     "path": "emoji/royal.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5444,
+     "h": 256,
+     "path": "emoji/royal@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "1a8d9fd23f71f351bf3e457bc4521cfa755c4775",
+   "src_bytes": 10899,
+   "w": 256
+  },
+  "emoji/scroll.png": {
+   "files": {
+    "x1": {
+     "bytes": 2176,
+     "h": 128,
+     "path": "emoji/scroll.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 2962,
+     "h": 256,
+     "path": "emoji/scroll@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "f7b78a7db2d5e2a1c13660d04c2c7da1fd1a8ec9",
+   "src_bytes": 6180,
+   "w": 256
+  },
+  "emoji/shooting_star.png": {
+   "files": {
+    "x1": {
+     "bytes": 2244,
+     "h": 128,
+     "path": "emoji/shooting_star.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4316,
+     "h": 256,
+     "path": "emoji/shooting_star@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "978d25d9021626436fc11b4c673e8cc2ebadc8de",
+   "src_bytes": 9524,
+   "w": 256
+  },
+  "emoji/sloth.png": {
+   "files": {
+    "x1": {
+     "bytes": 5842,
+     "h": 128,
+     "path": "emoji/sloth.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6086,
+     "h": 256,
+     "path": "emoji/sloth@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "09b5e99923d1ffb6df74e4eb25ad79fb845f26b7",
+   "src_bytes": 14767,
+   "w": 256
+  },
+  "emoji/snail.png": {
+   "files": {
+    "x1": {
+     "bytes": 4608,
+     "h": 128,
+     "path": "emoji/snail.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5480,
+     "h": 256,
+     "path": "emoji/snail@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "58c4dc47e84401f8126462e8db0227597dc26947",
+   "src_bytes": 11518,
+   "w": 256
+  },
+  "emoji/spark_burst.png": {
+   "files": {
+    "x1": {
+     "bytes": 4310,
+     "h": 128,
+     "path": "emoji/spark_burst.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8746,
+     "h": 256,
+     "path": "emoji/spark_burst@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "7856303d01c8fc28f4e5805c0ed0511ede8546d2",
+   "src_bytes": 18006,
+   "w": 256
+  },
+  "emoji/sparkle_swirl.png": {
+   "files": {
+    "x1": {
+     "bytes": 5852,
+     "h": 128,
+     "path": "emoji/sparkle_swirl.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6692,
+     "h": 256,
+     "path": "emoji/sparkle_swirl@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "58dcf5bf807982a28cdc67cf3d15cf233c8ddf4f",
+   "src_bytes": 9911,
+   "w": 256
+  },
+  "emoji/spiral.png": {
+   "files": {
+    "x1": {
+     "bytes": 7634,
+     "h": 128,
+     "path": "emoji/spiral.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8216,
+     "h": 256,
+     "path": "emoji/spiral@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "7997000acac186e4877283811804e4e0d7b8b45b",
+   "src_bytes": 12906,
+   "w": 256
+  },
+  "emoji/star.png": {
+   "files": {
+    "x1": {
+     "bytes": 5840,
+     "h": 128,
+     "path": "emoji/star.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6810,
+     "h": 256,
+     "path": "emoji/star@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "788f8159bd79d3de411f858adb7a00048afe52d6",
+   "src_bytes": 9895,
+   "w": 256
+  },
+  "emoji/strawberry.png": {
+   "files": {
+    "x1": {
+     "bytes": 4538,
+     "h": 128,
+     "path": "emoji/strawberry.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6012,
+     "h": 256,
+     "path": "emoji/strawberry@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "6b10acf23f78a2232fafb0ac4cf7b3684fbfd2c4",
+   "src_bytes": 12227,
+   "w": 256
+  },
+  "emoji/sun.png": {
+   "files": {
+    "x1": {
+     "bytes": 5228,
+     "h": 128,
+     "path": "emoji/sun.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 7632,
+     "h": 256,
+     "path": "emoji/sun@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "3d7f239524d3ab968fc512eb353e254c6eebf2ca",
+   "src_bytes": 14137,
+   "w": 256
+  },
+  "emoji/sunflower.png": {
+   "files": {
+    "x1": {
+     "bytes": 5690,
+     "h": 128,
+     "path": "emoji/sunflower.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6398,
+     "h": 256,
+     "path": "emoji/sunflower@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "5cec3fd69cec6fd313d3745420b4da0c583f7536",
+   "src_bytes": 10734,
+   "w": 256
+  },
+  "emoji/superhero.png": {
+   "files": {
+    "x1": {
+     "bytes": 5182,
+     "h": 128,
+     "path": "emoji/superhero.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6972,
+     "h": 256,
+     "path": "emoji/superhero@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "04d7a42dadba16a2ad88c0c060b95b02f2436e9c",
+   "src_bytes": 14105,
+   "w": 256
+  },
+  "emoji/supervillain.png": {
+   "files": {
+    "x1": {
+     "bytes": 5700,
+     "h": 128,
+     "path": "emoji/supervillain.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8076,
+     "h": 256,
+     "path": "emoji/supervillain@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "13ecc88c22222233e82b2a3240caa66d5f9ba514",
+   "src_bytes": 13835,
+   "w": 256
+  },
+  "emoji/swan.png": {
+   "files": {
+    "x1": {
+     "bytes": 4294,
+     "h": 128,
+     "path": "emoji/swan.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4574,
+     "h": 256,
+     "path": "emoji/swan@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "d7dfd387ec367c7e6ab74fe7cdc9b06687364608",
+   "src_bytes": 10914,
+   "w": 256
+  },
+  "emoji/tornado.png": {
+   "files": {
+    "x1": {
+     "bytes": 4288,
+     "h": 128,
+     "path": "emoji/tornado.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4870,
+     "h": 256,
+     "path": "emoji/tornado@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "e54ced3f19ddadbd0baee4a8a9b9ea28008e6e74",
+   "src_bytes": 14461,
+   "w": 256
+  },
+  "emoji/trex.png": {
+   "files": {
+    "x1": {
+     "bytes": 5564,
+     "h": 128,
+     "path": "emoji/trex.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6906,
+     "h": 256,
+     "path": "emoji/trex@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "31351ad6627accf6f124a0c647fe3797e86b4ab5",
+   "src_bytes": 15259,
+   "w": 256
+  },
+  "emoji/troll.png": {
+   "files": {
+    "x1": {
+     "bytes": 4292,
+     "h": 128,
+     "path": "emoji/troll.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5720,
+     "h": 256,
+     "path": "emoji/troll@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "19013a1c748a12a31f14f296645ab4298f4fb1c6",
+   "src_bytes": 16445,
+   "w": 256
+  },
+  "emoji/trophy.png": {
+   "files": {
+    "x1": {
+     "bytes": 4898,
+     "h": 128,
+     "path": "emoji/trophy.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5344,
+     "h": 256,
+     "path": "emoji/trophy@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "4d4092955d5f5bbf9b137b77dacf4fa78acd8b25",
+   "src_bytes": 7978,
+   "w": 256
+  },
+  "emoji/tulip.png": {
+   "files": {
+    "x1": {
+     "bytes": 5178,
+     "h": 128,
+     "path": "emoji/tulip.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5496,
+     "h": 256,
+     "path": "emoji/tulip@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "5a2e72702f96ee3beb51ac275a6bc4b286252500",
+   "src_bytes": 10387,
+   "w": 256
+  },
+  "emoji/turtle.png": {
+   "files": {
+    "x1": {
+     "bytes": 3608,
+     "h": 128,
+     "path": "emoji/turtle.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4006,
+     "h": 256,
+     "path": "emoji/turtle@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "c26409b2c3e5d45b70c325ecc40a2540a97c40d2",
+   "src_bytes": 9806,
+   "w": 256
+  },
+  "emoji/ufo.png": {
+   "files": {
+    "x1": {
+     "bytes": 4284,
+     "h": 128,
+     "path": "emoji/ufo.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5426,
+     "h": 256,
+     "path": "emoji/ufo@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "2dc0c32808620804e0a7b9ee13a63296d8f1cfe7",
+   "src_bytes": 13358,
+   "w": 256
+  },
+  "emoji/ui_pause.png": {
+   "files": {
+    "x1": {
+     "bytes": 870,
+     "h": 128,
+     "path": "emoji/ui_pause.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 1442,
+     "h": 256,
+     "path": "emoji/ui_pause@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "0fd7e9551819508fc6d0720c88421a158834739d",
+   "src_bytes": 2273,
+   "w": 256
+  },
+  "emoji/ui_speaker.png": {
+   "files": {
+    "x1": {
+     "bytes": 5122,
+     "h": 128,
+     "path": "emoji/ui_speaker.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5360,
+     "h": 256,
+     "path": "emoji/ui_speaker@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "c156514d7e9e5e5f248cb18e1b3023b5df259e9e",
+   "src_bytes": 9441,
+   "w": 256
+  },
+  "emoji/ui_star.png": {
+   "files": {
+    "x1": {
+     "bytes": 3946,
+     "h": 128,
+     "path": "emoji/ui_star.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4360,
+     "h": 256,
+     "path": "emoji/ui_star@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "ddc1580d566f537920999678dcccc92afb9af3ac",
+   "src_bytes": 6100,
+   "w": 256
+  },
+  "emoji/unicorn.png": {
+   "files": {
+    "x1": {
+     "bytes": 4646,
+     "h": 128,
+     "path": "emoji/unicorn.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5600,
+     "h": 256,
+     "path": "emoji/unicorn@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "415fc46e61704a9fd9a64547a709799e7aeefeef",
+   "src_bytes": 12212,
+   "w": 256
+  },
+  "emoji/vampire.png": {
+   "files": {
+    "x1": {
+     "bytes": 4404,
+     "h": 128,
+     "path": "emoji/vampire.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6228,
+     "h": 256,
+     "path": "emoji/vampire@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "e21828cbe189db87da20622b0173f5b035d14a02",
+   "src_bytes": 13919,
+   "w": 256
+  },
+  "emoji/volcano.png": {
+   "files": {
+    "x1": {
+     "bytes": 5766,
+     "h": 128,
+     "path": "emoji/volcano.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8388,
+     "h": 256,
+     "path": "emoji/volcano@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "28a424ada54b40b8499f1274677f26d15fba32d8",
+   "src_bytes": 19624,
+   "w": 256
+  },
+  "emoji/watermelon.png": {
+   "files": {
+    "x1": {
+     "bytes": 4830,
+     "h": 128,
+     "path": "emoji/watermelon.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 7066,
+     "h": 256,
+     "path": "emoji/watermelon@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "5512bc23ea2ac531e38a8ba643228a8aca1a9ea8",
+   "src_bytes": 15223,
+   "w": 256
+  },
+  "emoji/wave.png": {
+   "files": {
+    "x1": {
+     "bytes": 3470,
+     "h": 128,
+     "path": "emoji/wave.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4138,
+     "h": 256,
+     "path": "emoji/wave@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "91d699b58eecbc91e8d6b57b0a7cb1246950dcd6",
+   "src_bytes": 7995,
+   "w": 256
+  },
+  "emoji/wizard.png": {
+   "files": {
+    "x1": {
+     "bytes": 5136,
+     "h": 128,
+     "path": "emoji/wizard.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 6502,
+     "h": 256,
+     "path": "emoji/wizard@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "e7e70da2b8f1a39515ffeee92aad41145a763e37",
+   "src_bytes": 12853,
+   "w": 256
+  },
+  "emoji/yoyo.png": {
+   "files": {
+    "x1": {
+     "bytes": 4642,
+     "h": 128,
+     "path": "emoji/yoyo.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 5842,
+     "h": 256,
+     "path": "emoji/yoyo@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "f39746917dde42154b493461e55353105462afb2",
+   "src_bytes": 13205,
+   "w": 256
+  },
+  "emoji/zebra.png": {
+   "files": {
+    "x1": {
+     "bytes": 5930,
+     "h": 128,
+     "path": "emoji/zebra.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 8284,
+     "h": 256,
+     "path": "emoji/zebra@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "d622a1eba9834669209f78277743991f41cdf08c",
+   "src_bytes": 22739,
+   "w": 256
+  },
+  "emoji/zombie.png": {
+   "files": {
+    "x1": {
+     "bytes": 3792,
+     "h": 128,
+     "path": "emoji/zombie.webp",
+     "w": 128
+    },
+    "x2": {
+     "bytes": 4830,
+     "h": 256,
+     "path": "emoji/zombie@2x.webp",
+     "w": 256
+    }
+   },
+   "h": 256,
+   "sha1": "f4534ffde5206fcb0095e94415ebc69598a65114",
+   "src_bytes": 12904,
+   "w": 256
+  },
+  "furniture/chandelier_c.png": {
+   "files": {
+    "x1": {
+     "bytes": 26856,
+     "h": 368,
+     "path": "furniture/chandelier_c.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 61520,
+     "h": 736,
+     "path": "furniture/chandelier_c@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 844,
+   "sha1": "9aa7f402e8f0768204f153eadc74f9eadf2c255b",
+   "src_bytes": 533266,
+   "w": 596
+  },
+  "furniture/chandelier_f.png": {
+   "files": {
+    "x1": {
+     "bytes": 18418,
+     "h": 382,
+     "path": "furniture/chandelier_f.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 38174,
+     "h": 764,
+     "path": "furniture/chandelier_f@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 849,
+   "sha1": "5b51c8fe2ce4f3ef97029576ae71e98848e06453",
+   "src_bytes": 459319,
+   "w": 578
+  },
+  "furniture/chandelier_j.png": {
+   "files": {
+    "x1": {
+     "bytes": 25506,
+     "h": 369,
+     "path": "furniture/chandelier_j.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 60830,
+     "h": 737,
+     "path": "furniture/chandelier_j@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 876,
+   "sha1": "789dca54217eb35a8c39ad7134c3b5a8a8692ea5",
+   "src_bytes": 521262,
+   "w": 618
+  },
+  "furniture/chandelier_m.png": {
+   "files": {
+    "x1": {
+     "bytes": 22494,
+     "h": 388,
+     "path": "furniture/chandelier_m.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 31338,
+     "h": 717,
+     "path": "furniture/chandelier_m@2x.webp",
+     "w": 480
+    }
+   },
+   "h": 717,
+   "sha1": "2f034a8cfce80a66c01b162e867984a15d1abf46",
+   "src_bytes": 391062,
+   "w": 480
+  },
+  "furniture/drape_c.png": {
+   "files": {
+    "x1": {
+     "bytes": 18572,
+     "h": 389,
+     "path": "furniture/drape_c.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 42396,
+     "h": 778,
+     "path": "furniture/drape_c@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 880,
+   "sha1": "7fbcdede8a00db310ecf8a18897165f6d85d5a0c",
+   "src_bytes": 348536,
+   "w": 588
+  },
+  "furniture/drape_f.png": {
+   "files": {
+    "x1": {
+     "bytes": 7318,
+     "h": 281,
+     "path": "furniture/drape_f.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 15312,
+     "h": 561,
+     "path": "furniture/drape_f@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 873,
+   "sha1": "09d608bcb417af103e4f10570dfbe8c329e3615e",
+   "src_bytes": 304339,
+   "w": 809
+  },
+  "furniture/drape_j.png": {
+   "files": {
+    "x1": {
+     "bytes": 16604,
+     "h": 354,
+     "path": "furniture/drape_j.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 36546,
+     "h": 707,
+     "path": "furniture/drape_j@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 775,
+   "sha1": "17644bc26f87fc3cc76b0b8e4c156e24a19fdc16",
+   "src_bytes": 330307,
+   "w": 570
+  },
+  "furniture/drape_m.png": {
+   "files": {
+    "x1": {
+     "bytes": 14044,
+     "h": 327,
+     "path": "furniture/drape_m.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 32148,
+     "h": 654,
+     "path": "furniture/drape_m@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 1043,
+   "sha1": "64812aee3145d848ad55e5a218bd86a2b8678372",
+   "src_bytes": 624397,
+   "w": 829
+  },
+  "furniture/garland_c.png": {
+   "files": {
+    "x1": {
+     "bytes": 32088,
+     "h": 488,
+     "path": "furniture/garland_c.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 42714,
+     "h": 711,
+     "path": "furniture/garland_c@2x.webp",
+     "w": 379
+    }
+   },
+   "h": 711,
+   "sha1": "a56f558a68ceb8cd6a9a65bcc605eae4f58a1950",
+   "src_bytes": 265280,
+   "w": 379
+  },
+  "furniture/garland_f.png": {
+   "files": {
+    "x1": {
+     "bytes": 11084,
+     "h": 147,
+     "path": "furniture/garland_f.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 25966,
+     "h": 294,
+     "path": "furniture/garland_f@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 500,
+   "sha1": "3fae1ac582d9010763817b11e642915576a73afb",
+   "src_bytes": 342657,
+   "w": 883
+  },
+  "furniture/garland_j.png": {
+   "files": {
+    "x1": {
+     "bytes": 11340,
+     "h": 411,
+     "path": "furniture/garland_j.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 25732,
+     "h": 821,
+     "path": "furniture/garland_j@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 957,
+   "sha1": "e7c14de5beae8b035d1d5ac02aefe5f771945c8d",
+   "src_bytes": 261281,
+   "w": 606
+  },
+  "furniture/garland_m.png": {
+   "files": {
+    "x1": {
+     "bytes": 8026,
+     "h": 183,
+     "path": "furniture/garland_m.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 19632,
+     "h": 367,
+     "path": "furniture/garland_m@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 669,
+   "sha1": "1be5aa04104a05cad5f4b65a9613b826f4a2613d",
+   "src_bytes": 382414,
+   "w": 948
+  },
+  "furniture/mural_c.png": {
+   "files": {
+    "x1": {
+     "bytes": 12940,
+     "h": 236,
+     "path": "furniture/mural_c.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 29282,
+     "h": 472,
+     "path": "furniture/mural_c@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 639,
+   "sha1": "0c197d7f886780347b64300ee7c6b489e36daf7a",
+   "src_bytes": 372120,
+   "w": 704
+  },
+  "furniture/mural_f.png": {
+   "files": {
+    "x1": {
+     "bytes": 9686,
+     "h": 275,
+     "path": "furniture/mural_f.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 21766,
+     "h": 550,
+     "path": "furniture/mural_f@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 957,
+   "sha1": "9b052fd1f14f4e7d60c41c7746d8fde3472de6fb",
+   "src_bytes": 441678,
+   "w": 904
+  },
+  "furniture/mural_j.png": {
+   "files": {
+    "x1": {
+     "bytes": 19590,
+     "h": 263,
+     "path": "furniture/mural_j.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 48824,
+     "h": 526,
+     "path": "furniture/mural_j@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 816,
+   "sha1": "bd1f96b2d37aa59b07d2bdf90395b20ea9ded750",
+   "src_bytes": 653000,
+   "w": 806
+  },
+  "furniture/mural_m.png": {
+   "files": {
+    "x1": {
+     "bytes": 22638,
+     "h": 260,
+     "path": "furniture/mural_m.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 51812,
+     "h": 520,
+     "path": "furniture/mural_m@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 784,
+   "sha1": "9631254027787e69602903c26d4072a3bd2f4a18",
+   "src_bytes": 645676,
+   "w": 784
+  },
+  "furniture/pouf_c.png": {
+   "files": {
+    "x1": {
+     "bytes": 18004,
+     "h": 248,
+     "path": "furniture/pouf_c.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 41642,
+     "h": 496,
+     "path": "furniture/pouf_c@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 772,
+   "sha1": "4e37d81ac11f2dfadafe8f844a0c090bab3f264c",
+   "src_bytes": 686388,
+   "w": 810
+  },
+  "furniture/pouf_f.png": {
+   "files": {
+    "x1": {
+     "bytes": 8100,
+     "h": 253,
+     "path": "furniture/pouf_f.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 18490,
+     "h": 506,
+     "path": "furniture/pouf_f@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 861,
+   "sha1": "c8b9de5825679a797bea2976d4558c2b8dd2b2f5",
+   "src_bytes": 411666,
+   "w": 884
+  },
+  "furniture/pouf_j.png": {
+   "files": {
+    "x1": {
+     "bytes": 10032,
+     "h": 176,
+     "path": "furniture/pouf_j.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 22798,
+     "h": 352,
+     "path": "furniture/pouf_j@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 612,
+   "sha1": "627ebf060c243e8ae062b57b97b659c8a95697a7",
+   "src_bytes": 404589,
+   "w": 905
+  },
+  "furniture/pouf_m.png": {
+   "files": {
+    "x1": {
+     "bytes": 9300,
+     "h": 236,
+     "path": "furniture/pouf_m.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 20792,
+     "h": 471,
+     "path": "furniture/pouf_m@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 864,
+   "sha1": "4ccea4a38033954c1566e297c553f9880b297798",
+   "src_bytes": 411182,
+   "w": 953
+  },
+  "furniture/tapestry_c.png": {
+   "files": {
+    "x1": {
+     "bytes": 28492,
+     "h": 374,
+     "path": "furniture/tapestry_c.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 59460,
+     "h": 719,
+     "path": "furniture/tapestry_c@2x.webp",
+     "w": 500
+    }
+   },
+   "h": 719,
+   "sha1": "43d967db70dc33469db10940c15e00eb50924d5f",
+   "src_bytes": 356093,
+   "w": 500
+  },
+  "furniture/tapestry_f.png": {
+   "files": {
+    "x1": {
+     "bytes": 12994,
+     "h": 258,
+     "path": "furniture/tapestry_f.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 30028,
+     "h": 517,
+     "path": "furniture/tapestry_f@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 665,
+   "sha1": "1538f69cd5726ea4da31fc783b49ca78ceb7a096",
+   "src_bytes": 318874,
+   "w": 669
+  },
+  "furniture/tapestry_j.png": {
+   "files": {
+    "x1": {
+     "bytes": 25826,
+     "h": 287,
+     "path": "furniture/tapestry_j.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 66232,
+     "h": 574,
+     "path": "furniture/tapestry_j@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 978,
+   "sha1": "183bcea2dfc53628f75ebbedbbb84f77008079d4",
+   "src_bytes": 900549,
+   "w": 886
+  },
+  "furniture/tapestry_m.png": {
+   "files": {
+    "x1": {
+     "bytes": 16326,
+     "h": 275,
+     "path": "furniture/tapestry_m.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 39076,
+     "h": 550,
+     "path": "furniture/tapestry_m@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 958,
+   "sha1": "a03046bb307c72b68167b9afd08d5a2820411172",
+   "src_bytes": 628522,
+   "w": 905
+  },
+  "furniture/trellis_c.png": {
+   "files": {
+    "x1": {
+     "bytes": 22652,
+     "h": 261,
+     "path": "furniture/trellis_c.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 56950,
+     "h": 523,
+     "path": "furniture/trellis_c@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 913,
+   "sha1": "b98748da7a5257ece4f447a2b6e97ea435fd110e",
+   "src_bytes": 908725,
+   "w": 908
+  },
+  "furniture/trellis_f.png": {
+   "files": {
+    "x1": {
+     "bytes": 31490,
+     "h": 259,
+     "path": "furniture/trellis_f.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 79588,
+     "h": 518,
+     "path": "furniture/trellis_f@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 855,
+   "sha1": "fcdecbad161ba47bd151c7a08a5e833fe25e1312",
+   "src_bytes": 646135,
+   "w": 859
+  },
+  "furniture/trellis_j.png": {
+   "files": {
+    "x1": {
+     "bytes": 34732,
+     "h": 259,
+     "path": "furniture/trellis_j.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 90764,
+     "h": 519,
+     "path": "furniture/trellis_j@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 885,
+   "sha1": "8671a1fdab250c46642ce2f18580657c4ac43318",
+   "src_bytes": 978722,
+   "w": 887
+  },
+  "furniture/trellis_m.png": {
+   "files": {
+    "x1": {
+     "bytes": 26922,
+     "h": 298,
+     "path": "furniture/trellis_m.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 63708,
+     "h": 595,
+     "path": "furniture/trellis_m@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 714,
+   "sha1": "3db20ad51a142edb745b177bb9fd8a38e90c67cf",
+   "src_bytes": 570172,
+   "w": 624
+  },
+  "furniture/urn_c.png": {
+   "files": {
+    "x1": {
+     "bytes": 13212,
+     "h": 269,
+     "path": "furniture/urn_c.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 30022,
+     "h": 538,
+     "path": "furniture/urn_c@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 685,
+   "sha1": "81030fd8891ba8922bf7c74cb4e0a4c142e4c7cc",
+   "src_bytes": 397626,
+   "w": 662
+  },
+  "furniture/urn_f.png": {
+   "files": {
+    "x1": {
+     "bytes": 10112,
+     "h": 271,
+     "path": "furniture/urn_f.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 21694,
+     "h": 542,
+     "path": "furniture/urn_f@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 604,
+   "sha1": "a0bd0aa7ac6746153d4c00b7f70e6c98d132fcd7",
+   "src_bytes": 208909,
+   "w": 580
+  },
+  "furniture/urn_j.png": {
+   "files": {
+    "x1": {
+     "bytes": 15928,
+     "h": 270,
+     "path": "furniture/urn_j.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 36916,
+     "h": 540,
+     "path": "furniture/urn_j@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 768,
+   "sha1": "f01d29234e3f9e1e932614da42eb247794ad6d1a",
+   "src_bytes": 414773,
+   "w": 740
+  },
+  "furniture/urn_m.png": {
+   "files": {
+    "x1": {
+     "bytes": 6784,
+     "h": 265,
+     "path": "furniture/urn_m.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 14690,
+     "h": 530,
+     "path": "furniture/urn_m@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 894,
+   "sha1": "48152223ffbfdd451c788c67db6addb8c13c8413",
+   "src_bytes": 381187,
+   "w": 877
+  },
+  "mascot/neutral/mascot_happy.png": {
+   "files": {
+    "x1": {
+     "bytes": 8830,
+     "h": 260,
+     "path": "mascot/neutral/mascot_happy.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 17852,
+     "h": 520,
+     "path": "mascot/neutral/mascot_happy@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 1024,
+   "sha1": "3c3233c74b6ddc9195ae922d2f68e8858dc80a7d",
+   "src_bytes": 414998,
+   "w": 1024
+  },
+  "mascot/neutral/mascot_idle.png": {
+   "files": {
+    "x1": {
+     "bytes": 8134,
+     "h": 260,
+     "path": "mascot/neutral/mascot_idle.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 16722,
+     "h": 520,
+     "path": "mascot/neutral/mascot_idle@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 1024,
+   "sha1": "64bc3084c8c32d7f825311ef4ced68e468b515ce",
+   "src_bytes": 394453,
+   "w": 1024
+  },
+  "mascot/neutral/mascot_think.png": {
+   "files": {
+    "x1": {
+     "bytes": 7918,
+     "h": 260,
+     "path": "mascot/neutral/mascot_think.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 15838,
+     "h": 520,
+     "path": "mascot/neutral/mascot_think@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 1024,
+   "sha1": "0e4cc780546547c1a4adf2751099ce8439404e2c",
+   "src_bytes": 398640,
+   "w": 1024
+  },
+  "mascot/neutral/mascot_wave.png": {
+   "files": {
+    "x1": {
+     "bytes": 8372,
+     "h": 260,
+     "path": "mascot/neutral/mascot_wave.webp",
+     "w": 260
+    },
+    "x2": {
+     "bytes": 17106,
+     "h": 520,
+     "path": "mascot/neutral/mascot_wave@2x.webp",
+     "w": 520
+    }
+   },
+   "h": 1024,
+   "sha1": "cfaa8fc91d73a12d583bdcebb6cb61fd21e70c60",
+   "src_bytes": 412642,
+   "w": 1024
+  },
+  "music/10PM-PM-Music.wav": {
+   "files": {
+    "audio": {
+     "bytes": 1280697,
+     "path": "audio/music/10PM-PM-Music.m4a"
+    }
+   },
+   "sha1": "833c4daca5cdf36e4077a35b40b15ee41a96aa41",
+   "src_bytes": 22932012
+  },
+  "music/Dentists-Office-PM-Music.wav": {
+   "files": {
+    "audio": {
+     "bytes": 1907761,
+     "path": "audio/music/Dentists-Office-PM-Music.m4a"
+    }
+   },
+   "sha1": "1e63c1fa3064d81faa336565898b79c8f598dce5",
+   "src_bytes": 35722530
+  },
+  "music/The-25th-Hour-Schlatt-Crossing-PM-Music.wav": {
+   "files": {
+    "audio": {
+     "bytes": 1322651,
+     "path": "audio/music/The-25th-Hour-Schlatt-Crossing-PM-Music.m4a"
+    }
+   },
+   "sha1": "be89434777b0c676365d6922b66885defb512bd4",
+   "src_bytes": 23926914
+  },
+  "room/arcade/bubble_pop.png": {
+   "files": {
+    "thumb": {
+     "bytes": 1734,
+     "h": 134,
+     "path": "thumbs/room/arcade/bubble_pop.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 9028,
+     "h": 502,
+     "path": "room/arcade/bubble_pop.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 15384,
+     "h": 768,
+     "path": "room/arcade/bubble_pop@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "b5974c47c52050a25ab1591d8a5e9818c03e3bc5",
+   "src_bytes": 1011665,
+   "w": 1376
+  },
+  "room/arcade/star_catcher.png": {
+   "files": {
+    "thumb": {
+     "bytes": 2756,
+     "h": 134,
+     "path": "thumbs/room/arcade/star_catcher.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 11864,
+     "h": 502,
+     "path": "room/arcade/star_catcher.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 19418,
+     "h": 768,
+     "path": "room/arcade/star_catcher@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "39c5bbf9541863084da05cba927044fe6cc18b99",
+   "src_bytes": 1059718,
+   "w": 1376
+  },
+  "room/collection/c1.png": {
+   "files": {
+    "thumb": {
+     "bytes": 994,
+     "h": 134,
+     "path": "thumbs/room/collection/c1.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 4876,
+     "h": 502,
+     "path": "room/collection/c1.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 8616,
+     "h": 768,
+     "path": "room/collection/c1@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "857fdc1d0ad0722c06d1bafc320edbf84bf2f41c",
+   "src_bytes": 965304,
+   "w": 1376
+  },
+  "room/collection/c10.png": {
+   "files": {
+    "thumb": {
+     "bytes": 1864,
+     "h": 134,
+     "path": "thumbs/room/collection/c10.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 13660,
+     "h": 502,
+     "path": "room/collection/c10.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 24756,
+     "h": 768,
+     "path": "room/collection/c10@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "0145cdb9ddac983314f0752fc6bdbedb051d27c0",
+   "src_bytes": 1010069,
+   "w": 1376
+  },
+  "room/collection/c2.png": {
+   "files": {
+    "thumb": {
+     "bytes": 1880,
+     "h": 134,
+     "path": "thumbs/room/collection/c2.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 8654,
+     "h": 502,
+     "path": "room/collection/c2.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 14930,
+     "h": 768,
+     "path": "room/collection/c2@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "726151b66cdddf13d7ba1637b087b786d539bfc7",
+   "src_bytes": 893818,
+   "w": 1376
+  },
+  "room/collection/c9.jpg": {
+   "files": {
+    "thumb": {
+     "bytes": 2110,
+     "h": 134,
+     "path": "thumbs/room/collection/c9.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 10508,
+     "h": 502,
+     "path": "room/collection/c9.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 18476,
+     "h": 768,
+     "path": "room/collection/c9@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "66cdb0856db6cfd0ab7cfae1a2270ea69a72e0e3",
+   "src_bytes": 64402,
+   "w": 1376
+  },
+  "room/echo/echo.jpg": {
+   "files": {
+    "thumb": {
+     "bytes": 1056,
+     "h": 134,
+     "path": "thumbs/room/echo/echo.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 5272,
+     "h": 502,
+     "path": "room/echo/echo.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 9196,
+     "h": 768,
+     "path": "room/echo/echo@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "3aa1605efd34f33a7525f2e4dfc14b9c55243d2f",
+   "src_bytes": 112013,
+   "w": 1376
+  },
+  "room/light/glasshouse.png": {
+   "files": {
+    "thumb": {
+     "bytes": 7718,
+     "h": 134,
+     "path": "thumbs/room/light/glasshouse.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 34226,
+     "h": 502,
+     "path": "room/light/glasshouse.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 54840,
+     "h": 768,
+     "path": "room/light/glasshouse@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "913362297e72797a4319996fc403ec7d0ef63075",
+   "src_bytes": 1202840,
+   "w": 1376
+  },
+  "room/light/morning.png": {
+   "files": {
+    "thumb": {
+     "bytes": 2326,
+     "h": 134,
+     "path": "thumbs/room/light/morning.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 12078,
+     "h": 502,
+     "path": "room/light/morning.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 22864,
+     "h": 768,
+     "path": "room/light/morning@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "d51b1906a68cb28698e6d3350d1feb61b8376659",
+   "src_bytes": 1285774,
+   "w": 1376
+  },
+  "room/light/starfield.png": {
+   "files": {
+    "thumb": {
+     "bytes": 1428,
+     "h": 134,
+     "path": "thumbs/room/light/starfield.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 7844,
+     "h": 502,
+     "path": "room/light/starfield.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 14792,
+     "h": 768,
+     "path": "room/light/starfield@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "8dd911cc377ccc1e962e50e9d2ea2b82ac6554c7",
+   "src_bytes": 1070072,
+   "w": 1376
+  },
+  "room/theatre/theatre.jpg": {
+   "files": {
+    "thumb": {
+     "bytes": 1304,
+     "h": 134,
+     "path": "thumbs/room/theatre/theatre.webp",
+     "w": 240
+    },
+    "x1": {
+     "bytes": 6384,
+     "h": 502,
+     "path": "room/theatre/theatre.webp",
+     "w": 900
+    },
+    "x2": {
+     "bytes": 10494,
+     "h": 768,
+     "path": "room/theatre/theatre@2x.webp",
+     "w": 1376
+    }
+   },
+   "h": 768,
+   "sha1": "7e75b2c9c092c7c1cbbebd756b901680775206b8",
+   "src_bytes": 114005,
+   "w": 1376
+  },
+  "voice/break_prompt_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 26169,
+     "path": "audio/voice/break_prompt_0.m4a"
+    }
+   },
+   "sha1": "a68ef8874bff5a6a611a19ebf53113d1a94d609c",
+   "src_bytes": 265868
+  },
+  "voice/break_prompt_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 37542,
+     "path": "audio/voice/break_prompt_1.m4a"
+    }
+   },
+   "sha1": "3a76c7038a8ef2d624e75dbb5771b63b159c728a",
+   "src_bytes": 401286
+  },
+  "voice/cutscene_close_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 31717,
+     "path": "audio/voice/cutscene_close_0.m4a"
+    }
+   },
+   "sha1": "8093764ccad70ef6c0378432101811f4c5be359e",
+   "src_bytes": 328560
+  },
+  "voice/cutscene_close_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 34790,
+     "path": "audio/voice/cutscene_close_1.m4a"
+    }
+   },
+   "sha1": "43572316d6c60c623ebd2bc08acb208c9ccd6930",
+   "src_bytes": 356146
+  },
+  "voice/cutscene_open_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 28420,
+     "path": "audio/voice/cutscene_open_1.m4a"
+    }
+   },
+   "sha1": "5f7b8665bdea51efe98a277c9f8f0b5c401fb4e9",
+   "src_bytes": 288434
+  },
+  "voice/cutscene_open_2.wav": {
+   "files": {
+    "audio": {
+     "bytes": 47488,
+     "path": "audio/voice/cutscene_open_2.m4a"
+    }
+   },
+   "sha1": "5be27d3505907301ec57e1d0e37979e92dbc4a18",
+   "src_bytes": 516642
+  },
+  "voice/finish_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 32905,
+     "path": "audio/voice/finish_1.m4a"
+    }
+   },
+   "sha1": "9a1d3c3a18e6d32bf634c84f504f276b0a0b4dfe",
+   "src_bytes": 338592
+  },
+  "voice/instructions_tier1_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 105537,
+     "path": "audio/voice/instructions_tier1_0.m4a"
+    }
+   },
+   "sha1": "ebf3f91f9bfdfb864600897c4cf4bd95bd9ad06e",
+   "src_bytes": 1163642
+  },
+  "voice/level_complete_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 32947,
+     "path": "audio/voice/level_complete_0.m4a"
+    }
+   },
+   "sha1": "c945a08be09f723032d5fc4eed2e234f969ba73b",
+   "src_bytes": 361162
+  },
+  "voice/level_complete_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 32528,
+     "path": "audio/voice/level_complete_1.m4a"
+    }
+   },
+   "sha1": "e1bb0ff1ca7c718b42727dc33a898287aa338b71",
+   "src_bytes": 338592
+  },
+  "voice/level_complete_2.wav": {
+   "files": {
+    "audio": {
+     "bytes": 30743,
+     "path": "audio/voice/level_complete_2.m4a"
+    }
+   },
+   "sha1": "17b78c06b3811feab7c3b8383a208846c4b23b83",
+   "src_bytes": 328560
+  },
+  "voice/mansion_prompt_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 32248,
+     "path": "audio/voice/mansion_prompt_0.m4a"
+    }
+   },
+   "sha1": "ea8517b9318910848649a6e0b9886ca18c442d5a",
+   "src_bytes": 333576
+  },
+  "voice/mansion_prompt_1.wav": {
+   "files": {
+    "audio": {
+     "bytes": 51079,
+     "path": "audio/voice/mansion_prompt_1.m4a"
+    }
+   },
+   "sha1": "f7aeccb572dc3dafb8b205531393cadb6fa0cb5b",
+   "src_bytes": 561782
+  },
+  "voice/resting_0.wav": {
+   "files": {
+    "audio": {
+     "bytes": 39554,
+     "path": "audio/voice/resting_0.m4a"
+    }
+   },
+   "sha1": "3c8f02d0f0344c985fddebddf9ac856d87c8b9db",
+   "src_bytes": 423856
+  }
+ },
+ "specs": {
+  "animals": {
+   "alpha": true,
+   "quality": 88,
+   "thumb": false,
+   "width": 220
+  },
+  "backgrounds": {
+   "alpha": false,
+   "quality": 82,
+   "thumb": true,
+   "width": 900
+  },
+  "cutscene": {
+   "alpha": false,
+   "quality": 82,
+   "thumb": false,
+   "width": 1100
+  },
+  "emoji": {
+   "alpha": true,
+   "quality": 88,
+   "thumb": false,
+   "width": 128
+  },
+  "furniture": {
+   "alpha": true,
+   "quality": 88,
+   "thumb": false,
+   "width": 260
+  },
+  "mascot": {
+   "alpha": true,
+   "quality": 88,
+   "thumb": false,
+   "width": 260
+  },
+  "room": {
+   "alpha": false,
+   "quality": 82,
+   "thumb": true,
+   "width": 900
+  }
+ },
+ "thumb_width": 240
+}

@@ -13,6 +13,7 @@
  */
 
 import { playSfx } from "./sfx.js";
+import { mountPause, armNudgeTimer, showNudge } from "./pause.js";
 
 // Exported so the audio conditions highlight identically. One definition, so
 // "never green, never red" cannot drift apart between the V and A/AV screens.
@@ -46,6 +47,11 @@ export class TripletPlugin {
       progress: { type: "OBJECT", default: null },
       currency_icon: { type: "STRING", default: "\u{1FA99}" },
       feedback_ms: { type: "INT", default: 800 },
+      // Pause/nudge -- see js/src/pause.js. Blank/0 disables each: main.js
+      // only passes these when the dialogue bank actually has the line.
+      paused_text: { type: "STRING", default: "" },
+      nudge_text: { type: "STRING", default: "" },
+      nudge_after_ms: { type: "INT", default: 20000 },
     },
     data: {
       task_trial_index: { type: "INT" },
@@ -91,12 +97,29 @@ export class TripletPlugin {
           </div>` : ""}
       </div>`;
 
-    const t0 = performance.now();
+    let t0 = performance.now();
     let answered = false;     // one response per trial; children tap repeatedly
+
+    // Computed once so "should this trial ever nudge at all" can't drift
+    // between the initial arm and the resume-from-pause re-arm below.
+    const nudgeEnabled = gm && Boolean(trial.nudge_text);
+    const nudge = armNudgeTimer({
+      afterMs: trial.nudge_after_ms,
+      onNudge: () => { if (!answered) showNudge(display, trial.nudge_text); },
+    });
+    mountPause(display, {
+      gamified: gm && Boolean(trial.paused_text),
+      mascot: trial.mascot,
+      pausedText: trial.paused_text,
+      onOpen: () => nudge.clear(),
+      onResume: () => { t0 = performance.now(); if (nudgeEnabled) nudge.rearm(); },
+    });
+    if (nudgeEnabled) nudge.rearm();
 
     const finish = (i) => {
       if (answered) return;
       answered = true;
+      nudge.clear();
       const rt = performance.now() - t0;
       // Acknowledges the tap, not the answer: it is the same sound whichever
       // card was picked, so it cannot teach a similarity structure.
@@ -167,8 +190,13 @@ export class ScreenPlugin {
       // e.g. "Visit the shop" alongside "Put them in the castle!". Omit for
       // every screen that doesn't need one; existing callers are unaffected.
       quiet_button: { type: "STRING", default: "" },
+      // A second recessive button, alongside quiet_button -- the break
+      // screen's "Take a rest" next to "Visit the mansion"/"Keep going!".
+      // Its own outcome (chose_rest) rather than overloading chose_quiet,
+      // since a caller with both needs to tell the three apart.
+      rest_button: { type: "STRING", default: "" },
     },
-    data: { rt: { type: "FLOAT" }, chose_quiet: { type: "BOOL" } },
+    data: { rt: { type: "FLOAT" }, chose_quiet: { type: "BOOL" }, chose_rest: { type: "BOOL" } },
   };
 
   constructor(jsPsych) { this.jsPsych = jsPsych; }
@@ -177,21 +205,26 @@ export class ScreenPlugin {
     display.innerHTML = `
       <div class="screen">${trial.html}
         <div class="btn-row">
+          ${trial.rest_button ? `<button class="quiet" id="rest">${trial.rest_button}</button>` : ""}
           ${trial.quiet_button ? `<button class="quiet" id="quiet">${trial.quiet_button}</button>` : ""}
           <button class="big" id="go">${trial.button}</button>
         </div>
       </div>`;
     const t0 = performance.now();
-    const done = (choseQuiet) => {
+    const done = (choseQuiet, choseRest) => {
       if (key) document.removeEventListener("keydown", key);
       display.innerHTML = "";
-      this.jsPsych.finishTrial({ rt: performance.now() - t0, chose_quiet: choseQuiet });
+      this.jsPsych.finishTrial({
+        rt: performance.now() - t0, chose_quiet: choseQuiet, chose_rest: Boolean(choseRest),
+      });
     };
-    display.querySelector("#go").addEventListener("click", () => done(false));
+    display.querySelector("#go").addEventListener("click", () => done(false, false));
     const quietBtn = display.querySelector("#quiet");
-    if (quietBtn) quietBtn.addEventListener("click", () => done(true));
+    if (quietBtn) quietBtn.addEventListener("click", () => done(true, false));
+    const restBtn = display.querySelector("#rest");
+    if (restBtn) restBtn.addEventListener("click", () => done(false, true));
     const key = trial.allow_space
-      ? (e) => { if (e.code === "Space") done(false); }
+      ? (e) => { if (e.code === "Space") done(false, false); }
       : null;
     if (key) document.addEventListener("keydown", key);
   }

@@ -21,7 +21,9 @@
    Latin subset only -- the dialogue is English and pure ASCII. Licence sits
    beside the file at js/vendor/font/OFL.txt. Do not point this at
    assets/game/font/ if that ever reappears here -- those are the private
-   repo's licensed faces and must never be redistributed. */
+   repo's licensed faces and must never be redistributed. A sync FROM the
+   private repo overwrites this block every time; run.mjs's "the public copy
+   ships a redistributable font" test is what catches it. */
 @font-face {
   font-family: "PipUI";
   src: url("../vendor/font/nunito-latin-variable.woff2") format("woff2");
@@ -30,7 +32,7 @@
 }
 
 html, body {
-  margin: 0; padding: 0; height: 100%;
+  margin: 0; padding: 0; height: 100%; overflow-x: hidden;
   background: var(--bg); color: var(--text);
   font-family: "PipUI", system-ui, -apple-system, sans-serif;
 }
@@ -63,7 +65,7 @@ html, body {
 }
 .band {
   display: flex; align-items: center; justify-content: center; gap: 18px;
-  width: 100%; max-width: 1100px;
+  width: 100%; max-width: 1600px;
 }
 .bubble {
   width: clamp(180px, 24vw, 340px); min-height: 96px;
@@ -84,8 +86,18 @@ html, body {
   border: 3px solid transparent; border-radius: 12px; cursor: pointer;
 }
 .stimulus:hover { border-color: var(--select); }
+/* The desktop build sizes trial images off the live window's width/height
+   (_triplet_image_size in two_tier_experiment.py) and keeps growing them on
+   a bigger screen -- there is no upper cap beyond what the window itself
+   allows. The old 260px `clamp()` max here flatlined images at that size on
+   anything wider than ~1180px, more than 2x smaller than the desktop build
+   shows on a typical monitor. `min(28vw, 46vh)` mirrors the desktop's
+   width-AND-height-aware sizing (dividing available width by the triplet's
+   3 images, bounded by the vertical room the mascot/prompt/progress row
+   leave) instead of reacting to width alone. */
 .stimulus img {
-  width: clamp(140px, 22vw, 260px); height: clamp(140px, 22vw, 260px);
+  width: clamp(140px, min(28vw, 46vh), 460px);
+  height: clamp(140px, min(28vw, 46vh), 460px);
   object-fit: cover; display: block; border-radius: 8px;
 }
 
@@ -102,7 +114,10 @@ html, body {
   display: flex; flex-direction: column; align-items: center; gap: 10px;
   padding: 12px; background: var(--panel);
   border: 3px solid transparent; border-radius: 12px; cursor: pointer;
-  width: clamp(160px, 24vw, 280px); box-sizing: border-box;
+  /* Same width-AND-height-aware cap as .stimulus img -- see the comment
+     there. AV cards are the image, A cards are the speaker glyph at the
+     same box, so both stop looking undersized next to a large stimulus. */
+  width: clamp(160px, min(30vw, 48vh), 480px); box-sizing: border-box;
 }
 .audio-card:hover { border-color: var(--select); }
 .audio-card img {
@@ -128,6 +143,29 @@ html, body {
   min-height: var(--touch);           /* the actual response target */
 }
 
+/* Mid-trial pause (js/src/pause.js). The button sits in the corner rather
+   than the button row -- it must not compete with the stimuli for a
+   child's attention, but stay reachable for the adult supervising. The
+   overlay covers the trial without destroying it: nothing here is a
+   screen change, so nothing about the trial underneath is lost. */
+.pause-btn {
+  position: fixed; top: 14px; right: 14px; z-index: 900;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--panel); border: 2px solid var(--track); color: var(--muted);
+  font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.pause-btn:hover { border-color: var(--select); color: var(--select); }
+.pause-overlay {
+  position: fixed; inset: 0; z-index: 950;
+  background: var(--bg); display: flex; align-items: center; justify-content: center;
+}
+/* `display:flex` above out-specifies the [hidden] attribute's UA
+   `display:none` -- same trap .ghost[hidden] (below) already exists to
+   avoid. Without this the overlay is visible the instant it is created,
+   covering every trial from the start instead of only after the pause
+   button is pressed. */
+.pause-overlay[hidden] { display: none; }
+
 .progress-row {
   display: flex; align-items: center; gap: 14px;
   width: min(90vw, 1000px); flex: 0 0 auto; padding-bottom: 10px;
@@ -148,19 +186,67 @@ html, body {
      when a child is choosing. */
   position: fixed; top: 20px; left: 20px; z-index: 1000; pointer-events: none;
   background: var(--panel); border: 3px solid var(--fill); border-radius: var(--radius);
-  padding: 14px 20px; text-align: center;
+  /* Was fixed px throughout -- on a narrow phone this had no floor to shrink
+     against and could crowd .shop-corner (also position:fixed) or run off
+     the right edge; clamp() keeps the same look on desktop while giving it
+     room to shrink on a small screen, matching how every other fixed-
+     position/popup element in this file already scales. */
+  max-width: min(60vw, 260px);
+  padding: clamp(8px, 2.4vw, 14px) clamp(12px, 3.2vw, 20px); text-align: center;
   opacity: 0; transform: translateY(-10px);
   transition: opacity .26s ease-out, transform .26s ease-out;
 }
 .sticker-popup.visible { opacity: 1; transform: translateY(0); }
 .sticker-popup-art {
-  width: 96px; height: 96px; object-fit: contain; display: block; margin: 0 auto 6px;
+  width: clamp(56px, 14vw, 96px); height: clamp(56px, 14vw, 96px);
+  object-fit: contain; display: block; margin: 0 auto 6px;
 }
-.sticker-popup-emoji { font-size: 64px; line-height: 96px; }
+.sticker-popup-emoji { font-size: clamp(38px, 9vw, 64px); line-height: 1.5; }
 /* Shape only, no colour -- the same "something is coming" shadow the
    sticker book's unearned slots use, removed at the reveal beat. */
 .sticker-popup-art.silhouette { filter: brightness(0) opacity(.35); }
-.sticker-popup-text { color: var(--text); font-weight: 700; font-size: 18px; margin: 0; }
+.sticker-popup-text {
+  color: var(--text); font-weight: 700; font-size: clamp(14px, 3.6vw, 18px); margin: 0;
+}
+
+/* A shop purchase's own popup (item_popup.js) -- port of GameLayer's
+   animate_item_popup. Top RIGHT, not top-left like .sticker-popup: the
+   two never compete for the same corner since a purchase only ever
+   happens in the shop, a sticker reveal only ever mid-trial. Stacks
+   downward (top set inline per-slot by item_popup.js) rather than the
+   single fixed spot .sticker-popup uses, since more than one purchase can
+   be in flight (impatient clicking) where a trial only ever earns one
+   sticker at a time. */
+.item-popup {
+  position: fixed; right: 14px; z-index: 1000; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  width: min(46vw, 140px); box-sizing: border-box;
+  padding: 10px 12px; text-align: center;
+  background: var(--panel); border: 3px solid var(--fill); border-radius: var(--radius);
+  opacity: 0; transform: translateY(-14px) scale(.9);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.item-popup.visible { opacity: 1; transform: translateY(0) scale(1); }
+/* Paired with an upward drift on the way out, not a fade in place --
+   mirrors animate_item_popup's own fade-out. */
+.item-popup.leaving { opacity: 0; transform: translateY(-20px) scale(.95); }
+.item-popup-art {
+  width: clamp(40px, 10vw, 56px); height: clamp(40px, 10vw, 56px);
+  object-fit: contain; display: block;
+}
+.item-popup-emoji {
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(28px, 7vw, 40px);
+}
+.item-popup-title {
+  color: var(--muted); font-weight: 600; font-size: 12px; margin: 2px 0 0;
+}
+.item-popup-label {
+  color: var(--text); font-weight: 700; font-size: 14px; margin: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .item-popup { transition: none; }
+}
 
 button.big, button.quiet {
   min-height: var(--touch); min-width: calc(var(--touch) * 2);
@@ -197,11 +283,30 @@ button.quiet { background: transparent; color: var(--select); border: 3px solid 
   font-size: 14px; color: var(--muted);
 }
 
-/* Playground */
+/* Playground: the room and its pocket drawer stacked in ONE flexible
+   column that shares out whatever height the viewport actually has, the
+   same technique .trial-main uses for the trial screens -- see
+   .screen.playground below. Nothing on this screen scrolls; the room
+   simply gets smaller on a short window instead of pushing the drawer
+   (or the buttons) off screen. */
+/* Tighter than a general .screen: every pixel the surrounding chrome gives
+   up goes to the room, which is the only element here that matters and the
+   only one sized from what's left over. The room art is 16:9, so a short
+   wide box crops the ceiling and the floor off the backdrop -- the trim
+   below takes ~55px back from padding, prompt, hint and pocket. */
+.screen.playground {
+  justify-content: flex-start; gap: 6px; padding: 10px 20px 12px;
+}
+.playground .speech { font-size: clamp(18px, 2vw, 25px); margin: 0; }
+.playground .hint { font-size: 15px; margin: 0; }
+.room-wrap {
+  flex: 1 1 auto; min-height: 0; width: min(92vw, 1100px);
+  display: flex; flex-direction: column;
+}
 .playground .room {
-  position: relative; width: min(92vw, 1100px); height: min(52vh, 460px);
+  position: relative; flex: 1 1 auto; min-height: 0; width: 100%;
   background-size: cover; background-position: center;
-  background-color: var(--panel); border-radius: 12px; overflow: hidden;
+  background-color: var(--panel); border-radius: 12px 12px 0 0; overflow: hidden;
   touch-action: none;              /* the room owns the gesture, not the page */
   cursor: grab;
 }
@@ -209,33 +314,180 @@ button.quiet { background: transparent; color: var(--select); border: 3px solid 
 /* Sizes are set inline from the room's measured box (STICKER_REL), matching
    the desktop canvas, so a sticker is the same fraction of the room at any
    window size -- and big enough not to be a motor-planning demand for 4-6s. */
+/* Stacking inside the room, bottom to top: guests (z 1, part of the room),
+   then the child's own placed items (z 2), then whatever is IN THE HAND
+   (.ghost, z 10). Without this the ghost loses to every sticker: it is
+   declared once in the room's markup and render() APPENDS the placed items
+   after it, so DOM order alone puts the thing being carried underneath the
+   things already lying there -- exactly backwards for something held above
+   the room. */
 .sticker {
-  position: absolute; transform: translate(-50%, -50%);
+  position: absolute; transform: translate(-50%, -50%); z-index: 2;
   user-select: none; pointer-events: none;   /* hit-testing is done in JS */
   line-height: 1;
 }
-/* The sticker in the hand, drawn where it would actually LAND. The dashed
-   ring is the landing spot, so the clamping is never a surprise on release. */
-.ghost {
-  position: absolute; transform: translate(-50%, -50%);
+/* A guest animal living in the room -- see castle.js's `guests`. Sized and
+   positioned inline like a sticker, but never hit-tested: it is not in
+   `placed`, so nothing can pick it up. Behind the child's own items (render()
+   appends guests first), because a creature is part of the room rather than
+   an ornament sitting on top of it. */
+.guest {
+  position: absolute; transform: translate(-50%, -50%); z-index: 1;
   display: flex; align-items: center; justify-content: center;
-  border: 3px dashed var(--select); border-radius: 50%;
+  user-select: none; pointer-events: none; line-height: 1;
+}
+.guest .sticker-art { width: 100%; height: 100%; object-fit: contain; }
+/* The idle squish: wide-and-short -> normal -> tall-and-narrow -> normal,
+   area-preserving so the creature squashes and stretches rather than just
+   pulsing bigger and smaller. Slow and small on purpose (4s, 5%, port of
+   playground.py's GUEST_SQUISH_MS/GUEST_SQUISH_AMPLITUDE) -- this runs
+   continuously in the corner of a screen a child is trying to decorate on,
+   so it has to read as breathing rather than as something asking for
+   attention. A CSS animation rather than a JS ticker: the desktop repaints
+   its whole canvas per frame and has to quantise to ~15fps to afford it,
+   where the compositor animates a transform without touching the room at
+   all. */
+.guest.breathing { animation: guest-squish 4s ease-in-out infinite; }
+@keyframes guest-squish {
+  0%   { transform: translate(-50%, -50%) scale(1, 1); }
+  25%  { transform: translate(-50%, -50%) scale(1.05, .95); }
+  50%  { transform: translate(-50%, -50%) scale(1, 1); }
+  75%  { transform: translate(-50%, -50%) scale(.95, 1.05); }
+  100% { transform: translate(-50%, -50%) scale(1, 1); }
+}
+/* Landing juice, port of playground.py's pop-and-glow: plays once because
+   `render()` in room_canvas.js recreates every .sticker element from
+   scratch on each change, and only the most-recently-placed one gets this
+   class -- a fresh DOM node with an `animation` present always plays it on
+   insertion, and the next drop() rebuilds this element without the class,
+   so it does not replay on an unrelated placement. */
+.sticker.landed { animation: sticker-land .38s cubic-bezier(.22,.9,.4,1.2); }
+@keyframes sticker-land {
+  0%   { transform: translate(-50%, -50%) scale(.55); filter: drop-shadow(0 0 0 rgba(124,156,214,0)); }
+  55%  { transform: translate(-50%, -50%) scale(1.14); filter: drop-shadow(0 0 10px rgba(124,156,214,.55)); }
+  100% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(0 0 0 rgba(124,156,214,0)); }
+}
+/* The sticker in the hand, drawn where it would actually LAND -- lifted
+   with its own drop shadow (port of playground.py's _shadow_pixmap) rather
+   than sitting flush with the room, so picking something up reads as a
+   real lift, not a teleport. No ring around it: the item is drawn at the
+   clamped landing position already, so the lift (scale + shadow) shows
+   what a border was only restating, and a dashed circle over the artwork
+   read as chrome the child had to look past. */
+.ghost {
+  position: absolute; transform: translate(-50%, -50%) scale(1.08);
+  z-index: 10;                     /* above everything in the room -- see .sticker */
+  display: flex; align-items: center; justify-content: center;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
+  transition: transform .12s ease-out;
   user-select: none; pointer-events: none; line-height: 1;
 }
 /* `display:flex` above out-specifies the [hidden] attribute's UA
    `display:none`, so without this the landing ring stays on screen over the
    sticker just dropped, for the rest of the playground. */
 .ghost[hidden] { display: none; }
+/* The pocket drawer -- port of playground.py's RoomCanvas._drawer_layout/
+   paintEvent, not the shop's card grid: a fixed, ALWAYS-present shelf,
+   spanning the room's full width, with its own flat background/border so
+   it reads as game furniture fixed to the room. Unlike the desktop (and
+   an earlier pass here), it is OUTSIDE the room -- a sibling in
+   .room-wrap's own flex column, right below the room -- rather than an
+   overlay eating the room's own bottom edge; a drawer overlapping the
+   backdrop hid part of the room the child was decorating. flex: 0 0 auto
+   so it takes exactly the height its content needs and .room absorbs
+   whatever's left (see .playground .room's flex: 1 1 auto).*/
 .tray {
-  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
-  display: flex; gap: 10px; padding: 8px 14px;
-  background: rgba(255,255,255,.6); border-radius: 14px;
+  flex: 0 0 auto; width: 100%; box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 2px; padding: 3px 10px 5px;
+  /* The drawer owns the gesture too, not just the room: a drag that starts on
+     a pocket slot is captured here (see pickUpFromTray), and without this a
+     touch-drag would scroll the page out from under it. */
+  touch-action: none; user-select: none;
+  background: color-mix(in srgb, var(--track) 55%, white);
+  border-top: 2px solid color-mix(in srgb, var(--track) 70%, black);
+  border-radius: 0 0 12px 12px;
 }
-.tray-item { font-size: clamp(28px, 4vw, 44px); }
-.tray-item.next { outline: 3px solid var(--select); border-radius: 10px; }
+/* "Your pocket · N" -- the count lives here, in the header, not repeated
+   in the hint line below the room (see room_canvas.js's hintText()).
+   Swaps to "Drop here to save it!" while a placed item is dragged over
+   the drawer -- see dragTo()'s overTray() check. */
+.tray-header {
+  font-size: 13px; font-weight: 700; margin: 0; color: var(--muted);
+}
+/* Wraps rather than scrolling -- nothing on this screen scrolls except
+   the sticker book (see .book below); a drawer with more pending than
+   fits on one line just grows a second row instead, which .room-wrap's
+   own flex sizing (room: flex 1 1 auto, drawer: flex 0 0 auto) absorbs
+   by giving the room whatever's left. Still never shrinks a slot to cram
+   more columns onto one line -- a slot small enough to fit twenty items
+   would be too small to tap. */
+.tray-row {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  max-width: 100%; padding: 2px 4px;
+}
+/* 54px, down from 60: still comfortably above the 44px tap target a 4-6
+   year old needs, and the 6px per row goes to the room above. */
+.tray-item {
+  flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
+  width: 54px; height: 54px; box-sizing: border-box; cursor: grab;
+  font-size: clamp(24px, 3.4vw, 36px);
+  background: var(--panel); border: 2px solid var(--track); border-radius: 10px;
+  /* A soft offset shadow -- slots read as raised cards, matching the
+     placed items' own grounding shadow, not flat cutouts in the shelf. */
+  box-shadow: 2px 3px 0 rgba(0,0,0,.15);
+}
+/* The NEXT item to place gets a filled highlight, not just an outline --
+   reads at a glance which one taps into the room next. */
+.tray-item.next {
+  border-color: var(--select); border-width: 3px;
+  background: color-mix(in srgb, var(--select) 18%, var(--panel));
+}
+/* An empty slot still shows ITS OWN outline -- dashed and muted -- rather
+   than the row shrinking to fit exactly what's pending; the drawer keeps
+   a stable minimum width even with nothing (or almost nothing) in it. */
+.tray-item.empty {
+  background: transparent; border: 2px dashed var(--track); box-shadow: none;
+}
+/* A placed item dragged down over the tray is about to be retrieved to
+   the pocket -- see room_canvas.js's overTray(). Thickens/brightens
+   toward the selection colour, brighter still than a plain hover, so
+   "drop it here" reads as a real target rather than a hidden gesture. */
+.tray.receiving {
+  background: color-mix(in srgb, var(--select) 22%, var(--track));
+  border-top-color: var(--select);
+}
+.tray.receiving .tray-header { color: color-mix(in srgb, var(--select) 70%, black); }
+
+/* Finale: one small, non-interactive room per mansion room the child
+   decorated, side by side. Scrolls rather than shrinking below floor width
+   on a long session that filled every one of the 9 mansion rooms -- the
+   point is to still look like rooms, not to fit all nine at any cost. */
+.mini-rooms {
+  display: flex; gap: 12px; overflow-x: auto; max-width: min(92vw, 1100px);
+  padding: 4px 2px 10px;
+}
+.mini-room {
+  position: relative; flex: 0 0 auto; width: 180px; height: 122px;
+  border-radius: 12px; background-size: cover; background-position: center;
+  background-color: var(--panel); border: 2px solid var(--track); overflow: hidden;
+}
+/* Flat percentage of the mini-room box, not a measured radius -- see
+   castleRevealHtml's comment for why that's fine at thumbnail scale. */
+.sticker.mini { font-size: 26px; }
+.sticker.mini.furniture { font-size: 42px; }
 
 /* Sticker book: earned in colour, still-to-come as a grey shape. */
-.book { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 760px; }
+/* The one thing on this build that scrolls: a long session earns more
+   stickers than the round-complete screen (pip + speech + book + speech
+   + buttons) can show at once without the PAGE itself scrolling, and it
+   is the book's own row count that grows unboundedly session over
+   session, not anything around it. Bounded height + its own scrollbar
+   keeps the mascot/buttons always on screen instead. */
+.book {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  max-width: 760px; max-height: 34vh; overflow-y: auto; padding: 2px;
+}
 .slot {
   width: 62px; height: 62px; display: flex; align-items: center;
   justify-content: center; font-size: 34px; border-radius: 14px;
@@ -244,20 +496,37 @@ button.quiet { background: transparent; color: var(--select); border: 3px solid 
 .slot.mystery { border: 2px dashed var(--track); filter: grayscale(1) opacity(.28); }
 .awarded { font-size: clamp(36px, 6vw, 64px); margin: 6px 0; }
 
-/* Shop (economy addition) */
-.shop-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 14px; width: min(92vw, 900px); max-height: 46vh; overflow-y: auto;
-  padding: 6px;
+/* Shop (economy addition) -- port of the desktop's SHOP_COLUMNS layout:
+   one column per item type, items stacked inside it as compact ROWS, not a
+   grid of cards. Sorting by type puts a fixed, findable place on screen
+   behind each kind of thing, and stacking rows rather than cards is what
+   makes the whole catalogue fit without scrolling at any viewport this
+   runs at -- see shop_view.js's own docstring. */
+.shop-columns {
+  display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;
+  align-items: flex-start; max-width: min(94vw, 1100px);
 }
-.shop-cell {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding: 10px; border-radius: 14px; background: var(--panel);
-  border: 2px solid var(--track);
+.shop-column {
+  background: var(--panel); border-radius: var(--radius);
+  padding: 14px; width: min(30vw, 320px); box-sizing: border-box;
+  display: flex; flex-direction: column; gap: 8px;
 }
-.shop-art { display: flex; align-items: center; justify-content: center; height: 56px; }
-.shop-label { font-size: 15px; margin: 0; text-align: center; }
+.shop-column-head { display: flex; align-items: center; gap: 10px; }
+.shop-column-icon { font-size: 30px; line-height: 1; }
+.shop-column-title { font-size: 19px; font-weight: 700; }
+.shop-row { display: flex; align-items: center; gap: 10px; }
+.shop-row-art {
+  flex: 0 0 auto; width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+}
+.shop-row-text { flex: 1 1 auto; min-width: 0; text-align: left; }
+.shop-row-label {
+  font-size: 15px; font-weight: 600; margin: 0;
+  overflow-wrap: break-word;
+}
+.shop-row-found { font-size: 12px; margin: 0; color: #7A7268; }
 .shop-buy {
+  flex: 0 0 auto; min-height: 40px; min-width: 88px;
   border: 2px solid var(--select); border-radius: 10px; padding: 8px 14px;
   font-size: 15px; font-weight: 600; background: var(--select); color: #fff;
   cursor: pointer;
@@ -284,7 +553,16 @@ button.quiet { background: transparent; color: var(--select); border: 3px solid 
    sticker radius, a tray slot, a book cell), so it fills that box and keeps
    its aspect. The em-based size is what makes the room's inline font-size,
    set per render from the sticker radius, still drive the picture. */
-.sticker-art { width: 1em; height: 1em; object-fit: contain; display: block; }
+/* -webkit-user-drag alongside the draggable="false" stickerHtml already sets:
+   the attribute stops the native HTML5 drag, this stops WebKit's own image
+   drag, and together they are what keep a press on a sticker from handing the
+   pointer to the browser -- which would paint its own translucent copy of the
+   picture under the cursor and swallow the pointermove/pointerup the room
+   needs to place the item. */
+.sticker-art {
+  width: 1em; height: 1em; object-fit: contain; display: block;
+  -webkit-user-drag: none; user-select: none; pointer-events: none;
+}
 .tray-item .sticker-art,
 .slot .sticker-art,
 .awarded .sticker-art { width: 1em; height: 1em; }
@@ -292,6 +570,8 @@ button.quiet { background: transparent; color: var(--select); border: 3px solid 
 
 @media (prefers-reduced-motion: reduce) {
   .progress-fill { transition: none; }
+  .sticker.landed { animation: none; }
+  .ghost { transition: none; }
 }
 
 /* ---------------------------------------------------------------------------
@@ -326,17 +606,9 @@ button.quiet { background: transparent; color: var(--select); border: 3px solid 
 .setup-grid input:focus, .setup-grid select:focus {
   outline: none; border-color: var(--select);
 }
-/* Checkboxes sit in a grid cell of their own, so they need to align to the
-   inputs beside them rather than to the label text above them. */
-.setup-checks { justify-content: flex-end; gap: 8px; }
 /* A field whose answer is free text and can run long -- the race
    self-description -- gets the full row rather than half of one. */
 .setup-wide { grid-column: 1 / -1; }
-.setup-check {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 15px; color: var(--text);
-}
-.setup-check input { width: 18px; height: 18px; accent-color: var(--select); }
 
 .setup-preview {
   display: flex; flex-direction: column; gap: 3px;
@@ -368,13 +640,91 @@ button.quiet { background: transparent; color: var(--select); border: 3px solid 
   font-family: "PipUI", system-ui, -apple-system, sans-serif;
 }
 
-/* ---------------------------------------------------------------------------
-   Bot gate (js/src/captcha.js), shown briefly before anything else --
-   plain and centered like .setup, since this is infrastructure, not the
-   child's game, and most visitors should see it for well under a second. */
-.captcha-gate {
-  max-width: 420px; margin: 80px auto; padding: 28px 20px;
-  box-sizing: border-box; text-align: center;
+/* Shop counter: Pip and the money in the bottom-right corner.
+
+   The balance is the number a child checks against a price, so it sits beside
+   the shopkeeper rather than in a header they have to look away from the goods
+   to read. Fixed to the viewport corner, not the flow, so a long catalogue
+   scrolls underneath it instead of pushing it off the screen -- the desktop
+   build keeps it in the footer for the same reason. */
+.shop-corner {
+  position: fixed; right: 18px; bottom: 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  pointer-events: none;                /* never covers a Buy button */
 }
-.captcha-gate p { color: var(--muted); font-size: 16px; margin: 0 0 12px; }
-#turnstile-widget { display: flex; justify-content: center; margin-top: 8px; }
+.shop-pip { height: clamp(120px, 22vh, 210px); }
+.shop-balance {
+  margin: 0; font-size: clamp(18px, 2.4vw, 26px); font-weight: 700;
+  color: var(--ink);
+}
+
+/* The mansion: nine rooms, 3x3.
+
+   Locked rooms are SHOWN rather than hidden -- the castle filling up over a
+   session is the point, and an empty space says nothing about what is coming. */
+.mansion-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  width: min(92vw, 860px);
+}
+/* A fixed 3-column grid has no floor: at 375px width (92vw ~=345px) each
+   tile lands around 100x57px, well under any touch-target size, for what is
+   the child's primary tap-driven navigation in the mansion. 2 columns at
+   this width keeps tiles closer to phone-usable while the page simply grows
+   taller (the body scrolls normally -- nothing here clips vertically). */
+@media (max-width: 480px) {
+  .mansion-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.mansion-tile {
+  position: relative; aspect-ratio: 16 / 9; border-radius: 14px;
+  border: 3px solid var(--track); background: var(--panel);
+  background-size: cover; background-position: center;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; padding: 0; overflow: hidden;
+}
+.mansion-tile:hover { border-color: var(--select); }
+.mansion-tile.locked {
+  cursor: default; filter: grayscale(1) opacity(.45);
+  flex-direction: column; gap: 2px;
+}
+.mansion-lock { font-size: clamp(20px, 3vw, 30px); }
+/* "3 more rooms" under the padlock -- a distance rather than a refusal. */
+.mansion-countdown {
+  font-size: clamp(10px, 1.4vw, 13px); font-weight: 700; color: var(--ink);
+  text-align: center; line-height: 1.15;
+}
+/* The miniature: a positioning context filling the tile, with every item
+   placed at its own relative coordinates so the tile is a small picture of
+   the real room. Sizes are in vw so they scale with the tile, which is
+   itself a fraction of the grid's width. */
+.mansion-mini { position: absolute; inset: 0; }
+.mansion-item, .mansion-guest {
+  position: absolute; transform: translate(-50%, -50%);
+  line-height: 1; pointer-events: none;
+}
+.mansion-item { font-size: clamp(10px, 1.6vw, 18px); }
+/* Guests read as inhabitants, so they are drawn larger than the ornaments --
+   the same relationship GUEST_REL and STICKER_REL have in the room itself. */
+.mansion-guest { font-size: clamp(16px, 2.6vw, 30px); }
+.mansion-item .sticker-art,
+.mansion-guest .sticker-art { width: 1em; height: 1em; }
+/* A game room says what it is on its face: a badge and the game's name, over
+   its own dimmed backdrop, so the tile promises the room it opens. */
+.mansion-tile.arcade { flex-direction: column; gap: 2px; }
+.mansion-tile.arcade::before {
+  content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.55);
+}
+.mansion-badge, .mansion-title { position: relative; }
+.mansion-badge { font-size: clamp(20px, 3vw, 30px); }
+.mansion-title { font-size: clamp(11px, 1.5vw, 15px); font-weight: 700; color: var(--ink); }
+
+/* A game room. The canvas owns the gesture; the page must not scroll under a
+   child dragging a basket across it. */
+.arcade-canvas {
+  width: min(92vw, 1000px); height: min(56vh, 520px);
+  border-radius: 12px; touch-action: none; display: block;
+}
+.coin-chip {
+  display: inline-flex; align-items: center; padding: 6px 14px;
+  border-radius: 999px; background: var(--panel); border: 2px solid var(--track);
+  font-size: 17px; font-weight: 700;
+}
