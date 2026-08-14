@@ -78,7 +78,7 @@ export function showSetup(cfg, root, search = window.location.search) {
             <input id="s-pid" type="text" value="${urlPid}"
                    autocomplete="off" spellcheck="false"></label>
           <label>Age
-            <input id="s-age" type="number" min="3" max="99"
+            <input id="s-age" type="number" min="3" max="99" required
                    value="${cfg.Age ?? ""}" autocomplete="off"></label>
 
           <label>Task
@@ -184,6 +184,16 @@ export function showSetup(cfg, root, search = window.location.search) {
         error.textContent = "Participant ID is required: it seeds the session.";
         error.hidden = false;
         el("#s-pid").focus();
+        return;
+      }
+      // Age is required, not defaulted -- consent.js's showConsentGate reads
+      // it straight from here to pick the MELD form, and a silently-defaulted
+      // adult age would risk gating a minor's session on the wrong form.
+      const ageVal = el("#s-age").value;
+      if (ageVal === "" || Number(ageVal) < 0 || !Number.isFinite(Number(ageVal))) {
+        error.textContent = "Age is required: it decides the consent form and the session length.";
+        error.hidden = false;
+        el("#s-age").focus();
         return;
       }
       const p = plan();

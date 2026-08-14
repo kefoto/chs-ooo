@@ -26,6 +26,9 @@ export const MELD_LINKS = {
  * a minor's parental/assent form here.
  */
 export function meldFormsForAge(age) {
+  // Number("") is 0, not NaN -- a blank age would otherwise silently resolve
+  // to the 0-6 band instead of being rejected. Checked before the cast.
+  if (String(age ?? "").trim() === "") return null;
   const n = Number(age);
   if (!Number.isFinite(n) || n < 0) return null;
   if (n >= 18) return [MELD_LINKS.adult];
@@ -61,7 +64,7 @@ export function showConsentGate(cfg, root) {
           <p class="setup-sub">What is your (or your child's) age?</p>
           <div class="setup-grid">
             <label>Age
-              <input id="c-age" type="number" min="0" max="120" autocomplete="off"></label>
+              <input id="c-age" type="number" min="0" max="120" required autocomplete="off"></label>
           </div>
           <p class="setup-error" id="c-age-error" hidden></p>
           <button class="big" id="c-age-next">Continue</button>
