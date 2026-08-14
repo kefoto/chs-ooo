@@ -101,14 +101,24 @@ export const CONFIG = {
   Audio_Lead_In_Ms: 800,
   Audio_Gap_Ms: 3000,
 
-  // Paths are relative to js/index.html, i.e. one level up from js/. They work
-  // unchanged when the whole repository is served (GitHub Pages), since the
-  // page keeps its position above assets/ and datasets/. Point `?media=` at an
-  // absolute origin to serve the media from somewhere else -- that host then
-  // needs CORS, since the manifests are fetched rather than <img>-loaded.
-  asset_root: "../assets/game",
-  dataset_root: "../datasets/Tier1_THINGS_560",
-  tier2_dataset_root: "../datasets/Tier2_AV_Matched",
+  // Resolved from THIS MODULE's own URL, not from the page's.
+  //
+  // A relative "../assets/game" is interpreted against the document, so it
+  // depends on two things that vary: where index.html sits (js/index.html in
+  // the lab checkout, the root in the deploy repo) and whether the site is
+  // served from a domain root or a subpath. Those interact badly. On GitHub
+  // *project* Pages the site lives under /<repo>/, so a page at the root
+  // resolving "../datasets/..." escapes the project entirely and 404s -- which
+  // is exactly what happened, and what a localhost test at a domain root
+  // cannot reproduce.
+  //
+  // This module is always at <root>/js/src/config.js, so going up two levels
+  // is the repository root wherever it is mounted and wherever the page sits.
+  // Point `?media=` at another location on this origin to serve the media from
+  // somewhere else.
+  asset_root: new URL("../../assets/game", import.meta.url).href,
+  dataset_root: new URL("../../datasets/Tier1_THINGS_560", import.meta.url).href,
+  tier2_dataset_root: new URL("../../datasets/Tier2_AV_Matched", import.meta.url).href,
 };
 
 /**

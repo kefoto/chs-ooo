@@ -149,8 +149,13 @@ globalThis.fetch = async (url, init) => {
     if (!("X-Session-Block" in (init.headers ?? {}))) savedJson = init.body;
     return { ok: true, status: 200, json: async () => ({}) };
   }
-  const rel = String(url).replace(/^https?:\/\/[^/]+\//, "").replace(/^\.\.\//, "");
-  const file = path.join(ROOT, rel.replace(/^js\//, "js/"));
+  // config.js resolves the asset roots from its own module URL, which under
+  // node is a file:// path -- so an absolute local path arrives here as often
+  // as an http one. Map both back onto the repository.
+  const raw = String(url);
+  const file = raw.startsWith("file://")
+    ? fileURLToPath(raw)
+    : path.join(ROOT, raw.replace(/^https?:\/\/[^/]+\//, "").replace(/^\.\.\//, ""));
   if (!fs.existsSync(file)) {
     errors.push(`fetch 404: ${url} -> ${file}`);
     return { ok: false, status: 404, json: async () => ({}) };
