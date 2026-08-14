@@ -135,6 +135,17 @@ globalThis.fetch = async (url, init) => {
   // the only place its data appears. Capture it the way the Blob is captured
   // above, or the harness would be blind to exactly the path CHS relies on.
   if (init?.method === "POST") {
+    // /api/verify-start is a POST and is NOT a session upload: it is the
+    // ticket request js/src/captcha.js makes before the timeline is built.
+    // Answering it here also exercises the Authorization header every later
+    // upload carries. Falling through to the capture below instead set
+    // savedJson on the first tick and ended the driving loop before a single
+    // screen was clicked -- which reads as "no responses recorded", i.e. as
+    // a broken build rather than a blind harness.
+    if (String(url).includes("/api/verify-start")) {
+      return { ok: true, status: 200,
+               json: async () => ({ ok: true, gated: false, ticket: "harness-ticket" }) };
+    }
     // Per-block checkpoints (X-Session-Block header set -- see
     // js/src/save.js's postPayload) fire mid-session, one per completed
     // room; only the FINAL save -- from save(), never saveBlock() -- is
@@ -503,6 +514,14 @@ if (CHS) {
   check(payload?.participant_data.participant_id === "SG7JLN",
         `the child hash should seed the session, got ` +
         `${payload?.participant_data.participant_id}`);
+  // A CHS session is never offered a download, so `payload` here is the
+  // UPLOADED body -- which is the one case this harness can check the
+  // submitted shape end to end. save.js's forSubmission keeps the
+  // measurement and drops the game layer's own state.
+  check(!("game_state" in (payload ?? {})),
+        "the game state was uploaded; only responses and participant_data go");
+  check(Array.isArray(payload?.responses) && payload.responses.length > 0,
+        "a CHS session uploaded no responses");
 }
 
 // Stickers only exist once a session is running, which the setup case never
@@ -512,6 +531,20 @@ if (!SETUP) {
 }
 check(stickerTextOnly === 0,
       `${stickerTextOnly} sticker slots rendered as text rather than an image`);
+
+// The closing screen. Painted by main.js's showAllDone AFTER the timeline
+// ends, not as the last item on it -- so what this asserts is precisely the
+// thing that used to go wrong: that something is still on screen once jsPsych
+// has cleared its display element.
+if (!SETUP) {
+  check(/All done/i.test(target.textContent),
+        `no closing screen after the session: ` +
+        `"${target.textContent.trim().slice(0, 80)}"`);
+  const corner = target.querySelector(".corner-btn");
+  check(CHS ? !corner : Boolean(corner),
+        CHS ? "a family at home was offered a data download"
+            : "the closing screen has no corner download button");
+}
 
 console.log("sticker <img> samples :", stickerImgs, "| text-only slots:", stickerTextOnly);
 // The mansion, end to end: every screen reachable, and everything done in

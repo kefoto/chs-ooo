@@ -450,14 +450,30 @@ const jget = async (url) => {
 
   const jsPsych = initJsPsych({
     display_element: "jspsych-target",
-    on_finish: () => save(true),
+    // The closing screen is painted HERE rather than being the last item on
+    // the timeline, because it is the one screen with nothing after it. A
+    // ScreenPlugin screen has to be dismissed to advance, and dismissing the
+    // last one left the child looking at an empty page -- jsPsych clears the
+    // display element when the timeline ends.
+    //
+    // save() is deliberately not awaited: it captures the payload and writes
+    // the file synchronously, and only the upload is async. Waiting on a POST
+    // that can take seconds would put a blank page exactly where the blank
+    // page used to be.
+    on_finish: () => { save(true); showAllDone(); },
   });
+
+  // The last payload built, so the closing screen's download button has
+  // something to hand back without rebuilding it from state that has since
+  // been torn down.
+  let finalPayload = null;
 
   let saved = false;
   async function save(completed) {
     if (saved) return;
     saved = true;
     const payload = buildPayload({ config: cfg, responses, castle, shop, startTime, completed });
+    finalPayload = payload;
     // Under CHS the parent gets no file: upload_url is the only route out, so
     // a failure there loses the session rather than falling back to a copy on
     // disk. Kept loud for that reason.
@@ -472,6 +488,48 @@ const jget = async (url) => {
     } else if (cfg.offer_download === false) {
       console.error("CHS session with no upload_url: nowhere to put the data");
     }
+  }
+
+  /**
+   * The last thing the child sees, and the end of the session.
+   *
+   * Terminal on purpose: no button that advances, because there is nowhere to
+   * advance to. This used to be the final screen ON the timeline, with a
+   * "Finished!" button -- which a child duly pressed, and jsPsych cleared the
+   * display element, and they were left looking at a blank page.
+   *
+   * The closing line is `finish[0]`, not a random draw from the pair. Every
+   * other screen picks for variety because a child sees it many times in a
+   * session; this one they see once, and pinning it means the text and the
+   * recording named by the same index can never disagree.
+   *
+   * The experimenter's copy of the data sits in the corner, in the place and
+   * shape of the pause control the session has used throughout, rather than
+   * as a big button in a child's line of sight -- it is not addressed to
+   * them, and their file has already downloaded by the time this is drawn.
+   * It is the way back to it if that was dismissed. Absent under CHS, where a
+   * save prompt on a parent's computer is not a data pipeline.
+   */
+  function showAllDone() {
+    const FALLBACK = "All done! Thank you so much for playing with me.";
+    const text = dialogue.finish?.[0] ?? FALLBACK;
+    if (cfg.Gamify) {
+      playSfx("finish");
+      speak("finish", 0);
+    }
+    target.innerHTML = `
+      <div class="screen">
+        ${cfg.Gamify && mascot ? `<img class="pip big-pip" src="${mascot}" alt="">` : ""}
+        <p class="speech">${text}</p>
+      </div>`;
+
+    if (cfg.offer_download === false || !finalPayload) return;
+    const btn = document.createElement("button");
+    btn.className = "corner-btn";
+    btn.type = "button";
+    btn.textContent = "Download data";
+    btn.addEventListener("click", () => downloadPayload(finalPayload));
+    target.appendChild(btn);
   }
 
   // Fired at every room boundary (see the on_finish hook near atRoomEnd,
@@ -1027,19 +1085,9 @@ const jget = async (url) => {
       button: "🦝 Show Pip!",
     });
     pushCutscene("close", "Next");
-    timeline.push({
-      type: ScreenPlugin,
-      // A function so the chime fires when the screen is reached, not when
-      // the timeline is assembled -- these are built before the session runs.
-      html: () => {
-        playSfx("finish");
-        const [finishText, finishIdx] = pick("finish");
-        speak("finish", finishIdx);
-        return `<img class="pip big-pip" src="${mascot}" alt="">` +
-               `<p class="speech">${finishText ?? "All done! Thank you for playing."}</p>`;
-      },
-      button: "🎉 Finished!",
-    });
+    // The closing "All done!" screen is NOT a timeline item -- see
+    // showAllDone() and initJsPsych's on_finish. A screen with a button is a
+    // screen that can be dismissed, and there is nothing after this one.
   }
 
   jsPsych.run(timeline);
