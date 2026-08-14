@@ -105,6 +105,17 @@ http://localhost:8000/?pid=P07&rooms=6&trials=8&age=7&site=LabA
 
 Give neither `rooms` nor `trials` and both come from the session plan above.
 
+> **A CHS link configures nothing but the child.** CHS appends `child=` and
+> `response=` to whatever Study URL you set, so the researcher's parameters and
+> a family's edit of them arrive in the same query string and are
+> indistinguishable. On a deployment, therefore, a URL carrying `child=` gets
+> its identity from CHS and *everything else* — `tier`, `plain`, `calm`,
+> `quiet`, `age`, `site`, `mode`, `duration`, `lead`, `gap`, `rooms`, `trials`,
+> `pid` — from the committed defaults in `js/src/config.js`. Change the arm or
+> the tier for a CHS study by editing that file and deploying, not by writing a
+> URL. (`upload=` is the exception, and is same-origin-only for everyone.) All
+> of them still apply on a dev host, and on a lab link that carries no `child=`.
+
 ## Running it as a Children Helping Science study
 
 CHS's own jsPsych runner cannot host this build: it forbids custom plugins, and
@@ -132,12 +143,15 @@ an external endpoint and skip the "Hosting with a backend" section — but then
 there is no CAPTCHA gate and no built-in storage; that combination only makes
 sense if you already have a collection endpoint elsewhere.)
 
-**2. Set the Study URL** on the CHS study page, with any of the params above
-baked in — CHS keeps your query string and appends its own. `upload=` can be
-omitted now: it defaults to this deploy's own `/api/submit`.
+**2. Set the Study URL** on the CHS study page — just the page itself. CHS
+keeps your query string and appends its own, but on a deployment a CHS session
+takes nothing from it (see the note above): `upload=` already defaults to this
+deploy's own `/api/submit`, and the tier and the arm come from
+`js/src/config.js`, where changing them is a commit rather than a link anyone
+can retype.
 
 ```
-https://<project>.vercel.app/?tier=1
+https://<project>.vercel.app/
 ```
 
 **3. What CHS sends.** When a family presses "Participate now", CHS appends the

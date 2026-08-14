@@ -309,6 +309,36 @@ test("a CHS session's identity, length and destination are fixed", () => {
   assert.equal(c.offer_download, false);
 });
 
+test("a CHS session's ARM and TASK are fixed too", () => {
+  // The other half of the same problem, and the one that corrupts data
+  // rather than breaking a session: a family that edits ?plain=1 into their
+  // link is in the non-gamified baseline arm, and ?tier=2 is a different
+  // experiment. Both look like ordinary rows afterwards.
+  const c = onDeploy("?child=SG7JLN&tier=2&plain=1&calm=1&quiet=1"
+    + "&age=25&site=NOWHERE&mode=disjoint&duration=extended");
+  assert.equal(c.Tier, CONFIG.Tier, "the task is the deploy's, not the URL's");
+  assert.equal(c.Gamify, CONFIG.Gamify, "the arm is the deploy's");
+  assert.equal(c.Gamify_Reduced_Motion, CONFIG.Gamify_Reduced_Motion);
+  assert.equal(c.Gamify_Mute_SFX, CONFIG.Gamify_Mute_SFX);
+  assert.equal(c.Age, CONFIG.Age,
+    "age is joined from the CHS snapshot on chs_child, never taken from the link");
+  assert.equal(c.Tier2_Triplet_Mode, CONFIG.Tier2_Triplet_Mode);
+  assert.equal(c.Session_Duration, CONFIG.Session_Duration);
+  assert.equal(c["Experiment Site"], CONFIG["Experiment Site"]);
+
+  // A lab/facility link is not a visitor's link: the experimenter sets these.
+  const lab = onDeploy("?pid=P07&tier=2&plain=1&age=25");
+  assert.equal(lab.Tier, 2);
+  assert.equal(lab.Gamify, false);
+  assert.equal(lab.Age, "25");
+
+  // ...and a dev host can walk the CHS path in any configuration, or the
+  // jsdom harness could only ever test it in whatever tier CONFIG names.
+  const dev = onLocal("?child=SG7JLN&tier=2&plain=1");
+  assert.equal(dev.Tier, 2);
+  assert.equal(dev.Gamify, false);
+});
+
 test("a broken number never reaches the session builder", () => {
   // ?rooms=abc used to leave Num Blocks NaN and build zero trials;
   // ?rooms=20000 built 220,000 of them and locked the tab for 19 seconds.

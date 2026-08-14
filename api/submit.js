@@ -31,6 +31,24 @@ import { ensureSchema } from "./_lib/schema.js";
 // turn this into a storage-cost attack.
 const MAX_BODY_BYTES = 5 * 1024 * 1024;
 
+// How many rows one ticket may write while it is valid.
+//
+// This is the rate limit the platform will not do for us. The Vercel firewall
+// rate-limits /api/verify-start (60/hour/IP), which caps how many tickets a
+// client can mint -- but Hobby allows only that one rate-limiting rule, so
+// there is none on this path, and a single ticket is otherwise good for three
+// hours of unbounded INSERTs.
+//
+// The ceiling a real session needs is one row per completed room plus a final
+// save: 51 for the longest plan (50 rooms), 23 for an adult. 200 leaves room
+// for a child who restarts and replays under the same id, and still bounds
+// what one stolen or scripted ticket can put in the table. The window matches
+// the ticket's own lifetime, so it is a ceiling per ticket rather than a
+// lifetime quota per participant -- a child coming back next week starts from
+// zero, which a plain row count per participant_id would not allow.
+const MAX_ROWS_PER_TICKET = 200;
+const TICKET_WINDOW = "3 hours";   // _lib/ticket.js's TICKET_LIFETIME_MS
+
 function tagFor(payload, block) {
   if (Number.isFinite(block)) return `block-${block}`;
   return payload?.participant_data?.completion_status === 1 ? "final" : "final_partial";
@@ -94,6 +112,24 @@ export default async function handler(req, res) {
 
   try {
     await ensureSchema();
+
+    // Counted before the insert, not after, so the cap is a ceiling rather
+    // than a ceiling plus one. Indexed by sessions_participant_idx, which is
+    // (participant_id, created_at DESC) -- exactly this query.
+    const { rows: [{ recent }] } = await sql`
+      SELECT count(*)::int AS recent FROM sessions
+      WHERE participant_id = ${pid}
+        AND created_at > now() - ${TICKET_WINDOW}::interval;
+    `;
+    if (recent >= MAX_ROWS_PER_TICKET) {
+      // 429, not 403: this is a rate, and a client that backs off and returns
+      // tomorrow is fine. Logged, because a REAL session hitting this means
+      // the ceiling is wrong and someone's data is being dropped.
+      console.warn(`upload cap reached for ${pid}: ${recent} rows in ${TICKET_WINDOW}`);
+      res.status(429).json({ ok: false, error: "too many uploads for this session" });
+      return;
+    }
+
     const { rows } = await sql`
       INSERT INTO sessions (participant_id, tag, payload)
       VALUES (${pid}, ${tag}, ${JSON.stringify(payload)}::jsonb)

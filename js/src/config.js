@@ -43,18 +43,17 @@ export const CONFIG = {
   // without its clips is not the task.
   Gamify_Mute_SFX: false,
 
-  // Where the finished (and per-block) session data goes. Download is
-  // offered by default; set upload_url to also POST the same JSON to a
-  // collection endpoint. Defaults to this deploy's own /api/submit (see
-  // api/submit.js) -- same-origin once hosted on Vercel, so a CHS study
-  // link needs no ?upload= of its own. On a host with no backend the POST
-  // 404s and is caught the same way any other upload failure is.
+  // Where the finished session goes. Download is offered by default; set
+  // upload_url to also POST the same JSON to a collection endpoint. The
+  // public deploy points this at its own /api/submit -- the ONE line
+  // utilities/export_public.py has to rewrite, so keep them together.
   upload_url: "/api/submit",
 
   // Public Turnstile SITE key for this deploy (not secret -- it is meant to
   // ship to the client; pairs with TURNSTILE_SECRET_KEY, set server-side
-  // only, in Vercel's env vars). Blank runs every session ungated -- see
-  // js/src/captcha.js. Get one at https://dash.cloudflare.com/?to=/:account/turnstile.
+  // only, in Vercel's env vars). Blank runs every session ungated, which is
+  // what a lab build with no backend wants -- see js/src/captcha.js. Get one
+  // at https://dash.cloudflare.com/?to=/:account/turnstile.
   turnstile_site_key: "",
 
   // Dev/QA only -- added straight onto the spendable balance (never onto
@@ -276,22 +275,48 @@ export function applyUrlOverrides(cfg, search = window.location.search,
     if (pid) cfg.participant_id = pid;
   }
 
-  // -- plain values --------------------------------------------------------
-  if (q.get("tier")) cfg.Tier = Number(q.get("tier")) === 2 ? 2 : 1;
-  const mode = oneOf(q.get("mode"), ["disjoint", "shared"]);
-  if (mode) cfg.Tier2_Triplet_Mode = mode;
-  const lead = intIn(q.get("lead"), 0, 10000);
-  if (q.get("lead") && lead !== null) cfg.Audio_Lead_In_Ms = lead;
-  const gap = intIn(q.get("gap"), 100, 20000);
-  if (q.get("gap") && gap !== null) cfg.Audio_Gap_Ms = gap;
-  // A number, not "abc" -- an unparseable age used to fall through to the
-  // adult bin, which is a 22-block session in front of a four-year-old.
-  const age = intIn(q.get("age"), 1, 120);
-  if (q.get("age") && age !== null) cfg.Age = String(age);
-  const duration = oneOf(q.get("duration"), DURATIONS);
-  if (duration) cfg.Session_Duration = duration;
-  const site = text(q.get("site"), 64);
-  if (site) cfg["Experiment Site"] = site;
+  // -- what the study IS ---------------------------------------------------
+  //
+  // Same rule as the session's shape above, and for a stronger reason: these
+  // decide which arm and which task the child is in. `plain=1` moves them
+  // into the non-gamified baseline arm, `tier=2` gives them a different
+  // experiment entirely, and `age` is what the analyses bin by.
+  //
+  // A CHS study URL and a CHS family's URL are the SAME string -- CHS appends
+  // `child`/`response` to whatever the researcher configured, and the family
+  // sees the result in their address bar. So there is no way to honour the
+  // researcher's `?tier=2` on a deployment without also honouring a visitor's
+  // edit of it. The public study therefore runs the ONE configuration
+  // committed in CONFIG above: change the arm by editing that and deploying,
+  // which is the same reasoning that took the gamified / reduced-motion
+  // checkboxes off the public setup form (utilities/export_public.py).
+  //
+  // Everything stays settable on a dev host, or the CHS path could only ever
+  // be smoke-tested in whatever tier CONFIG happens to name.
+  const studyConfigurable = !chs || dev;
+  if (studyConfigurable) {
+    if (q.get("tier")) cfg.Tier = Number(q.get("tier")) === 2 ? 2 : 1;
+    const mode = oneOf(q.get("mode"), ["disjoint", "shared"]);
+    if (mode) cfg.Tier2_Triplet_Mode = mode;
+    const lead = intIn(q.get("lead"), 0, 10000);
+    if (q.get("lead") && lead !== null) cfg.Audio_Lead_In_Ms = lead;
+    const gap = intIn(q.get("gap"), 100, 20000);
+    if (q.get("gap") && gap !== null) cfg.Audio_Gap_Ms = gap;
+    // A number, not "abc" -- an unparseable age used to fall through to the
+    // adult bin, which is a 22-block session in front of a four-year-old.
+    // For a CHS session it stays empty whatever the URL says, and is joined
+    // from the demographic snapshot on chs_child afterwards.
+    const age = intIn(q.get("age"), 1, 120);
+    if (q.get("age") && age !== null) cfg.Age = String(age);
+    const duration = oneOf(q.get("duration"), DURATIONS);
+    if (duration) cfg.Session_Duration = duration;
+    const site = text(q.get("site"), 64);
+    if (site) cfg["Experiment Site"] = site;
+
+    if (q.get("plain") === "1") cfg.Gamify = false;
+    if (q.get("calm") === "1") cfg.Gamify_Reduced_Motion = true;
+    if (q.get("quiet") === "1") cfg.Gamify_Mute_SFX = true;
+  }
 
   // -- dev-host only -------------------------------------------------------
   // Spending money for a tester. Refused on a deployment however it is
@@ -300,12 +325,12 @@ export function applyUrlOverrides(cfg, search = window.location.search,
     cfg.Debug_Bonus_Coins = intIn(q.get("bonus_coins"), 0, 1e6) ?? 0;
   }
 
-  if (q.get("plain") === "1") cfg.Gamify = false;
-  if (q.get("calm") === "1") cfg.Gamify_Reduced_Motion = true;
-  if (q.get("quiet") === "1") cfg.Gamify_Mute_SFX = true;
-
   // Reduced stimulation implies quiet, unless this session asked for sound
-  // explicitly. Mirrors GameLayer.__init__.
-  if (cfg.Gamify_Reduced_Motion && !q.has("quiet")) cfg.Gamify_Mute_SFX = true;
+  // explicitly. Mirrors GameLayer.__init__. An ignored ?quiet= is not an
+  // answer either way -- otherwise a CHS URL could still speak here, through
+  // the one parameter that was supposed to have been dropped.
+  if (cfg.Gamify_Reduced_Motion && !(studyConfigurable && q.has("quiet"))) {
+    cfg.Gamify_Mute_SFX = true;
+  }
   return cfg;
 }
