@@ -21,7 +21,7 @@ A game layer wraps the task for young children: a mascot, a castle that fills
 with stickers, and a playground between blocks. `?plain=1` turns all of it off
 for the non-gamified baseline arm.
 
-## Running it
+## Running it locally
 
 The page fetches manifests and media, so it must be served over HTTP —
 opening `index.html` from disk fails, because `file://` blocks `fetch`.
@@ -31,9 +31,62 @@ python3 -m http.server 8000
 # then open http://localhost:8000/js/index.html
 ```
 
+This is for development only: there is no `api/` behind it, so uploads 404 and
+the session runs ungated. See **Deploying** below for the real thing.
+
 With no query string you get the experimenter's setup screen. See
 [`js/README.md`](js/README.md) for the full parameter list, the session plan,
 the Tier 2 design, and the CHS integration.
+
+## Deploying
+
+This repository is the deploy artifact: **Vercel** serves the static tree and
+runs `api/` as serverless functions. `vercel.json` is the whole build config —
+there is no build step, because there is nothing to build.
+
+> **GitHub Pages cannot host this study.** Pages serves static files only, so
+> `/api/submit` 404s there: the Turnstile gate never runs and **no session data
+> is stored anywhere**. For a CHS family that endpoint is the only route out
+> (no file download is offered at home), so a Pages deployment silently
+> collects nothing. Point the CHS Study URL at Vercel, and disable Pages once
+> it does, so there is no un-backed copy of the study still reachable.
+
+**1. Import the repository.** [vercel.com/new](https://vercel.com/new) → import
+`kefoto/chs-ooo`. Framework preset **Other**; leave Build Command and Output
+Directory empty. Vercel serves the repo root and picks up `api/*.js`
+automatically.
+
+**2. Add Postgres and the environment variables**, then **3. create the
+Turnstile site and paste its site key into `js/src/config.js`** — all three are
+written out step by step, with what each variable is for, in
+[`js/README.md`](js/README.md#hosting-with-a-backend-turnstile--postgres).
+Until `turnstile_site_key` is filled in, every session runs **ungated**.
+
+**4. Set the CHS Study URL** to the deployment root. `vercel.json` rewrites
+`/` to `/js/index.html`, so the link stays short and CHS still appends its own
+`child`/`response` parameters to the query string:
+
+```
+https://<project>.vercel.app/?tier=1
+```
+
+**5. Check it end to end** before any family sees it: open that URL, confirm
+the Turnstile gate appears, finish a short session
+(`?rooms=2&trials=2&pid=SMOKE`), then pull it back out —
+
+```bash
+curl -H "Authorization: Bearer $ADMIN_EXPORT_SECRET" \
+  "https://<project>.vercel.app/api/export?participant_id=SMOKE"
+```
+
+### What `vercel.json` does
+
+| Rule | Why |
+|---|---|
+| rewrite `/` → `/js/index.html` | The study URL is the bare origin rather than `/js/index.html?…`. Only the exact root path matches, so `/api/*` and every asset path are untouched, and the query string is preserved. |
+| `/js/*` — `max-age=0, must-revalidate` | Code must never be served stale. A cached module is the failure mode that looks exactly like "the fix didn't deploy". |
+| `/assets/*`, `/datasets/*` — `max-age=3600` + a week of `stale-while-revalidate` | Media is large and only changes on a sync, so the CDN keeps serving instantly while it refreshes behind the request. |
+| `/api/*` — `no-store` | A cached upload response or a cached export would be wrong in both directions. |
 
 ## Layout
 
