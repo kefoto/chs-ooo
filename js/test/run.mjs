@@ -248,23 +248,107 @@ test("a lab session is unaffected by the CHS handling", () => {
   assert.equal(p.participant_data.age, "7");
 });
 
-test("?bonus_coins= sets a dev-only spendable bonus, never below 0", () => {
-  assert.equal(applyUrlOverrides({ ...CONFIG }, "?bonus_coins=500").Debug_Bonus_Coins, 500);
-  assert.equal(applyUrlOverrides({ ...CONFIG }, "?bonus_coins=-50").Debug_Bonus_Coins, 0);
-  assert.equal(applyUrlOverrides({ ...CONFIG }, "?bonus_coins=nope").Debug_Bonus_Coins, 0);
-  assert.equal(applyUrlOverrides({ ...CONFIG }, "").Debug_Bonus_Coins, 0);
+// The query string on a deployment is whatever the visitor typed, so these
+// cover the three ways that can go wrong: breaking the session, cheating it,
+// and redirecting where its data goes. DEPLOY/LOCAL stand in for
+// window.location, which applyUrlOverrides takes as its third argument.
+const DEPLOY = { hostname: "chs-ooo.vercel.app", href: "https://chs-ooo.vercel.app/" };
+const LOCAL = { hostname: "localhost", href: "http://localhost:8000/js/" };
+const onDeploy = (qs) => applyUrlOverrides({ ...CONFIG }, qs, DEPLOY);
+const onLocal = (qs) => applyUrlOverrides({ ...CONFIG }, qs, LOCAL);
+
+test("?bonus_coins= works on a dev host and nowhere else", () => {
+  // The one parameter whose entire purpose is to skip the game.
+  assert.equal(onLocal("?bonus_coins=500").Debug_Bonus_Coins, 500);
+  assert.equal(onLocal("?bonus_coins=-50").Debug_Bonus_Coins, 0);
+  assert.equal(onLocal("?bonus_coins=nope").Debug_Bonus_Coins, 0);
+  assert.equal(onLocal("?bonus_coins=1e12").Debug_Bonus_Coins, 1e6);   // clamped
+  assert.equal(onLocal("").Debug_Bonus_Coins, 0);
+  assert.equal(onDeploy("?bonus_coins=500").Debug_Bonus_Coins, 0);
 });
 
-test("?media= repoints the stimuli at another origin", () => {
-  // CHS requires stimuli to be hosted online; if they are not served from the
-  // same place as the page, every root has to move together.
-  const cfg = applyUrlOverrides({ ...CONFIG }, "?media=https://cdn.example.org/");
-  assert.equal(cfg.asset_root, "https://cdn.example.org/assets/game");
-  assert.equal(cfg.dataset_root,
-    "https://cdn.example.org/datasets/Tier1_THINGS_560");
-  assert.equal(cfg.tier2_dataset_root,
-    "https://cdn.example.org/datasets/Tier2_AV_Matched");
+test("?upload= and ?media= cannot leave this origin", () => {
+  // upload_url decides where a child's age, gender, ethnicity, race,
+  // handedness and first language are sent. Off-origin is a one-parameter
+  // data leak, so only this origin is accepted.
+  assert.equal(onDeploy("?upload=https://evil.example/collect").upload_url,
+    CONFIG.upload_url, "off-origin destination refused, default left alone");
+  assert.equal(onDeploy("?upload=//evil.example/collect").upload_url,
+    CONFIG.upload_url,
+    "protocol-relative looks relative but resolves to another host");
+  assert.equal(onDeploy("?upload=/api/other").upload_url, "/api/other");
+  assert.equal(
+    onDeploy("?upload=https://chs-ooo.vercel.app/api/other").upload_url,
+    "https://chs-ooo.vercel.app/api/other");
+
+  // Same rule for where the page loads its stimuli from.
+  assert.equal(onDeploy("?media=https://evil.example").asset_root,
+    CONFIG.asset_root, "off-origin media is ignored");
+  const same = onDeploy("?media=https://chs-ooo.vercel.app/mirror/");
+  assert.equal(same.asset_root, "https://chs-ooo.vercel.app/mirror/assets/game");
+  assert.equal(same.dataset_root,
+    "https://chs-ooo.vercel.app/mirror/datasets/Tier1_THINGS_560");
+  assert.equal(same.tier2_dataset_root,
+    "https://chs-ooo.vercel.app/mirror/datasets/Tier2_AV_Matched");
 });
+
+test("a CHS session's identity, length and destination are fixed", () => {
+  // A family can edit the link before they arrive. None of these may take.
+  const c = onDeploy("?child=SG7JLN&pid=IMPOSTOR&rooms=1&trials=1"
+    + "&upload=https://evil.example");
+  assert.equal(c.participant_id, "SG7JLN",
+    "the child hash seeds the session and is the join key to the demographics");
+  assert.equal(c.session_length_pinned, false,
+    "length falls through to the age-bin plan, not to a two-tap session");
+  assert.equal(c.upload_url, CONFIG.upload_url, "off-origin destination refused");
+  // A CHS session may still be pointed somewhere else ON THIS ORIGIN -- the
+  // rule is same-origin, not "CHS may not upload", which would leave those
+  // sessions with nowhere to put their data.
+  assert.equal(onDeploy("?child=SG7JLN&upload=/api/other").upload_url, "/api/other");
+  assert.equal(c.chs_child, "SG7JLN");
+  assert.equal(c.offer_download, false);
+});
+
+test("a broken number never reaches the session builder", () => {
+  // ?rooms=abc used to leave Num Blocks NaN and build zero trials;
+  // ?rooms=20000 built 220,000 of them and locked the tab for 19 seconds.
+  const bad = onDeploy("?rooms=abc&trials=abc");
+  assert.equal(bad.session_length_pinned, false, "falls through to the plan");
+  assert.equal(onDeploy("?rooms=20000")["Num Blocks"], 64);
+  assert.equal(onDeploy("?rooms=0&trials=-9")["Num Blocks"], 1);
+  assert.equal(onDeploy("?rooms=0&trials=-9")["Num Trials"], 1);
+  assert.equal(onDeploy("?gap=-5000").Audio_Gap_Ms, 100);
+  assert.equal(onDeploy("?lead=99999").Audio_Lead_In_Ms, 10000);
+  // An unparseable age used to fall through to the ADULT plan, which is
+  // 25-trial blocks in front of a four-year-old.
+  assert.equal(onDeploy("?age=abc").Age, CONFIG.Age);
+  assert.equal(onDeploy("?age=7").Age, "7");
+});
+
+test("a word that means nothing is ignored, not passed through", () => {
+  assert.equal(onDeploy("?mode=nonsense").Tier2_Triplet_Mode,
+    CONFIG.Tier2_Triplet_Mode);
+  assert.equal(onDeploy("?mode=disjoint").Tier2_Triplet_Mode, "disjoint");
+  assert.equal(onDeploy("?duration=forever").Session_Duration,
+    CONFIG.Session_Duration);
+  assert.equal(onDeploy("?duration=short").Session_Duration, "short");
+  assert.equal(onDeploy("?tier=9").Tier, 1);
+});
+
+test("a lab link still configures a session normally", () => {
+  // The hardening must not cost the experimenter their own workflow.
+  const c = onDeploy("?pid=P07&rooms=6&trials=8&age=7&tier=2&site=Yale&plain=1");
+  assert.equal(c.participant_id, "P07");
+  assert.equal(c["Num Blocks"], 6);
+  assert.equal(c["Num Trials"], 8);
+  assert.equal(c.session_length_pinned, true);
+  assert.equal(c.Age, "7");
+  assert.equal(c.Tier, 2);
+  assert.equal(c["Experiment Site"], "Yale");
+  assert.equal(c.Gamify, false);
+});
+
+
 
 test("tier 2 runs two blocks per condition, same total", () => {
   for (const [age, dur] of [[5, "standard"], [8, "standard"], [25, "standard"]]) {
@@ -1287,6 +1371,27 @@ test("mansion: the saved state carries the whole visit", () => {
   // minigame_ms is a SUBSET of playground_ms (the mansion clock keeps running
   // inside a game room), so it must never exceed it.
   assert.ok(json.minigame_ms <= json.playground_ms);
+});
+
+test("the public copy ships a redistributable font", () => {
+  // The lab build's display faces are licensed and cannot be redistributed,
+  // so the deploy repo omits assets/game/font/ and points @font-face at
+  // Nunito (SIL OFL) in js/vendor/font/ instead.
+  //
+  // Every sync from the private repo overwrites game.css and puts the
+  // licensed face back -- it has happened twice. This test is the check that
+  // survives the sync, because it lives in the file the sync also copies.
+  // In the private repo, where the fonts legitimately exist, it passes
+  // trivially; in the deploy repo, where they do not, it fails loudly.
+  const css = fs.readFileSync(path.join(REPO, "js/css/game.css"), "utf8");
+  const licensedFontsPresent = fs.existsSync(path.join(REPO, "assets/game/font"));
+  if (licensedFontsPresent) return;              // the private repo: nothing to police
+  assert.ok(!/url\([^)]*assets\/game\/font/.test(css),
+    "game.css points at assets/game/font/, which is not in this checkout and "
+    + "must never be redistributed -- restore the js/vendor/font Nunito @font-face");
+  assert.ok(/vendor\/font\//.test(css),
+    "no @font-face pointing at js/vendor/font/ -- the page will fall back to a "
+    + "system face with no warning");
 });
 
 test("sounds: every clip the manifest names exists on disk", () => {

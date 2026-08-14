@@ -13,7 +13,7 @@ Opening `index.html` from disk will fail (`file://` blocks `fetch`).
 # from the repository root
 python3 -m http.server 8000
 # then open:
-#   http://localhost:8000/js/index.html
+#   http://localhost:8000/
 ```
 
 Opening it **without a query string** shows the experimenter's **setup screen**
@@ -83,7 +83,7 @@ link, or for the test harness. `?setup=1` forces the form even so, and any
 other params below preselect its fields.
 
 ```
-http://localhost:8000/js/index.html?pid=P07&rooms=6&trials=8&age=7&site=LabA
+http://localhost:8000/?pid=P07&rooms=6&trials=8&age=7&site=LabA
 ```
 
 | Param | Meaning |
@@ -124,7 +124,7 @@ detects on its own). `index.html` keeps its position above `assets/` and
 study is then at:
 
 ```
-https://<project>.vercel.app/js/index.html
+https://<project>.vercel.app/
 ```
 
 (GitHub Pages still works for the static frontend alone — set `upload=` to
@@ -137,7 +137,7 @@ baked in — CHS keeps your query string and appends its own. `upload=` can be
 omitted now: it defaults to this deploy's own `/api/submit`.
 
 ```
-https://<project>.vercel.app/js/index.html?tier=1
+https://<project>.vercel.app/?tier=1
 ```
 
 **3. What CHS sends.** When a family presses "Participate now", CHS appends the

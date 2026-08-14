@@ -56,8 +56,11 @@ const jget = async (url) => {
   // the page bare gives the same session the desktop build would. `Num
   // Trials` is trials PER BLOCK; handing it the session total is what made
   // the desktop build run an adult's "80 trial" session as 704.
-  const q = new URLSearchParams(window.location.search);
-  if (!q.get("rooms") && !q.get("trials")) {
+  // Whether the URL actually pinned it, not whether it mentioned it -- a
+  // rejected ?rooms= (unparseable, or a CHS session, where the length is not
+  // the visitor's to set) has to fall through to the plan rather than to
+  // CONFIG's placeholder. See config.js's session_length_pinned.
+  if (!cfg.session_length_pinned) {
     const plan = sessionPlan(cfg.Age || 25, cfg.Session_Duration, cfg.Tier);
     cfg["Num Blocks"] = plan.blocks;
     cfg["Num Trials"] = plan.perBlock;

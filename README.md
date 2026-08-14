@@ -28,7 +28,7 @@ opening `index.html` from disk fails, because `file://` blocks `fetch`.
 
 ```bash
 python3 -m http.server 8000
-# then open http://localhost:8000/js/index.html
+# then open http://localhost:8000/
 ```
 
 This is for development only: there is no `api/` behind it, so uploads 404 and
@@ -62,9 +62,9 @@ written out step by step, with what each variable is for, in
 [`js/README.md`](js/README.md#hosting-with-a-backend-turnstile--postgres).
 Until `turnstile_site_key` is filled in, every session runs **ungated**.
 
-**4. Set the CHS Study URL** to the deployment root. `vercel.json` rewrites
-`/` to `/js/index.html`, so the link stays short and CHS still appends its own
-`child`/`response` parameters to the query string:
+**4. Set the CHS Study URL** to the deployment root. The page is served from
+the root here, so the link stays short, and CHS appends its own
+`child`/`response` parameters to whatever query string you set:
 
 ```
 https://<project>.vercel.app/?tier=1
@@ -83,7 +83,6 @@ curl -H "Authorization: Bearer $ADMIN_EXPORT_SECRET" \
 
 | Rule | Why |
 |---|---|
-| rewrite `/` → `/js/index.html` | The study URL is the bare origin rather than `/js/index.html?…`. Only the exact root path matches, so `/api/*` and every asset path are untouched, and the query string is preserved. |
 | `/js/*` — `max-age=0, must-revalidate` | Code must never be served stale. A cached module is the failure mode that looks exactly like "the fix didn't deploy". |
 | `/assets/*`, `/datasets/*` — `max-age=3600` + a week of `stale-while-revalidate` | Media is large and only changes on a sync, so the CDN keeps serving instantly while it refreshes behind the request. |
 | `/api/*` — `no-store` | A cached upload response or a cached export would be wrong in both directions. |
@@ -91,6 +90,7 @@ curl -H "Authorization: Bearer $ADMIN_EXPORT_SECRET" \
 ## Layout
 
 ```
+index.html   the page itself, served at /
 js/          the jsPsych 8 build — timeline, plugins, game layer
 assets/      mascot art, backdrops, stickers, cutscene panels, dialogue
 datasets/    the stimuli: Tier1_THINGS_560/, Tier2_AV_Matched/
@@ -100,8 +100,15 @@ api/         the Vercel serverless functions (Turnstile gate, storage, export)
 
 ### What this copy deliberately does NOT carry
 
-Two things are absent here on purpose, and a sync from the private repo will
-try to put both back. Check them by hand every time:
+Three things differ from the private repo on purpose, and a sync will try to
+undo each. Check them by hand every time:
+
+- **`index.html` sits at the ROOT here**, not at `js/index.html`, so the study
+  URL is the bare origin. Only that file moved: it points at `js/vendor/`,
+  `js/css/` and `js/src/`, and `config.js`'s `../assets/game` resolves to
+  `/assets/game` from either location, so nothing else needed changing. A sync
+  that copies `js/index.html` across will reintroduce the old layout — delete
+  it and keep this one.
 
 - **`assets/game/font/`** — the lab build's Fontworks display faces cannot be
   redistributed. This copy ships Nunito (SIL OFL) from `js/vendor/font/`

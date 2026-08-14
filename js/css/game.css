@@ -22,8 +22,8 @@
    beside the file at js/vendor/font/OFL.txt. Do not point this at
    assets/game/font/ if that ever reappears here -- those are the private
    repo's licensed faces and must never be redistributed. A sync FROM the
-   private repo will try to: this block and that directory are the two things
-   to check by hand every time. */
+   private repo overwrites this block every time; run.mjs's "the public copy
+   ships a redistributable font" test is what catches it. */
 @font-face {
   font-family: "PipUI";
   src: url("../vendor/font/nunito-latin-variable.woff2") format("woff2");
