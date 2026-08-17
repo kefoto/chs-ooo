@@ -1,7 +1,28 @@
 /**
- * Receive one completed MELD consent/assent form: called once per required
- * form by js/src/consent.js's uploadConsentFiles, immediately after
- * verify-start has issued this session's ticket.
+ * Receive one completed MELD consent/assent form.
+ *
+ *     DORMANT -- NOTHING CALLS THIS
+ *     ------------------------------
+ *     The consent gate went back to being an acknowledgement: the participant
+ *     opens each required form, completes it in REDCap, and ticks a box. No
+ *     document is uploaded, so this endpoint and api/consent-export.js are
+ *     live routes that no client requests. They are kept deliberately, for a
+ *     future version that collects the documents directly.
+ *
+ *     To switch it back on, the client side needs: a file input per required
+ *     form in js/src/consent.js (Continue gated on ALL of them, or a minor's
+ *     parental consent comes through with no assent beside it), a
+ *     `consent_upload_url` in js/src/config.js patched to "/api/consent" by
+ *     utilities/export_public.py the way upload_url is, and a call after
+ *     admitSession in main.js -- after, because this endpoint requires the
+ *     ticket that only admission issues. Git history has a working version of
+ *     all four; the document bytes must not enter the session payload.
+ *
+ *     Until then it is reachable but unusable without a valid session ticket,
+ *     and js/test/browser.mjs asserts nothing posts to it.
+ *
+ * Called once per required form, immediately after verify-start has issued
+ * this session's ticket.
  *
  * Requires that ticket (Authorization: Bearer <ticket>), for the same reason
  * submit.js does -- and more urgently. An unauthenticated upload endpoint on a

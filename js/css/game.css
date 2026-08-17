@@ -676,27 +676,11 @@ button.quiet { background: transparent; color: var(--select); border: 3px solid 
 .consent-gate .big:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* What to actually DO with the forms. Sits above the list, because a parent
-   reading this page for the first time meets the links before the inputs and
-   otherwise has no reason to expect a second step after signing. */
+   reading this page for the first time meets the links first and otherwise has
+   no reason to expect to come BACK here after signing -- the links open in new
+   tabs, so without this the tick box is easy to leave behind. */
 .consent-howto {
   margin: 0 0 16px; font-size: 15px; line-height: 1.45; color: var(--text);
-}
-/* One row per required form: the link, then the attachment for THAT form.
-   Boxed together so it reads as "this file belongs to this form" -- two bare
-   file inputs under two links is the shape that gets them swapped. */
-.consent-row {
-  display: flex; flex-direction: column; gap: 8px;
-  padding: 12px; border: 2px solid var(--track);
-  border-radius: 10px; background: var(--panel);
-}
-.consent-row a { background: none; border: none; padding: 0; font-weight: 700; }
-.consent-file { display: flex; flex-direction: column; gap: 4px; }
-.consent-file-label { font-size: 13px; font-weight: 700; color: var(--muted); }
-.consent-file input { font-size: 14px; }
-/* Confirmation that a specific file landed on a specific form, named. Blank
-   until something is attached, so it never claims a form is done. */
-.consent-file-state:not(:empty) {
-  margin: 0; font-size: 13px; font-weight: 700; color: var(--select);
 }
 
 /* ---------------------------------------------------------------------------

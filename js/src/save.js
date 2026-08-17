@@ -85,11 +85,6 @@ export function buildPayload({ config, responses, castle, shop, startTime, compl
     // actual REDCap consent record is participant_id, piped onto each link's
     // URL as ?pid= (see js/README.md's REDCap setup checklist).
     consent_forms_shown: config.consent_forms_shown ?? [],
-    // Which document was attached for each form -- name, size, type, and the
-    // form it belongs to. Never the file's CONTENT: the document goes only to
-    // consent_upload_url (see consent.js's uploadConsentFiles), and this file
-    // is the one an analyst opens and a REDCap upload walks field by field.
-    consent_files: config.consent_files ?? [],
     consent_acknowledged: Boolean(config.consent_acknowledged),
     consent_acknowledged_at: config.consent_acknowledged_at ?? null,
   };

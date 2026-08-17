@@ -27,7 +27,7 @@ import { buildPayload, makeResponse, downloadPayload, postPayload } from "./save
 import { admitSession, getTicket } from "./captcha.js";
 import { sessionPlan } from "./session.js";
 import { setupNeeded, showSetup } from "./setup.js";
-import { showConsentGate, uploadConsentFiles } from "./consent.js";
+import { showConsentGate } from "./consent.js";
 import { initAssets, assetUrl, assetSavings, prefetch, idlePrefetch } from "./assets.js";
 
 let cfg = applyUrlOverrides({ ...CONFIG });
@@ -88,18 +88,6 @@ const jget = async (url) => {
       <p>Please reload the page and try again.</p>
     </div>`;
     return;
-  }
-
-  // The consent forms attached at the gate, sent now rather than then: the
-  // endpoint is authenticated with the ticket admitSession has only just
-  // issued. Awaited so the documents are away before a child starts pressing
-  // things, but never fatal -- see uploadConsentFiles.
-  if (cfg.consent_upload_url) {
-    await uploadConsentFiles({
-      url: cfg.consent_upload_url,
-      participantId: cfg.participant_id,
-      ticket: getTicket(),
-    });
   }
   target.innerHTML = "";
 

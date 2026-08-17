@@ -365,9 +365,16 @@ only through `/api/export`, which is the sole holder of the DB credential.
    | `TURNSTILE_SECRET_KEY` | the secret key from step 1 |
    | `SESSION_TICKET_SECRET` | any long random string (e.g. `openssl rand -hex 32`) |
    | `ADMIN_EXPORT_SECRET` | any long random string, different from the one above |
-   | `CONSENT_ENCRYPTION_KEY` | **exactly 32 bytes, base64**: `openssl rand -base64 32` |
+   | `CONSENT_ENCRYPTION_KEY` | only if the consent-document upload is switched on (see below) |
    | `CONSENT_STORAGE_BUDGET_BYTES` | optional; defaults to 200MB (see below) |
 
+   > **The consent-document upload is currently OFF.** The gate is an
+   > acknowledgement — participants complete the forms in REDCap and tick a box,
+   > and nothing is uploaded — so `/api/consent` and `/api/consent-export` are
+   > dormant and `CONSENT_ENCRYPTION_KEY` is not needed to run the study. The
+   > rest of this box applies only if you switch that path back on; see
+   > `api/consent.js`'s header for what the client side needs.
+   >
    > **`CONSENT_ENCRYPTION_KEY` cannot be recovered or rotated after the fact.**
    > Consent documents are encrypted with it before they reach Postgres
    > (`api/_lib/crypto.js`), and the key is deliberately not stored anywhere in
@@ -412,6 +419,13 @@ already expects — save it there under whatever filename convention you use
 locally, same as a downloaded file would be.
 
 ### Getting the consent forms back out
+
+> **Dormant.** Nothing uploads documents at present — the gate is a tick box and
+> the signed forms live in REDCap, reachable there by `participant_id`. This
+> section describes `/api/consent-export`, which is kept for a future version
+> and which reports an empty table until the upload path is switched back on.
+> It is still what to reach for if the table *does* hold rows from when that
+> path was live.
 
 The documents are encrypted at rest and `/api/consent-export` is the only way
 to read them. It needs `ADMIN_EXPORT_SECRET` **and** `CONSENT_ENCRYPTION_KEY`

@@ -2,6 +2,12 @@
  * Pull the signed consent documents back out, decrypted -- for the researcher
  * only, and the only way to read them at all.
  *
+ * DORMANT, with api/consent.js -- see its header. Nothing uploads documents at
+ * present (the gate is a tick box), so this will report an empty table until
+ * that changes. It is still the right thing to reach for if the table DOES
+ * hold rows: anything stored while the upload path was live is here, and
+ * `?content=1` is how to get it out.
+ *
  * Guarded by ADMIN_EXPORT_SECRET, the same separate secret api/export.js uses
  * and deliberately NOT a session ticket: a ticket is short-lived and scoped to
  * one participant, and must never become a way to read another family's

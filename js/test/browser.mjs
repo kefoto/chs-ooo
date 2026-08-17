@@ -122,8 +122,9 @@ dom.window.HTMLMediaElement.prototype.load = function () {};
 
 // Capture the payload save.js hands to the download, rather than writing it.
 let savedJson = null;
-// Every consent-form upload the session made -- see the /api/consent branch in
-// the fetch stub. Empty in the lab checkout, where consent_upload_url is null.
+// Any POST the session made to the deploy's consent endpoint -- see that branch
+// in the fetch stub. Expected to stay EMPTY: the gate is a tick box and the
+// endpoint is dormant, so anything landing here is a regression.
 const consentUploads = [];
 globalThis.Blob = class {
   constructor(parts) { this.__text = parts.join(""); }
@@ -131,13 +132,12 @@ globalThis.Blob = class {
 dom.window.Blob = globalThis.Blob;
 globalThis.URL.createObjectURL = (b) => { savedJson = b.__text; return "blob:stub"; };
 globalThis.URL.revokeObjectURL = () => {};
-// consent.js reads an attached form with FileReader, which is a browser global
-// that jsdom does not hoist onto globalThis -- the same reason Blob and
-// createObjectURL are bridged above. Without this, base64Of() threw, the throw
-// was swallowed by uploadConsentFiles' own catch (which is deliberately
-// non-fatal), and every consent upload silently failed while the session looked
-// perfect. Bridged rather than worked around in consent.js, because FileReader
-// is the right API in a real browser and the harness is what is unusual here.
+// Browser globals jsdom does not hoist onto globalThis, bridged for the same
+// reason Blob and createObjectURL are above. Nothing reads a file here now that
+// the gate is a tick box, but these cost nothing and are what the document-
+// upload path needed when it existed -- so re-enabling it does not start by
+// rediscovering that its failure was being swallowed by a deliberately
+// non-fatal catch while the session looked perfect.
 globalThis.FileReader = dom.window.FileReader;
 globalThis.File = dom.window.File;
 
@@ -158,14 +158,13 @@ globalThis.fetch = async (url, init) => {
       return { ok: true, status: 200,
                json: async () => ({ ok: true, gated: false, ticket: "harness-ticket" }) };
     }
-    // The consent-form upload -- the THIRD POST type this stub has to know
-    // about (consent.js's uploadConsentFiles, one call per required form). It
-    // is not a session upload and must not be captured as one: it fires before
-    // the timeline is even built, so falling through would set savedJson on the
-    // first tick and end the driving loop before a single screen was clicked --
-    // precisely the failure the verify-start branch above was added to fix.
-    // Only the public config points anywhere, so this branch is live in the
-    // exported deploy and dormant in the lab checkout.
+    // The deploy's consent-document endpoint. Nothing in js/ calls it -- the
+    // gate is a tick box and the signed form lives in REDCap -- so this branch
+    // exists to CATCH a call rather than to serve one: the assertion below
+    // requires consentUploads to stay empty. Kept because the endpoint itself
+    // is kept (see api/consent.js), so if it is ever wired back up this stub
+    // is already the right shape, and until then a stray POST is caught rather
+    // than silently captured as the session payload.
     if (String(url).includes("/api/consent")) {
       const sent = JSON.parse(init.body || "{}");
       consentUploads.push({
@@ -256,7 +255,6 @@ let setupPreview = "";
 const CONSENT_AGE = 5;
 let consentAgeAsked = false;
 let consentFormsShown = 0;
-let consentFilesAttached = 0;
 let panelClicks = 0;   // cutscene panels are click-advanced, not button-advanced
 // Stickers must be drawn from images, never as emoji text: the glyph would
 // otherwise come from whatever emoji font the machine has, which is a tofu box
@@ -346,23 +344,13 @@ while (!savedJson && guard++ < 8000) {
   const consentContinue = target.querySelector("#c-continue");
   if (consentContinue) {
     consentFormsShown = target.querySelectorAll(".consent-links a").length;
-    // Attach a file to EVERY required form. The gate keeps Continue disabled
-    // until all of them have one, which is the property worth driving: a gate
-    // that enabled on the first attachment would let a parental consent
-    // through with no assent beside it.
-    for (const input of target.querySelectorAll('input[type="file"]')) {
-      if (input.files && input.files.length) continue;
-      const file = new dom.window.File(
-        [`%PDF-1.4 signed consent for ${input.id}`],
-        `${input.id}.pdf`, { type: "application/pdf" });
-      // jsdom's `files` is a read-only FileList, so it cannot be assigned the
-      // way a real user's selection sets it. Defined onto the element instead,
-      // which is what the change handler reads.
-      Object.defineProperty(input, "files", {
-        value: [file], writable: false, configurable: true,
-      });
-      input.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
-      consentFilesAttached += 1;
+    const ack = target.querySelector("#c-ack");
+    // Checked by setting .checked AND firing change: the gate enables Continue
+    // from the change handler, not from the property, so assigning alone would
+    // leave the button disabled and the loop spinning.
+    if (ack && !ack.checked) {
+      ack.checked = true;
+      ack.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
     }
     if (!consentContinue.disabled) click(consentContinue);
     continue;
@@ -538,46 +526,13 @@ if (!SETUP) {
   // a gate that rendered no forms and enabled Continue immediately would also
   // produce a payload. These check it actually gated.
   check(consentFormsShown > 0, "the consent gate showed no forms");
-  // One attachment per form, and each recorded against the form it belongs to.
-  check(consentFilesAttached === consentFormsShown,
-        `${consentFormsShown} forms shown but ${consentFilesAttached} file inputs`);
-  const cf = payload?.participant_data?.consent_files ?? [];
-  check(cf.length === consentFormsShown,
-        `consent_files has ${cf.length} entries for ${consentFormsShown} forms`);
-  check(cf.every((f) => f.form && f.filename && f.bytes > 0),
-        `a consent_files entry is missing its form/filename/size: ${JSON.stringify(cf)}`);
-  // The whole point of recording metadata rather than the document: no file
-  // CONTENT may appear anywhere in the payload.
+  // The gate is an acknowledgement, not an upload: the signed document lives in
+  // REDCap. Nothing may be POSTed to the deploy's (dormant) consent endpoint,
+  // and no document bytes may appear in the payload.
+  check(consentUploads.length === 0,
+        "a consent document was uploaded; the gate is meant to be a tick box");
   check(!JSON.stringify(payload).includes("%PDF"),
         "a consent document's bytes reached the session payload");
-
-  // Where consent_upload_url IS configured (the exported deploy, not the lab
-  // checkout), every attached form must actually have been sent, each carrying
-  // the session ticket -- an unauthenticated upload endpoint on a public deploy
-  // would be an open bucket, so the header is the property under test.
-  // Read off config.js's source rather than imported: this is the ONE setting
-  // utilities/export_public.py rewrites between the two repos (alongside
-  // upload_url), so the harness has to test whichever checkout it is run in,
-  // and the source is where that difference actually lives.
-  const configSrc = fs.readFileSync(
-    path.join(ROOT, "js", "src", "config.js"), "utf8");
-  const consentUrl = /consent_upload_url:\s*"[^"]+"/.test(configSrc);
-  if (consentUrl) {
-    check(consentUploads.length === consentFormsShown,
-          `${consentFormsShown} forms attached but ${consentUploads.length} uploaded`);
-    check(consentUploads.every((u) => u.auth.startsWith("Bearer ")),
-          "a consent upload went out with no session ticket");
-    check(consentUploads.every((u) => u.bytes > 0),
-          "a consent upload carried no file content");
-    check(new Set(consentUploads.map((u) => u.form)).size === consentUploads.length,
-          `two consent uploads claimed the same form: `
-          + `${consentUploads.map((u) => u.form)}`);
-  } else {
-    // Null means the document never leaves the machine. The gate still demands
-    // it -- consent_files above proves that -- but nothing may be transmitted.
-    check(consentUploads.length === 0,
-          "a consent document was uploaded with no consent_upload_url set");
-  }
   check(payload?.participant_data?.consent_acknowledged === true,
         "consent_acknowledged did not reach the payload");
   check((payload?.participant_data?.consent_forms_shown ?? []).length > 0,

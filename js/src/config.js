@@ -36,20 +36,16 @@ export const CONFIG = {
 
   // MELD consent/assent, set by consent.js's showConsentGate before a
   // session may proceed. See js/src/consent.js for the age bands.
-  // `consent_files` records WHICH form each attachment was and its name/size
-  // -- never the document's bytes, which go only to consent_upload_url.
+  //
+  // The gate is an ACKNOWLEDGEMENT: the participant opens each required form,
+  // completes it, and ticks a box to confirm. The signed document itself lives
+  // in REDCap, joined back to this session by participant_id (see
+  // consentLinkUrl). The deploy also carries an endpoint that can receive the
+  // documents directly (/api/consent) -- kept for a future version, and not
+  // wired to anything here; see its docstring before switching it on.
   consent_forms_shown: [],
-  consent_files: [],
   consent_acknowledged: false,
   consent_acknowledged_at: null,
-
-  // Where the attached consent forms go. Null means the gate still requires
-  // them (a session may not start without them) but nothing is transmitted --
-  // the lab build has no backend, and a signed form on a lab machine is
-  // already where it needs to be. The public deploy points this at its own
-  // /api/consent; utilities/export_public.py rewrites it alongside
-  // upload_url, so keep the two together.
-  consent_upload_url: "/api/consent",
 
   Gamify: true,
   Gamify_Mascot: "neutral",
