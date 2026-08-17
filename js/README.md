@@ -354,8 +354,9 @@ only through `/api/export`, which is the sole holder of the DB credential.
    **secret key** (not public).
 2. **Add a Postgres database** to the Vercel project: project → Storage → Create
    Database → Postgres. Linking it to the project sets `POSTGRES_URL`
-   automatically — nothing to copy by hand. The table (`sessions`) is created
-   on first use; there is no separate migration step.
+   automatically — nothing to copy by hand. The tables (`sessions`,
+   `consent_files`) are created on first use; there is no separate migration
+   step.
 3. **Set environment variables** on the Vercel project (Settings →
    Environment Variables):
 
@@ -364,6 +365,21 @@ only through `/api/export`, which is the sole holder of the DB credential.
    | `TURNSTILE_SECRET_KEY` | the secret key from step 1 |
    | `SESSION_TICKET_SECRET` | any long random string (e.g. `openssl rand -hex 32`) |
    | `ADMIN_EXPORT_SECRET` | any long random string, different from the one above |
+   | `CONSENT_ENCRYPTION_KEY` | **exactly 32 bytes, base64**: `openssl rand -base64 32` |
+   | `CONSENT_STORAGE_BUDGET_BYTES` | optional; defaults to 200MB (see below) |
+
+   > **`CONSENT_ENCRYPTION_KEY` cannot be recovered or rotated after the fact.**
+   > Consent documents are encrypted with it before they reach Postgres
+   > (`api/_lib/crypto.js`), and the key is deliberately not stored anywhere in
+   > the database — that is what makes a database leak yield ciphertext rather
+   > than signed forms. The consequence is symmetrical: **lose the key and every
+   > stored consent form is permanently unreadable.** Put it wherever the
+   > study's other irreplaceable credentials live before the first session runs.
+   > Changing it later orphans everything stored under the old one, so export
+   > and clear first (below) if it ever has to change.
+   >
+   > If it is missing or the wrong length, `/api/consent` returns 500 and
+   > refuses the upload rather than storing the document in the clear.
 
 4. **Put the site key in the client config**: `turnstile_site_key` in
    `js/src/config.js`. This one is *not* secret — it is meant to ship to the
@@ -394,6 +410,56 @@ block-by-block row instead, or `?participant_id=P07` to filter to one
 participant. Each row's `payload` field is the same JSON `data/responses/`
 already expects — save it there under whatever filename convention you use
 locally, same as a downloaded file would be.
+
+### Getting the consent forms back out
+
+The documents are encrypted at rest and `/api/consent-export` is the only way
+to read them. It needs `ADMIN_EXPORT_SECRET` **and** `CONSENT_ENCRYPTION_KEY`
+— a session ticket is never enough, so a leaked ticket cannot reach another
+family's paperwork.
+
+```bash
+# inventory only: who has which form, how big, when. No documents move.
+curl -H "Authorization: Bearer $ADMIN_EXPORT_SECRET" \
+  "https://<project>.vercel.app/api/consent-export"
+
+# with the documents themselves, base64 in `content_base64`
+curl -H "Authorization: Bearer $ADMIN_EXPORT_SECRET" \
+  "https://<project>.vercel.app/api/consent-export?participant_id=P07&content=1"
+```
+
+Write one out with, e.g.:
+
+```bash
+jq -r '.files[0].content_base64' export.json | base64 -d > P07-parental.pdf
+```
+
+**Storage is bounded, and the bound protects the response data.** `consent_files`
+shares a database with `sessions`, so documents that fill the quota would start
+failing session INSERTs — losing measurements to paperwork. `/api/consent`
+therefore refuses an upload once the table reaches
+`CONSENT_STORAGE_BUDGET_BYTES` (default 200MB) and returns **507**, logging
+loudly. The session itself continues: a consent form can be chased afterwards,
+a child's half-hour cannot.
+
+Rough capacity at the default: a signed PDF is typically 200KB–1MB, so ~200–500
+documents, i.e. ~100–250 participants at two forms each. A 10MB phone photo is
+allowed but eats twenty times the room. Re-attaching a form for the same
+participant upserts, so corrections cost the difference rather than another
+document.
+
+To reclaim space, export **and** clear in one call — note it is a `POST`, and
+`delete=1` requires `content=1` so nothing is destroyed that was not just handed
+over:
+
+```bash
+curl -X POST -H "Authorization: Bearer $ADMIN_EXPORT_SECRET" \
+  "https://<project>.vercel.app/api/consent-export?content=1&delete=1" > consent.json
+```
+
+Rows that fail to decrypt are reported in `undecryptable` and are **never**
+deleted — an unreadable document is the last thing that should be thrown away.
+Every response also carries `stored_bytes`, so the budget can be watched.
 
 ## The rule this port had to preserve
 

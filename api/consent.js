@@ -31,11 +31,32 @@
 import { sql } from "@vercel/postgres";
 import { verifyTicket } from "./_lib/ticket.js";
 import { ensureConsentSchema } from "./_lib/schema.js";
+import { encrypt, encryptionReady, ENVELOPE_OVERHEAD } from "./_lib/crypto.js";
 
 // Mirrors MAX_CONSENT_BYTES in js/src/consent.js. Checked there so a parent is
 // told immediately, and here so the limit is real -- the browser's check is a
 // courtesy to the person, not a control on the endpoint.
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
+
+// Ceiling on everything this table holds, across all participants.
+//
+// THE POINT IS NOT DISK COST. consent_files shares a database with `sessions`,
+// which is where the actual measurement lands -- so documents that fill the
+// storage quota do not merely stop being accepted, they start failing
+// submit.js's INSERTs and lose research data. A paperwork attachment must
+// never be able to cost a completed session.
+//
+// So this budget is deliberately a fraction of the smallest plan the study is
+// likely to run on (Neon's free tier is 0.5GB), leaving the rest for session
+// rows, which are small and are the thing that actually matters. When the
+// budget is reached the UPLOAD is refused and the session carries on: a
+// consent form is recoverable afterwards by asking the family, and a
+// half-hour of a child's attention is not.
+//
+// Raise it once the forms are being exported and cleared regularly (see
+// api/consent-export.js, which deletes what it has handed over).
+const MAX_TOTAL_BYTES = Number(process.env.CONSENT_STORAGE_BUDGET_BYTES
+  || 200 * 1024 * 1024);
 
 // base64 is 4 characters per 3 bytes, so the encoded body is ~1.34x the file.
 // A little headroom over that for the JSON around it.
@@ -62,6 +83,17 @@ export default async function handler(req, res) {
 
   if (!process.env.SESSION_TICKET_SECRET) {
     console.error("SESSION_TICKET_SECRET is not set");
+    res.status(500).json({ ok: false, error: "server not configured" });
+    return;
+  }
+
+  // Refused, not degraded. Without a key these documents could only be stored
+  // in the clear, and a signed consent form sitting unencrypted in a database
+  // that someone believes is encrypted is worse than one that was never
+  // collected -- the first is a silent exposure, the second is a visible gap.
+  if (!encryptionReady()) {
+    console.error("CONSENT_ENCRYPTION_KEY is missing or not 32 bytes base64; "
+      + "refusing to store consent documents in the clear");
     res.status(500).json({ ok: false, error: "server not configured" });
     return;
   }
@@ -132,11 +164,41 @@ export default async function handler(req, res) {
 
   try {
     await ensureConsentSchema();
+
+    // The storage budget, checked BEFORE the insert so it is a ceiling rather
+    // than a ceiling plus one document. The row this upload replaces is
+    // discounted: re-attaching a form for a participant who already has one is
+    // an upsert, so it costs the DIFFERENCE, not another whole document, and
+    // charging it in full would refuse a correction on a nearly-full table.
+    const stored = content.length + ENVELOPE_OVERHEAD;
+    const { rows: [{ used, existing }] } = await sql`
+      SELECT
+        COALESCE((SELECT sum(octet_length(content)) FROM consent_files), 0)::bigint AS used,
+        COALESCE((SELECT octet_length(content) FROM consent_files
+                   WHERE participant_id = ${pid} AND form = ${form}), 0)::bigint AS existing;
+    `;
+    if (Number(used) - Number(existing) + stored > MAX_TOTAL_BYTES) {
+      // Loud: this is not a client's mistake and not a rate to back off from.
+      // It means the table needs exporting and clearing, and until it is,
+      // every family's forms are being turned away.
+      console.error(`consent storage budget exhausted: ${used} bytes stored, `
+        + `budget ${MAX_TOTAL_BYTES}. Export and clear via /api/consent-export `
+        + `?delete=1, or raise CONSENT_STORAGE_BUDGET_BYTES.`);
+      res.status(507).json({ ok: false, error: "consent storage full" });
+      return;
+    }
+
+    // Encrypted here, at the last moment before it is handed over, and bound
+    // to this participant so the ciphertext cannot be replayed onto another
+    // child's row. `bytes` stays the PLAINTEXT length: it is the record of how
+    // big the document a family sent was, which is what a human comparing it
+    // to the original cares about.
+    const sealed = encrypt(content, pid);
     const { rows } = await sql`
       INSERT INTO consent_files
         (participant_id, form, filename, mime, bytes, content)
       VALUES (${pid}, ${form}, ${filename}, ${mime}, ${content.length},
-              ${content})
+              ${sealed})
       ON CONFLICT (participant_id, form) DO UPDATE
         SET filename = EXCLUDED.filename,
             mime     = EXCLUDED.mime,
