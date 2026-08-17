@@ -27,7 +27,7 @@ import { buildPayload, makeResponse, downloadPayload, postPayload } from "./save
 import { admitSession, getTicket } from "./captcha.js";
 import { sessionPlan } from "./session.js";
 import { setupNeeded, showSetup } from "./setup.js";
-import { showConsentGate } from "./consent.js";
+import { showConsentGate, uploadConsentFiles } from "./consent.js";
 import { initAssets, assetUrl, assetSavings, prefetch, idlePrefetch } from "./assets.js";
 
 let cfg = applyUrlOverrides({ ...CONFIG });
@@ -88,6 +88,18 @@ const jget = async (url) => {
       <p>Please reload the page and try again.</p>
     </div>`;
     return;
+  }
+
+  // The consent forms attached at the gate, sent now rather than then: the
+  // endpoint is authenticated with the ticket admitSession has only just
+  // issued. Awaited so the documents are away before a child starts pressing
+  // things, but never fatal -- see uploadConsentFiles.
+  if (cfg.consent_upload_url) {
+    await uploadConsentFiles({
+      url: cfg.consent_upload_url,
+      participantId: cfg.participant_id,
+      ticket: getTicket(),
+    });
   }
   target.innerHTML = "";
 
@@ -482,19 +494,36 @@ const jget = async (url) => {
     saved = true;
     const payload = buildPayload({ config: cfg, responses, castle, shop, startTime, completed });
     finalPayload = payload;
-    // Under CHS the parent gets no file: upload_url is the only route out, so
-    // a failure there loses the session rather than falling back to a copy on
-    // disk. Kept loud for that reason.
-    if (cfg.offer_download !== false) downloadPayload(payload);
+    // NOTHING is downloaded automatically. A save dialog appearing unbidden on
+    // a family's own computer at the end of a children's study is startling in
+    // a way the data does not require: the experimenter's copy is a button on
+    // the closing screen (see showAllDone), taken deliberately when it is
+    // wanted. `offer_download` still decides whether that button exists at
+    // all, so a CHS session -- where a file on a parent's machine is not a
+    // data pipeline -- still offers nothing.
+    //
+    // The consequence for error handling: upload_url is now the only route out
+    // that happens on its own, in EVERY arm rather than only under CHS. A
+    // failure there is loud for that reason, and no longer has a file already
+    // on disk to fall back on -- only a button someone has to notice.
     if (cfg.upload_url) {
       try { await postPayload(cfg.upload_url, payload, { ticket: getTicket() }); }
       catch (e) {
         console.error(cfg.offer_download === false
           ? "upload failed and no download was offered -- this session is lost"
-          : "upload failed; the download still holds the data", e);
+          : "upload failed; the closing screen's download button is the only "
+            + "remaining copy -- take it before leaving this page", e);
       }
     } else if (cfg.offer_download === false) {
       console.error("CHS session with no upload_url: nowhere to put the data");
+    } else {
+      // No endpoint and nothing automatic: this session exists only in this
+      // tab, behind the closing screen's button. Worth saying out loud, because
+      // it used to be the case that a run configured this way still produced a
+      // file without anyone doing anything, and closing the tab is now enough
+      // to lose it.
+      console.warn("no upload_url: this session is only in the closing "
+        + "screen's download button -- closing the tab discards it");
     }
   }
 
@@ -513,10 +542,12 @@ const jget = async (url) => {
    *
    * The experimenter's copy of the data sits in the corner, in the place and
    * shape of the pause control the session has used throughout, rather than
-   * as a big button in a child's line of sight -- it is not addressed to
-   * them, and their file has already downloaded by the time this is drawn.
-   * It is the way back to it if that was dismissed. Absent under CHS, where a
-   * save prompt on a parent's computer is not a data pipeline.
+   * as a big button in a child's line of sight -- it is not addressed to them.
+   * Since nothing downloads on its own any more (see save), this button is the
+   * ONLY way to a local file, not a second chance at one: on a run with no
+   * upload_url it is the only copy of the session that will ever exist. Absent
+   * under CHS, where a save prompt on a parent's computer is not a data
+   * pipeline.
    */
   function showAllDone() {
     const FALLBACK = "All done! Thank you so much for playing with me.";
@@ -534,6 +565,11 @@ const jget = async (url) => {
     if (cfg.offer_download === false || !finalPayload) return;
     const btn = document.createElement("button");
     btn.className = "corner-btn";
+    // Now that nothing downloads on its own, this button is the only path to a
+    // file -- so the jsdom harness has to press it to see a payload at all.
+    // The id is that handle: matching on the label would tie the only
+    // end-to-end test of this path to the wording of a button.
+    btn.id = "download-data";
     btn.type = "button";
     btn.textContent = "Download data";
     btn.addEventListener("click", () => downloadPayload(finalPayload));

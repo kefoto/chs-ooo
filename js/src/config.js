@@ -36,9 +36,20 @@ export const CONFIG = {
 
   // MELD consent/assent, set by consent.js's showConsentGate before a
   // session may proceed. See js/src/consent.js for the age bands.
+  // `consent_files` records WHICH form each attachment was and its name/size
+  // -- never the document's bytes, which go only to consent_upload_url.
   consent_forms_shown: [],
+  consent_files: [],
   consent_acknowledged: false,
   consent_acknowledged_at: null,
+
+  // Where the attached consent forms go. Null means the gate still requires
+  // them (a session may not start without them) but nothing is transmitted --
+  // the lab build has no backend, and a signed form on a lab machine is
+  // already where it needs to be. The public deploy points this at its own
+  // /api/consent; utilities/export_public.py rewrites it alongside
+  // upload_url, so keep the two together.
+  consent_upload_url: "/api/consent",
 
   Gamify: true,
   Gamify_Mascot: "neutral",
@@ -83,8 +94,11 @@ export const CONFIG = {
   chs_child: null,
   chs_response: null,
 
-  // Suppressed under CHS: a file download prompt on a parent's home computer
-  // is not a data pipeline. Set by applyUrlOverrides, not by hand.
+  // Whether the closing screen OFFERS a download button at all. Nothing
+  // downloads automatically in any arm -- see save() in main.js -- so this no
+  // longer suppresses a prompt, it decides whether there is a way to a local
+  // file. Off under CHS, where a file on a parent's home computer is not a
+  // data pipeline. Set by applyUrlOverrides, not by hand.
   offer_download: true,
 
   // True once ?rooms/?trials have actually PINNED the session length, so

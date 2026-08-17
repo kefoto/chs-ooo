@@ -122,12 +122,24 @@ dom.window.HTMLMediaElement.prototype.load = function () {};
 
 // Capture the payload save.js hands to the download, rather than writing it.
 let savedJson = null;
+// Every consent-form upload the session made -- see the /api/consent branch in
+// the fetch stub. Empty in the lab checkout, where consent_upload_url is null.
+const consentUploads = [];
 globalThis.Blob = class {
   constructor(parts) { this.__text = parts.join(""); }
 };
 dom.window.Blob = globalThis.Blob;
 globalThis.URL.createObjectURL = (b) => { savedJson = b.__text; return "blob:stub"; };
 globalThis.URL.revokeObjectURL = () => {};
+// consent.js reads an attached form with FileReader, which is a browser global
+// that jsdom does not hoist onto globalThis -- the same reason Blob and
+// createObjectURL are bridged above. Without this, base64Of() threw, the throw
+// was swallowed by uploadConsentFiles' own catch (which is deliberately
+// non-fatal), and every consent upload silently failed while the session looked
+// perfect. Bridged rather than worked around in consent.js, because FileReader
+// is the right API in a real browser and the harness is what is unusual here.
+globalThis.FileReader = dom.window.FileReader;
+globalThis.File = dom.window.File;
 
 // Serve the repo's files straight off disk.
 globalThis.fetch = async (url, init) => {
@@ -145,6 +157,23 @@ globalThis.fetch = async (url, init) => {
     if (String(url).includes("/api/verify-start")) {
       return { ok: true, status: 200,
                json: async () => ({ ok: true, gated: false, ticket: "harness-ticket" }) };
+    }
+    // The consent-form upload -- the THIRD POST type this stub has to know
+    // about (consent.js's uploadConsentFiles, one call per required form). It
+    // is not a session upload and must not be captured as one: it fires before
+    // the timeline is even built, so falling through would set savedJson on the
+    // first tick and end the driving loop before a single screen was clicked --
+    // precisely the failure the verify-start branch above was added to fix.
+    // Only the public config points anywhere, so this branch is live in the
+    // exported deploy and dormant in the lab checkout.
+    if (String(url).includes("/api/consent")) {
+      const sent = JSON.parse(init.body || "{}");
+      consentUploads.push({
+        form: sent.form,
+        bytes: (sent.content_base64 || "").length,
+        auth: String(init.headers?.Authorization ?? ""),
+      });
+      return { ok: true, status: 200, json: async () => ({ ok: true, id: 1 }) };
     }
     // Per-block checkpoints (X-Session-Block header set -- see
     // js/src/save.js's postPayload) fire mid-session, one per completed
@@ -220,6 +249,14 @@ const placePending = (room) => {
 let guard = 0;
 let setupSeen = false;
 let setupPreview = "";
+// The MELD consent gate. 5 puts a CHS session in the 0-6 band, which is the
+// TWO-form case (parental + 0-6 assent) -- the branch worth driving, since a
+// single adult form would not catch a gate that only ever enables Continue on
+// the first form it renders.
+const CONSENT_AGE = 5;
+let consentAgeAsked = false;
+let consentFormsShown = 0;
+let consentFilesAttached = 0;
 let panelClicks = 0;   // cutscene panels are click-advanced, not button-advanced
 // Stickers must be drawn from images, never as emoji text: the glyph would
 // otherwise come from whatever emoji font the machine has, which is a tofu box
@@ -280,6 +317,54 @@ while (!savedJson && guard++ < 8000) {
     // pid -> session path stays covered by the ?pid= cases above.
     if (SETUP) break;
     click(startBtn);
+    continue;
+  }
+  // -- the closing screen's download button ----------------------------------
+  // Nothing downloads automatically any more (see save() in main.js), so on a
+  // run with no upload_url this press is the ONLY thing that produces a
+  // payload -- without it the loop below runs to its guard and reports "no
+  // responses recorded" on a session that in fact completed perfectly. Pressed
+  // last in the loop because it is the last thing on screen.
+  const dl = target.querySelector("#download-data");
+  if (dl) { click(dl); continue; }
+  // -- the MELD consent/assent gate ------------------------------------------
+  // Runs after the setup form and before the session, and BLOCKS both: without
+  // this the harness sat on the consent screen until the guard expired and
+  // reported "no responses recorded", which is what it did (in both repos, and
+  // in production) from the moment the gate landed until this was added.
+  //
+  // Two screens, either of which can be the one showing. The age question
+  // appears only when cfg.Age is still blank -- a CHS session, since CHS never
+  // puts age in the URL; a ?age= session goes straight to the forms.
+  const ageNext = target.querySelector("#c-age-next");
+  if (ageNext) {
+    const ageField = target.querySelector("#c-age");
+    if (ageField) { ageField.value = String(CONSENT_AGE); consentAgeAsked = true; }
+    click(ageNext);
+    continue;
+  }
+  const consentContinue = target.querySelector("#c-continue");
+  if (consentContinue) {
+    consentFormsShown = target.querySelectorAll(".consent-links a").length;
+    // Attach a file to EVERY required form. The gate keeps Continue disabled
+    // until all of them have one, which is the property worth driving: a gate
+    // that enabled on the first attachment would let a parental consent
+    // through with no assent beside it.
+    for (const input of target.querySelectorAll('input[type="file"]')) {
+      if (input.files && input.files.length) continue;
+      const file = new dom.window.File(
+        [`%PDF-1.4 signed consent for ${input.id}`],
+        `${input.id}.pdf`, { type: "application/pdf" });
+      // jsdom's `files` is a read-only FileList, so it cannot be assigned the
+      // way a real user's selection sets it. Defined onto the element instead,
+      // which is what the change handler reads.
+      Object.defineProperty(input, "files", {
+        value: [file], writable: false, configurable: true,
+      });
+      input.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
+      consentFilesAttached += 1;
+    }
+    if (!consentContinue.disabled) click(consentContinue);
     continue;
   }
   // -- the shop's background room-picker -------------------------------------
@@ -447,6 +532,72 @@ if (!SETUP) {
         `trial_index not monotonic: ${idxs}`);
   check(idxs[0] === 0 && idxs[idxs.length - 1] === rows.length - 1,
         `trial_index is not 0..${rows.length - 1}: ${idxs}`);
+
+  // The consent gate blocks every session, so reaching a payload at all proves
+  // it was passed. What that does NOT prove is that it asked for anything --
+  // a gate that rendered no forms and enabled Continue immediately would also
+  // produce a payload. These check it actually gated.
+  check(consentFormsShown > 0, "the consent gate showed no forms");
+  // One attachment per form, and each recorded against the form it belongs to.
+  check(consentFilesAttached === consentFormsShown,
+        `${consentFormsShown} forms shown but ${consentFilesAttached} file inputs`);
+  const cf = payload?.participant_data?.consent_files ?? [];
+  check(cf.length === consentFormsShown,
+        `consent_files has ${cf.length} entries for ${consentFormsShown} forms`);
+  check(cf.every((f) => f.form && f.filename && f.bytes > 0),
+        `a consent_files entry is missing its form/filename/size: ${JSON.stringify(cf)}`);
+  // The whole point of recording metadata rather than the document: no file
+  // CONTENT may appear anywhere in the payload.
+  check(!JSON.stringify(payload).includes("%PDF"),
+        "a consent document's bytes reached the session payload");
+
+  // Where consent_upload_url IS configured (the exported deploy, not the lab
+  // checkout), every attached form must actually have been sent, each carrying
+  // the session ticket -- an unauthenticated upload endpoint on a public deploy
+  // would be an open bucket, so the header is the property under test.
+  // Read off config.js's source rather than imported: this is the ONE setting
+  // utilities/export_public.py rewrites between the two repos (alongside
+  // upload_url), so the harness has to test whichever checkout it is run in,
+  // and the source is where that difference actually lives.
+  const configSrc = fs.readFileSync(
+    path.join(ROOT, "js", "src", "config.js"), "utf8");
+  const consentUrl = /consent_upload_url:\s*"[^"]+"/.test(configSrc);
+  if (consentUrl) {
+    check(consentUploads.length === consentFormsShown,
+          `${consentFormsShown} forms attached but ${consentUploads.length} uploaded`);
+    check(consentUploads.every((u) => u.auth.startsWith("Bearer ")),
+          "a consent upload went out with no session ticket");
+    check(consentUploads.every((u) => u.bytes > 0),
+          "a consent upload carried no file content");
+    check(new Set(consentUploads.map((u) => u.form)).size === consentUploads.length,
+          `two consent uploads claimed the same form: `
+          + `${consentUploads.map((u) => u.form)}`);
+  } else {
+    // Null means the document never leaves the machine. The gate still demands
+    // it -- consent_files above proves that -- but nothing may be transmitted.
+    check(consentUploads.length === 0,
+          "a consent document was uploaded with no consent_upload_url set");
+  }
+  check(payload?.participant_data?.consent_acknowledged === true,
+        "consent_acknowledged did not reach the payload");
+  check((payload?.participant_data?.consent_forms_shown ?? []).length > 0,
+        "consent_forms_shown reached the payload empty");
+  // Age 5 is a two-form band (parental + 0-6 assent). A gate that only
+  // rendered the first form, or only required the first, would still pass
+  // every check above.
+  if (CHS) {
+    check(consentAgeAsked, "a CHS session was not asked for an age");
+    check(consentFormsShown === 2,
+          `age ${CONSENT_AGE} should need 2 forms, gate showed ${consentFormsShown}`);
+    // The age answered at the gate must become the session's age -- the gap
+    // the gate was added to close, since a blank Age falls through to the
+    // adult trial plan.
+    // `age`, lowercase: save.js maps cfg.Age onto the desktop build's field
+    // name, which is what analysis/vice_utils.py reads.
+    check(String(payload?.participant_data?.age ?? "") === String(CONSENT_AGE),
+          `the age given at the gate did not become the session's: `
+          + `${payload?.participant_data?.age}`);
+  }
 }
 
 if (TIER2) {

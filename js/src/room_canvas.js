@@ -117,7 +117,13 @@ export function mountRoomCanvas(host, opts) {
         </div>
         <div class="tray" id="tray">
           <p class="tray-header" id="trayHeader"></p>
-          <div class="tray-row" id="trayRow"></div>
+          <div class="tray-pager">
+            <button class="tray-arrow" id="trayPrev" type="button"
+                    aria-label="Previous row">&lsaquo;</button>
+            <div class="tray-row" id="trayRow"></div>
+            <button class="tray-arrow" id="trayNext" type="button"
+                    aria-label="Next row">&rsaquo;</button>
+          </div>
         </div>
       </div>
       <p class="hint" id="hint"></p>
@@ -128,13 +134,36 @@ export function mountRoomCanvas(host, opts) {
   const tray = host.querySelector("#tray");
   const trayHeader = host.querySelector("#trayHeader");
   const trayRow = host.querySelector("#trayRow");
+  const trayPrev = host.querySelector("#trayPrev");
+  const trayNext = host.querySelector("#trayNext");
   const hint = host.querySelector("#hint");
   const ghost = host.querySelector("#ghost");
   // The drawer keeps a stable minimum width even with little or nothing
   // pending -- port of _drawer_layout's "n_slots is at least 1 even with
   // nothing pending, purely so the panel has a sensible width to sit at."
+  // It is also the PAGE SIZE: the pocket is exactly one row of this many
+  // slots, and a longer pending list is reached with the arrows rather than
+  // by wrapping onto a second row. One row means the drawer's height never
+  // changes, so the room above it never resizes mid-decoration -- a room that
+  // shrank because a sticker was earned used to move every placement a child
+  // had already made, relative to the walls they placed it against.
   const MIN_SLOTS = 6;
-  const trayHeaderText = () => `Your pocket · ${pending.length}`;
+  //: Which page of the pocket is showing. Clamped in render(), never by the
+  //: caller: placing an item shortens `pending`, and a page index that was
+  //: valid before the placement can point past the end after it.
+  let page = 0;
+  const pageCount = () => Math.max(1, Math.ceil(pending.length / MIN_SLOTS));
+  const trayHeaderText = () => {
+    const base = `Your pocket · ${pending.length}`;
+    // The page counter appears only when there IS more than one page. On the
+    // common short pocket it would be a permanent "1/1" explaining nothing.
+    return pageCount() > 1 ? `${base} · ${page + 1}/${pageCount()}` : base;
+  };
+  /** Bring `i`'s page into view. Port of playground.py's _ensure_slot_visible:
+   *  after placing something, the newly-highlighted slot must not be sitting
+   *  on a page nobody is looking at -- a child should not have to know to page
+   *  across before they can see what a press in the room will lift. */
+  const showPageOf = (i) => { page = Math.floor(Math.max(0, i) / MIN_SLOTS); };
 
   // held: the sticker in the hand -- either lifted from the room or taken from
   // the tray. Null when nothing is being dragged.
@@ -252,9 +281,26 @@ export function mountRoomCanvas(host, opts) {
     // would recreate the same element (render() always rebuilds from
     // scratch) and replay the landing pop on an unrelated action.
     justPlaced = null;
+    if (selected >= pending.length) {
+      selected = Math.max(0, pending.length - 1);
+      // The selection just moved because the list shrank (something was
+      // placed), so follow it -- otherwise placing the last item on page 2
+      // leaves the pocket showing an empty page 2 while the highlighted slot
+      // sits back on page 1.
+      showPageOf(selected);
+    }
+    // Clamped after `pending` may have shrunk, and BEFORE the header is drawn
+    // from it -- the header reports the page number.
+    page = Math.max(0, Math.min(page, pageCount() - 1));
     trayHeader.textContent = trayHeaderText();
-    if (selected >= pending.length) selected = Math.max(0, pending.length - 1);
-    const slotsHtml = pending.map((s, i) => {
+
+    const start = page * MIN_SLOTS;
+    const shown = pending.slice(start, start + MIN_SLOTS);
+    const slotsHtml = shown.map((s, j) => {
+      // data-slot stays the index into `pending`, NOT into this page -- every
+      // reader (pickUpFromTray, the drop paths, `selected`) indexes the real
+      // list, so paging stays purely a matter of which slots are drawn.
+      const i = start + j;
       // The one in the hand is out of the tray, not still sitting in it.
       const dragging = fromTray && held && held.id === s.id;
       // `next` marks the CHOSEN slot, not always the first: it is what a
@@ -264,11 +310,33 @@ export function mountRoomCanvas(host, opts) {
                     data-slot="${i}"
                     ${dragging ? 'style="visibility:hidden"' : ""}>${stickerHtml(s)}</span>`;
     }).join("");
-    const emptySlots = Math.max(0, MIN_SLOTS - pending.length);
+    // The row always holds exactly MIN_SLOTS boxes, on every page including a
+    // short last one, so the drawer is the same size whatever is in it and the
+    // arrows never move under a finger that is reaching for them.
+    const emptySlots = Math.max(0, MIN_SLOTS - shown.length);
     trayRow.innerHTML = slotsHtml
       + `<span class="tray-item empty"></span>`.repeat(emptySlots);
+
+    // Disabled rather than hidden at the ends: a control that vanishes takes
+    // the row's width with it and shifts every slot sideways mid-reach.
+    trayPrev.disabled = page === 0;
+    trayNext.disabled = page >= pageCount() - 1;
+    // Nothing to page through at all -- keep the arrows out of the tab order
+    // and off a screen reader's list, but still occupying their space.
+    const onePage = pageCount() <= 1;
+    trayPrev.classList.toggle("idle", onePage);
+    trayNext.classList.toggle("idle", onePage);
     hint.textContent = hintText();
   }
+
+  // Paging is not a placement and raises no event: it changes what is drawn,
+  // nothing about the room or the pocket's contents.
+  const turnPage = (d) => {
+    page = Math.max(0, Math.min(page + d, pageCount() - 1));
+    render();
+  };
+  trayPrev.addEventListener("click", () => turnPage(-1));
+  trayNext.addEventListener("click", () => turnPage(1));
 
   const showGhost = (xRel, yRel) => {
     const size = radius(held?.kind) * 2;

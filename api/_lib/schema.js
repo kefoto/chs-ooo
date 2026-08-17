@@ -44,3 +44,46 @@ export function ensureSchema() {
   }
   return schemaReady;
 }
+
+let consentReady = null;
+
+/**
+ * The signed MELD consent/assent documents -- see api/consent.js, which is the
+ * only writer, and its note on why these live in Postgres rather than Blob.
+ *
+ * A SEPARATE table from `sessions`, and created separately, for two reasons.
+ * The obvious one is shape: this holds bytes, not JSON. The one that matters is
+ * that `sessions` is what export.js hands out, and these documents must not
+ * ride along with a response export -- keeping them in their own table means
+ * including them takes a deliberate new query rather than a wider SELECT.
+ *
+ * UNIQUE (participant_id, form) is what consent.js's ON CONFLICT upserts
+ * against: one current document per form per participant, so a session redone
+ * after attaching the wrong file leaves one row rather than two with nothing to
+ * distinguish them.
+ *
+ * Same one-statement-per-call rule as above -- see this file's header.
+ */
+export function ensureConsentSchema() {
+  if (!consentReady) {
+    consentReady = (async () => {
+      await sql`
+        CREATE TABLE IF NOT EXISTS consent_files (
+          id SERIAL PRIMARY KEY,
+          participant_id TEXT NOT NULL,
+          form TEXT NOT NULL,
+          filename TEXT NOT NULL,
+          mime TEXT NOT NULL,
+          bytes INTEGER NOT NULL,
+          content BYTEA NOT NULL,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+        );
+      `;
+      await sql`
+        CREATE UNIQUE INDEX IF NOT EXISTS consent_files_participant_form_idx
+          ON consent_files (participant_id, form);
+      `;
+    })().catch((e) => { consentReady = null; throw e; });
+  }
+  return consentReady;
+}

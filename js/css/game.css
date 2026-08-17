@@ -426,17 +426,43 @@ button.quiet { background: transparent; color: var(--select); border: 3px solid 
 .tray-header {
   font-size: 13px; font-weight: 700; margin: 0; color: var(--muted);
 }
-/* Wraps rather than scrolling -- nothing on this screen scrolls except
-   the sticker book (see .book below); a drawer with more pending than
-   fits on one line just grows a second row instead, which .room-wrap's
-   own flex sizing (room: flex 1 1 auto, drawer: flex 0 0 auto) absorbs
-   by giving the room whatever's left. Still never shrinks a slot to cram
-   more columns onto one line -- a slot small enough to fit twenty items
-   would be too small to tap. */
+/* ALWAYS one row -- never wraps, never scrolls. A longer pending list is
+   reached with the arrows either side (see .tray-arrow and room_canvas.js's
+   turnPage), one row at a time.
+
+   It used to wrap onto a second row, which made the drawer taller, which
+   .room-wrap's flex sizing absorbed by shrinking the room above it. That is
+   the problem: the room is the coordinate space every placement is stored
+   in, as a fraction of its size, so earning a sixth sticker moved every
+   sticker a child had already placed relative to the walls they placed them
+   against. A fixed one-row drawer keeps the room a fixed size for the whole
+   visit. Slots still never shrink to cram more columns onto the line -- a
+   slot small enough to fit twenty items would be too small to tap. */
 .tray-row {
-  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
-  max-width: 100%; padding: 2px 4px;
+  display: flex; flex-wrap: nowrap; gap: 8px; justify-content: center;
+  padding: 2px 4px;
 }
+/* The row and its two arrows on one line, the row taking the middle. */
+.tray-pager {
+  display: flex; align-items: center; justify-content: center;
+  gap: 4px; max-width: 100%;
+}
+/* Deliberately larger than the 44px minimum: this is the one control on the
+   screen a 4-6 year old presses REPEATEDLY to find something, and it sits
+   next to draggable slots, so a near-miss should land on nothing rather
+   than on a sticker it would start dragging. */
+.tray-arrow {
+  flex: 0 0 auto; width: 48px; height: 54px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; line-height: 1; font-weight: 700;
+  color: var(--select); background: var(--panel);
+  border: 2px solid var(--track); border-radius: 12px; cursor: pointer;
+}
+.tray-arrow:disabled { opacity: 0.3; cursor: default; }
+/* One page of items: the arrows keep their space so the slots do not shift
+   sideways when a sixth sticker suddenly makes paging possible, but they are
+   not offered as controls. */
+.tray-arrow.idle { visibility: hidden; }
 /* 54px, down from 60: still comfortably above the 44px tap target a 4-6
    year old needs, and the 6px per row goes to the room above. */
 .tray-item {
@@ -648,6 +674,30 @@ button.quiet { background: transparent; color: var(--select); border: 3px solid 
 }
 .consent-ack input { margin-top: 3px; }
 .consent-gate .big:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* What to actually DO with the forms. Sits above the list, because a parent
+   reading this page for the first time meets the links before the inputs and
+   otherwise has no reason to expect a second step after signing. */
+.consent-howto {
+  margin: 0 0 16px; font-size: 15px; line-height: 1.45; color: var(--text);
+}
+/* One row per required form: the link, then the attachment for THAT form.
+   Boxed together so it reads as "this file belongs to this form" -- two bare
+   file inputs under two links is the shape that gets them swapped. */
+.consent-row {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 12px; border: 2px solid var(--track);
+  border-radius: 10px; background: var(--panel);
+}
+.consent-row a { background: none; border: none; padding: 0; font-weight: 700; }
+.consent-file { display: flex; flex-direction: column; gap: 4px; }
+.consent-file-label { font-size: 13px; font-weight: 700; color: var(--muted); }
+.consent-file input { font-size: 14px; }
+/* Confirmation that a specific file landed on a specific form, named. Blank
+   until something is attached, so it never claims a form is done. */
+.consent-file-state:not(:empty) {
+  margin: 0; font-size: 13px; font-weight: 700; color: var(--select);
+}
 
 /* ---------------------------------------------------------------------------
    Font, over jsPsych's own.
