@@ -74,7 +74,7 @@ export function showSetup(cfg, root, search = window.location.search) {
         <p class="setup-sub">Fill the blank fields in before handing the screen to the child.</p>
 
         <div class="setup-grid">
-          <label>Participant ID
+          <label>Participant Name
             <input id="s-pid" type="text" value="${urlPid}"
                    autocomplete="off" spellcheck="false"></label>
           <label>Age
