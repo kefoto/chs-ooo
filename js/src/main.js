@@ -45,6 +45,34 @@ const jget = async (url) => {
   return r.json();
 };
 
+/**
+ * Loading overlay shown between "Start" and the first painted trial. Lives
+ * OUTSIDE #jspsych-target (a sibling on <body>), never inside it --
+ * initJsPsych() appends its own .jspsych-content-wrapper alongside whatever
+ * is already in display_element rather than clearing it, so anything placed
+ * directly inside #jspsych-target beforehand is stranded as a permanent
+ * sibling no plugin ever touches: not overlapping via z-index, just stacked
+ * above the game in normal document flow, pushing it below the fold forever.
+ *
+ * Returns a function that fades the overlay out and removes it -- call that
+ * once the first trial has actually painted underneath (see jsPsych.run()
+ * below). The CSS transition is skipped under prefers-reduced-motion, so the
+ * fallback timeout is what removes it there instead of `transitionend`.
+ */
+function showLoadingOverlay() {
+  const el = document.createElement("div");
+  el.className = "loading-overlay";
+  el.innerHTML = `
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="hint">Getting things ready…</p>`;
+  document.body.appendChild(el);
+  return () => {
+    el.classList.add("hide");
+    el.addEventListener("transitionend", () => el.remove(), { once: true });
+    setTimeout(() => el.remove(), 400);
+  };
+}
+
 (async function run() {
   const target = document.getElementById("jspsych-target");
 
@@ -92,13 +120,18 @@ const jget = async (url) => {
   // Manifests, asset warm-up, and voice/sfx/music init below all run before
   // jsPsych.run() paints the first screen -- with nothing shown here, that
   // stretch is a blank page that reads as a freeze right after the child (or
-  // the experimenter, on their behalf) hits Start. jsPsych overwrites this
-  // the moment the first trial actually renders, so nothing needs to clear
-  // it back out.
-  target.innerHTML = `<div class="screen loading-screen">
-    <div class="spinner" aria-hidden="true"></div>
-    <p class="hint">Getting things ready…</p>
-  </div>`;
+  // the experimenter, on their behalf) hits Start.
+  //
+  // This lives OUTSIDE #jspsych-target (a sibling on <body>, not a child) and
+  // is removed explicitly once jsPsych.run() below has painted the first
+  // trial -- see showLoadingOverlay's caller. It cannot be left for jsPsych
+  // to clear on its own: initJsPsych() does not clear display_element, it
+  // APPENDS its own .jspsych-content-wrapper alongside whatever is already
+  // there, so anything placed directly in #jspsych-target beforehand (as this
+  // used to be) is stranded as a permanent sibling no plugin ever touches --
+  // not overlapping via z-index, just stacked above the game in normal flow,
+  // pushing it below the fold forever.
+  const hideLoadingOverlay = showLoadingOverlay();
 
   const datasetRoot = TIER2 ? cfg.tier2_dataset_root : cfg.dataset_root;
   const [manifest, dialogue, stimuli] = await Promise.all([
@@ -1132,7 +1165,12 @@ const jget = async (url) => {
   }
 
   jsPsych.run(timeline);
+  hideLoadingOverlay();
 })().catch((e) => {
+  // A failure anywhere above leaves the loading overlay stranded on top of
+  // this error screen -- it is only ever cleared by hideLoadingOverlay()
+  // after a successful jsPsych.run(), which this path never reaches.
+  document.querySelector(".loading-overlay")?.remove();
   document.getElementById("jspsych-target").innerHTML =
     `<div class="screen"><p class="speech">Could not start: ${e.message}</p>
      <p class="hint">Serve the repository over HTTP (see js/README.md); opening
