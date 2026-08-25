@@ -25,7 +25,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { ShopState } from "../src/shop.js";
 import { buildPayload, makeResponse, postPayload, forSubmission } from "../src/save.js";
-import { sessionPlan, ageBin, TRIAL_SECONDS, DURATION_MINUTES } from "../src/session.js";
+import { sessionPlan, ageBin, DURATION_TRIALS, DURATION_MINUTES } from "../src/session.js";
 import { CONFIG, applyUrlOverrides } from "../src/config.js";
 import { setupNeeded } from "../src/setup.js";
 import { meldFormsForAge, consentLinkUrl, MELD_LINKS } from "../src/consent.js";
@@ -174,22 +174,20 @@ test("six blocks yoke within a pass, not across passes", () => {
   }
 });
 
-test("trial count tracks the requested duration, per block not in total", () => {
+test("trial count is flat per duration, per block not in total", () => {
   // `Num Trials` is trials PER BLOCK -- the runner multiplies by Num Blocks.
   // Handing it the session total is what made the desktop build run an
   // adult's "80 trial" session as 704.
   //
-  // The count is derived from the time budget (age pace x duration), and
-  // must MATCH core/flexible_session_manager.get_session_config's formula.
-  // If the two builds disagree, a browser session and a lab session of the
-  // "same" age and duration hold different amounts of data.
+  // The count is one flat number per duration, the same at every age, and
+  // must MATCH core/flexible_session_manager.duration_trial_counts. If the
+  // two builds disagree, a browser session and a lab session of the "same"
+  // duration hold different amounts of data.
   for (const age of [4, 5, 8, 14, 17, 25, 60]) {
     for (const dur of ["short", "standard", "extended"]) {
       const p = sessionPlan(age, dur, 1);
-      const effectiveSeconds = DURATION_MINUTES[dur] * 60 * 0.8;
-      const wantRecommended = Math.floor(effectiveSeconds / TRIAL_SECONDS[p.bin]);
-      assert.equal(p.recommended, wantRecommended,
-        `age ${age} ${dur}: target ${p.recommended}, expected ${wantRecommended}`);
+      assert.equal(p.recommended, DURATION_TRIALS[dur],
+        `age ${age} ${dur}: target ${p.recommended}, expected ${DURATION_TRIALS[dur]}`);
       assert.equal(p.blocks * p.perBlock, p.total);
       // Blocks are what actually get scheduled, so the achievable total is
       // the largest multiple of perBlock that fits under recommended -- never

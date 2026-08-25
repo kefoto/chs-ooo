@@ -3,11 +3,11 @@
  * Port of core/flexible_session_manager.py (get_flexible_session_config) and
  * of the block arithmetic experiments/setup_experiment.py does on top of it.
  *
- * Trial count is derived from the time budget: TRIAL_SECONDS[bin] is how long
- * one trial takes at that age's pace, so recommended = effective time / pace.
- * Both age AND duration drive the count, so a 'short' session actually takes
- * ~30 min at every age instead of everyone running the same total regardless
- * of how long they sat down for.
+ * Trial count is one flat number per duration (DURATION_TRIALS), the same at
+ * every age -- it does not track any individual age's pace, so it is not
+ * exactly right for anyone: younger children run somewhat over the nominal
+ * duration, adults finish with time to spare. See DURATION_TRIALS below for
+ * how the three numbers were sized.
  *
  *     Blocks are short on purpose
  *     ---------------------------
@@ -33,17 +33,18 @@ export const DURATION_MINUTES = { short: 30, standard: 60, extended: 90 };
 const EFFECTIVE = 0.8;
 
 /**
- * Seconds a visual trial costs, averaged by age bin. Mirrors
- * FlexibleSessionManager.trial_durations in core/flexible_session_manager.py
- * -- the two builds must agree or a browser session and a lab session of the
- * "same" age and duration would hold different amounts of data.
+ * One flat trial count per duration, the same for every age. Mirrors
+ * FlexibleSessionManager.duration_trial_counts in
+ * core/flexible_session_manager.py -- the two builds must agree or a browser
+ * session and a lab session of the "same" duration hold different amounts of
+ * data.
+ *
+ * Sized to the blended average pace across the four age bins (early
+ * childhood 8.0s, middle childhood 6.0s, adolescence 4.5s, adults 3.5s -- a
+ * 5.5s average) against the EFFECTIVE-adjusted time budget for each duration,
+ * e.g. short: floor(30 * 60 * 0.8 / 5.5) = 261.
  */
-export const TRIAL_SECONDS = {
-  early_childhood: 8.0,
-  middle_childhood: 6.0,
-  adolescence: 4.5,
-  adults: 3.5,
-};
+export const DURATION_TRIALS = { short: 261, standard: 523, extended: 785 };
 
 /**
  * Seconds a Tier 2 trial costs, averaged over its three condition blocks.
@@ -76,8 +77,7 @@ export function sessionPlan(age, duration = "standard", tier = 1) {
   const bin = ageBin(age);
   const dur = DURATIONS.includes(duration) ? duration : "standard";
   const effectiveSeconds = DURATION_MINUTES[dur] * 60 * EFFECTIVE;
-  // How many trials of this age's estimated pace fit in the time budget.
-  const recommended = Math.floor(effectiveSeconds / TRIAL_SECONDS[bin]);
+  const recommended = DURATION_TRIALS[dur];
 
   if (Number(tier) === 2) {
     // Two blocks per condition. Six is still a multiple of three, so every
@@ -102,9 +102,8 @@ export function sessionPlan(age, duration = "standard", tier = 1) {
   // Blocks are what actually get scheduled -- num_blocks = recommended //
   // perBlock truncates, so the achievable total is the largest multiple of
   // perBlock that fits under recommended, not recommended itself unless it
-  // happens to divide evenly. recommended now varies with age and duration
-  // (see TRIAL_SECONDS above), so room count does too, rather than always
-  // landing near a fixed 50.
+  // happens to divide evenly. recommended is flat per duration (see
+  // DURATION_TRIALS above), so room count varies only with age, not duration.
   const n = Number(age);
   const perBlock = n < 18 ? 11 : 25;
   const blocks = Math.max(1, Math.floor(recommended / perBlock));

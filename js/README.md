@@ -28,24 +28,29 @@ child an identical session.
 
 ### Session length
 
-**Trial count comes from the time budget**: age pace × requested duration
-(`TRIAL_SECONDS` and `sessionPlan()` in `js/src/session.js`, matching
-`core/flexible_session_manager.py`'s `trial_durations` and `get_session_config`
-— a test parses one against the other, since a browser session and a lab
-session of the same age and duration that disagree are not the same study). A
-'short' session runs fewer trials than an 'extended' one at the same age, so
-it actually takes about 30 min rather than carrying a 'short' label on the
-same trial count every other duration runs.
+**One flat trial count per duration** — `short` 261, `standard` 523, `extended`
+785 — the same at every age (`DURATION_TRIALS` in `js/src/session.js`, matching
+`core/flexible_session_manager.py`'s `duration_trial_counts` — a test parses
+one against the other, since a browser session and a lab session of the same
+duration that disagree are not the same study). Only the block/room split
+(`trials_per_block`, `num_blocks`) is still age-based; the total itself is not.
 
-This replaced a flat count (550, unaffected by which duration was picked) that
-in turn replaced an age-bin × duration table that ran 16/24/32 for early
-childhood up to 350/600/800 for adults.
+The three numbers are sized to the *blended average* pace across the four age
+bins (5.5s/trial), not any one age's own pace, so they are not exactly right
+for anyone: early childhood and middle childhood (slower than average) run
+somewhat over the nominal duration, while adolescence and adults (faster than
+average) finish with time to spare.
 
-> 550 does **not** fit a `short` session: ~32 min of responding at the 3.5s
-> visual estimate against 24 effective minutes, and ~73 min at the 8s estimated
-> for early childhood. Sessions run past their nominal duration or stop early on
-> the time check. For young children the protocol answer is repeat sessions
-> across days rather than one sitting.
+This replaced a per-age, per-duration calculation (age pace × requested
+duration) that in turn replaced a flat count (550, unaffected by which
+duration was picked) that in turn replaced an age-bin × duration table that
+ran 16/24/32 for early childhood up to 350/600/800 for adults.
+
+> Early childhood and middle childhood do **not** fit their nominal duration
+> at any of the three settings: e.g. a `short` early-childhood session runs
+> ~34 min of responding against a 24-effective-minute budget. Sessions run past
+> their nominal duration or stop early on the time check. For young children
+> the protocol answer is repeat sessions across days rather than one sitting.
 
 **Tier 2 is capped by its own pacing.** Its A and AV blocks play three clips
 before a choice is possible (~9.8s), so it costs ~9.2s a trial against ~3.5s
