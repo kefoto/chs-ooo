@@ -3,9 +3,11 @@
  * Port of core/flexible_session_manager.py (get_flexible_session_config) and
  * of the block arithmetic experiments/setup_experiment.py does on top of it.
  *
- * The trial counts below are a panel-recommended TABLE, not a calculation.
- * Deriving them from time-per-trial made short/standard/extended collapse to
- * the same number once the age ceiling clamped them.
+ * Trial count is derived from the time budget: TRIAL_SECONDS[bin] is how long
+ * one trial takes at that age's pace, so recommended = effective time / pace.
+ * Both age AND duration drive the count, so a 'short' session actually takes
+ * ~30 min at every age instead of everyone running the same total regardless
+ * of how long they sat down for.
  *
  *     Blocks are short on purpose
  *     ---------------------------
@@ -13,7 +15,7 @@
  *     At 8-10 trials a 4-6 year old's standard session held three rewards in
  *     the whole sitting. Halving the block splits the SAME total into twice as
  *     many rooms, so the child is rewarded twice as often without working any
- *     longer -- the table still governs how long they actually sit there.
+ *     longer.
  */
 
 export const AGE_BINS = [
@@ -25,26 +27,23 @@ export const AGE_BINS = [
 
 export const DURATIONS = ["short", "standard", "extended"];
 
-/**
- * Trials every session runs, whatever the age or requested duration. Mirrors
- * FIXED_TRIALS_PER_SESSION in core/flexible_session_manager.py -- the two
- * builds must agree or a browser session and a lab session of the "same"
- * length would hold different amounts of data.
- *
- * This replaced an age-bin x duration table (16/24/32 for early childhood up
- * to 350/600/800 for adults). Block sizes must divide it or the session lands
- * short: 550 = 2 x 5^2 x 11, so 5, 10, 11, 22, 25 and 50 all land on it while
- * 4 gives 137 blocks and 548 trials.
- *
- * It does not fit a short session -- ~32 min of responding at the 3.5s visual
- * estimate against 24 effective min -- which is a known and accepted cost.
- */
-export const FIXED_TRIALS_PER_SESSION = 550;
-
 export const DURATION_MINUTES = { short: 30, standard: 60, extended: 90 };
 
 /** Fraction of the clock left for trials once setup and breaks are taken out. */
 const EFFECTIVE = 0.8;
+
+/**
+ * Seconds a visual trial costs, averaged by age bin. Mirrors
+ * FlexibleSessionManager.trial_durations in core/flexible_session_manager.py
+ * -- the two builds must agree or a browser session and a lab session of the
+ * "same" age and duration would hold different amounts of data.
+ */
+export const TRIAL_SECONDS = {
+  early_childhood: 8.0,
+  middle_childhood: 6.0,
+  adolescence: 4.5,
+  adults: 3.5,
+};
 
 /**
  * Seconds a Tier 2 trial costs, averaged over its three condition blocks.
@@ -76,7 +75,9 @@ export function ageBin(age) {
 export function sessionPlan(age, duration = "standard", tier = 1) {
   const bin = ageBin(age);
   const dur = DURATIONS.includes(duration) ? duration : "standard";
-  const recommended = FIXED_TRIALS_PER_SESSION;
+  const effectiveSeconds = DURATION_MINUTES[dur] * 60 * EFFECTIVE;
+  // How many trials of this age's estimated pace fit in the time budget.
+  const recommended = Math.floor(effectiveSeconds / TRIAL_SECONDS[bin]);
 
   if (Number(tier) === 2) {
     // Two blocks per condition. Six is still a multiple of three, so every
@@ -84,8 +85,7 @@ export function sessionPlan(age, duration = "standard", tier = 1) {
     // without lengthening the session.
     const blocks = 6;
     // Capped by Tier 2's own pacing rather than the visual count.
-    const cap = Math.floor(
-      (DURATION_MINUTES[dur] * 60 * EFFECTIVE) / TIER2_SECONDS_PER_TRIAL);
+    const cap = Math.floor(effectiveSeconds / TIER2_SECONDS_PER_TRIAL);
     const target = Math.max(6, Math.min(recommended, cap));
     const perBlock = Math.max(2, Math.round(target / blocks));
     return { bin, duration: dur, recommended, target, blocks, perBlock,
@@ -93,21 +93,18 @@ export function sessionPlan(age, duration = "standard", tier = 1) {
   }
 
   // A block boundary is where a room ends: stickers, then the playground.
-  // Under-18s were on 5, which against a flat 550 meant 110 rooms -- 110
-  // sticker ceremonies and playgrounds in one session. 11 gives 50.
+  // Under-18s get 11 trials per room -- enough sticker ceremonies to feel
+  // rewarding without turning every room into a single trial. Adults get 25:
+  // a 25-trial block is still only ~90 seconds between breaks, and they
+  // normally run the baseline arm where none of this is shown anyway. Must
+  // match the desktop build's trials_per_block.
   //
-  // The size is not free to choose. It must divide FIXED_TRIALS_PER_SESSION
-  // or the session lands short, and 550 = 2 x 5^2 x 11 leaves only 10 and 11
-  // in the 10-20 range: 10 gives 55 rooms, 11 gives 50.
-  //
-  // 50 rooms still outruns the 104-sticker pool at 2-4 stickers a room, so
-  // children DO see repeat stickers -- CastleState.create reshuffles the pool
-  // when it runs dry. Avoiding that entirely needs <= ~34 rooms, i.e. 22 per
-  // block, which is outside the range this was asked for.
-  //
-  // Adults keep 25. They are on 22 rooms, which stays inside the pool, and
-  // they normally run the baseline arm where none of this is shown anyway.
-  // Must match the desktop build's trials_per_block.
+  // Blocks are what actually get scheduled -- num_blocks = recommended //
+  // perBlock truncates, so the achievable total is the largest multiple of
+  // perBlock that fits under recommended, not recommended itself unless it
+  // happens to divide evenly. recommended now varies with age and duration
+  // (see TRIAL_SECONDS above), so room count does too, rather than always
+  // landing near a fixed 50.
   const n = Number(age);
   const perBlock = n < 18 ? 11 : 25;
   const blocks = Math.max(1, Math.floor(recommended / perBlock));

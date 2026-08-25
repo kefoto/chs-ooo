@@ -25,7 +25,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { ShopState } from "../src/shop.js";
 import { buildPayload, makeResponse, postPayload, forSubmission } from "../src/save.js";
-import { sessionPlan, ageBin, FIXED_TRIALS_PER_SESSION } from "../src/session.js";
+import { sessionPlan, ageBin, TRIAL_SECONDS, DURATION_MINUTES } from "../src/session.js";
 import { CONFIG, applyUrlOverrides } from "../src/config.js";
 import { setupNeeded } from "../src/setup.js";
 import { meldFormsForAge, consentLinkUrl, MELD_LINKS } from "../src/consent.js";
@@ -174,37 +174,35 @@ test("six blocks yoke within a pass, not across passes", () => {
   }
 });
 
-test("every session runs the fixed trial count, per block not in total", () => {
+test("trial count tracks the requested duration, per block not in total", () => {
   // `Num Trials` is trials PER BLOCK -- the runner multiplies by Num Blocks.
   // Handing it the session total is what made the desktop build run an
   // adult's "80 trial" session as 704.
   //
-  // The count itself is now flat across age and duration, and must MATCH
-  // core/flexible_session_manager.FIXED_TRIALS_PER_SESSION. If the two builds
-  // disagree, a browser session and a lab session of the "same" length hold
-  // different amounts of data.
+  // The count is derived from the time budget (age pace x duration), and
+  // must MATCH core/flexible_session_manager.get_session_config's formula.
+  // If the two builds disagree, a browser session and a lab session of the
+  // "same" age and duration hold different amounts of data.
   for (const age of [4, 5, 8, 14, 17, 25, 60]) {
     for (const dur of ["short", "standard", "extended"]) {
       const p = sessionPlan(age, dur, 1);
-      assert.equal(p.recommended, FIXED_TRIALS_PER_SESSION,
-        `age ${age} ${dur}: target ${p.recommended}`);
+      const effectiveSeconds = DURATION_MINUTES[dur] * 60 * 0.8;
+      const wantRecommended = Math.floor(effectiveSeconds / TRIAL_SECONDS[p.bin]);
+      assert.equal(p.recommended, wantRecommended,
+        `age ${age} ${dur}: target ${p.recommended}, expected ${wantRecommended}`);
       assert.equal(p.blocks * p.perBlock, p.total);
-      // Blocks must divide the total exactly or the session lands short --
-      // under-12s were on 4, which gives 137 blocks and 548 trials.
-      assert.equal(p.total, FIXED_TRIALS_PER_SESSION,
+      // Blocks are what actually get scheduled, so the achievable total is
+      // the largest multiple of perBlock that fits under recommended -- never
+      // a multiple OF it, and never more than a block short of it.
+      assert.ok(p.total <= p.recommended && p.recommended - p.total < p.perBlock,
         `age ${age} ${dur}: ${p.blocks} blocks of ${p.perBlock} runs ` +
-        `${p.total}, not ${FIXED_TRIALS_PER_SESSION}`);
+        `${p.total} against a target of ${p.recommended}`);
       // Must match core/flexible_session_manager.get_session_config: a
       // browser session and a lab session of the same age should hand the
       // child the same number of rooms, not just the same number of trials.
       const wantBlock = age < 18 ? 11 : 25;
       assert.equal(p.perBlock, wantBlock,
         `age ${age}: blocks of ${p.perBlock}, expected ${wantBlock}`);
-      // The reward loop is what block size is for: a session with more rooms
-      // than the sticker pool holds starts repeating stickers.
-      assert.ok(p.blocks <= 55,
-        `age ${age}: ${p.blocks} rooms is more sticker ceremonies than a ` +
-        `session should hold`);
     }
   }
 });

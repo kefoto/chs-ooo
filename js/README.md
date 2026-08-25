@@ -28,14 +28,18 @@ child an identical session.
 
 ### Session length
 
-**Every session runs 550 trials**, whatever the participant's age or the
-requested duration (`FIXED_TRIALS_PER_SESSION` in `js/src/session.js`, matching
-`core/flexible_session_manager.py` — a test parses one against the other, since
-a browser session and a lab session that disagree are not the same study).
+**Trial count comes from the time budget**: age pace × requested duration
+(`TRIAL_SECONDS` and `sessionPlan()` in `js/src/session.js`, matching
+`core/flexible_session_manager.py`'s `trial_durations` and `get_session_config`
+— a test parses one against the other, since a browser session and a lab
+session of the same age and duration that disagree are not the same study). A
+'short' session runs fewer trials than an 'extended' one at the same age, so
+it actually takes about 30 min rather than carrying a 'short' label on the
+same trial count every other duration runs.
 
-This replaced an age-bin × duration table that ran 16/24/32 for early childhood
-up to 350/600/800 for adults. Fixing it makes counts comparable across age bins
-without reweighting.
+This replaced a flat count (550, unaffected by which duration was picked) that
+in turn replaced an age-bin × duration table that ran 16/24/32 for early
+childhood up to 350/600/800 for adults.
 
 > 550 does **not** fit a `short` session: ~32 min of responding at the 3.5s
 > visual estimate against 24 effective minutes, and ~73 min at the 8s estimated
