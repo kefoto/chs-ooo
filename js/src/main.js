@@ -89,7 +89,16 @@ const jget = async (url) => {
     </div>`;
     return;
   }
-  target.innerHTML = "";
+  // Manifests, asset warm-up, and voice/sfx/music init below all run before
+  // jsPsych.run() paints the first screen -- with nothing shown here, that
+  // stretch is a blank page that reads as a freeze right after the child (or
+  // the experimenter, on their behalf) hits Start. jsPsych overwrites this
+  // the moment the first trial actually renders, so nothing needs to clear
+  // it back out.
+  target.innerHTML = `<div class="screen loading-screen">
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="hint">Getting things ready…</p>
+  </div>`;
 
   const datasetRoot = TIER2 ? cfg.tier2_dataset_root : cfg.dataset_root;
   const [manifest, dialogue, stimuli] = await Promise.all([

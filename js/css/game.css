@@ -48,6 +48,19 @@ html, body {
 .pip     { height: clamp(90px, 16vh, 170px); }
 .big-pip { height: clamp(120px, 24vh, 240px); }
 
+/* Fills the gap between "Start session" and the first painted trial --
+   manifests, asset warm-up, and voice/sfx/music init all happen in that
+   window, and with nothing on screen it reads as a freeze. */
+.spinner {
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 5px solid var(--track); border-top-color: var(--select);
+  animation: spinner-turn 0.8s linear infinite;
+}
+@keyframes spinner-turn { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; border-top-color: var(--track); }
+}
+
 /* Trial: Pip centred above the choices, a bubble either side, progress below.
    Both bubbles are always in the DOM at a fixed size, so a message appearing
    cannot move the images out from under a child's finger.
