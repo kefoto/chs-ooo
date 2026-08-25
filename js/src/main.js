@@ -498,6 +498,16 @@ function showLoadingOverlay() {
   const startTime = new Date().toISOString().slice(0, 19).replace("T", " ");
   const responses = [];
 
+  // #jspsych-target still holds whatever showSetup/showConsentGate last wrote
+  // into it -- neither clears itself on the way out, and nothing since has
+  // touched target (the loading overlay above lives on <body>, not in here).
+  // initJsPsych() does not clear display_element either: it APPENDS its own
+  // .jspsych-content-wrapper as a sibling of whatever is already there, so
+  // without this the consent screen would be stranded as a permanent sibling
+  // of the wrapper -- same shape as the loading-overlay bug this file used to
+  // have, just via a different leftover screen.
+  target.innerHTML = "";
+
   const jsPsych = initJsPsych({
     display_element: "jspsych-target",
     // The closing screen is painted HERE rather than being the last item on
